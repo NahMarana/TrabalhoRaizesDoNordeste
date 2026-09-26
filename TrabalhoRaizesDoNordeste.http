@@ -1,6 +1,27 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/weatherforecast/
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/weatherforecast/
 Accept: application/json
 
 ###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/
+Content-Type: application/json
+Accept: application/json
+{
+  "nome": "string",
+  "email": "user1@example.com",
+  "cpf": "1string",
+  "telefone": "string",
+  "senha": "string",
+  "rua": "string",
+  "numero": "string",
+  "bairro": "string",
+  "cidade": "string",
+  "estado": "string",
+  "cep": "string",
+  "complemento": "string",
+  "consentimento_lgpd": false,
+  "participaFidelidade": false,
+  "perfil": 3
+}

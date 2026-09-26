@@ -1,4 +1,5 @@
-﻿using TrabalhoRaizesDoNordeste.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 
 namespace TrabalhoRaizesDoNordeste.Domain.Models
 {
@@ -16,33 +17,14 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public string? Complemento { get; set; }
         public required string Bairro { get; set; }
         public required string Cidade { get; set; }
-        public required string Estado { get; set; }
+        public required string Estado { get; set; }   
         public required string CEP { get; set; }
+        [JsonPropertyName("senha")]
         public required string SenhaHash { get; set; }
         public required bool ConsentimentoLGPD { get; set; }
         public required bool ParticipaFidelidade { get; set; }
-        public required bool UsuarioAtivo { get; set; }
-        public required DateTime DataCadastro { get; set; }
-
-        public Usuario() { }
-
-        public Usuario(string nome, string email, string cpf, string telefone, TipoPerfil perfil, string rua, string numero, string? complemento, string bairro, string cidade, string estado, string cep, string senhaHash, bool consentimentoLGPD, bool participaFidelidade)
-        {
-            Nome = nome;
-            Email = email;
-            CPF = cpf;
-            Telefone = telefone;
-            Perfil = perfil;
-            Rua = rua;
-            Numero = numero;
-            Complemento = complemento;
-            Bairro = bairro;
-            Cidade = cidade;
-            Estado = estado;
-            CEP = cep;
-            SenhaHash = senhaHash;
-            ConsentimentoLGPD = consentimentoLGPD;
-            ParticipaFidelidade = participaFidelidade;
-        }
+        public bool UsuarioAtivo { get; set; } = true;
+        public DateTime DataCadastro { get; set; } = DateTime.Now;
+        public int EstabelecimentoId { get; set; }
     }
 }
