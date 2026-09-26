@@ -24,6 +24,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required bool UsuarioAtivo { get; set; }
         public required DateTime DataCadastro { get; set; }
 
+        public Usuario() { }
 
         public Usuario(string nome, string email, string cpf, string telefone, TipoPerfil perfil, string rua, string numero, string? complemento, string bairro, string cidade, string estado, string cep, string senhaHash, bool consentimentoLGPD, bool participaFidelidade)
         {
