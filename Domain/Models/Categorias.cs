@@ -2,8 +2,9 @@
 {
     public class Categorias
     {
-        public required int Id { get; set; }
-        public required string NomeCategoria { get; set; }
-        public required bool CategoriaAtiva { get; set; }
+        public int Id { get; set; }
+        public string? NomeCategoria { get; set; }
+        public bool CategoriaAtiva { get; set; } = true;
+        public ICollection<Produtos>? Produtos { get; set; }
     }
 }

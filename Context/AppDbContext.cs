@@ -29,6 +29,11 @@ namespace TrabalhoRaizesDoNordeste.Context
             modelBuilder.Entity<Usuario>().HasIndex(u => u.CPF).IsUnique();
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<UnidadesEstabelecimento>().HasIndex(u => u.CNPJ).IsUnique();
+
+            modelBuilder.Entity<Categorias>()
+                .HasMany(r => r.Produtos)
+                .WithOne(r => r.Categoria)
+                .HasForeignKey(fk => fk.CategoriaId);
         }
 
     }
