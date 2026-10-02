@@ -16,7 +16,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult BuscarCategoria(int id)
+        public IActionResult BuscarCategoriaPorId(int id)
         {
             var categoria = _appDbContext.Categorias.Find(id);
 
@@ -24,6 +24,19 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 return NoContent();
 
             return Ok(categoria);
+        }
+
+        [HttpGet("buscar")]
+        public IActionResult BuscarCategoriaPorNome(string nome)
+        {
+            var categorias = _appDbContext.Categorias
+                .Where(c => c.NomeCategoria.Contains(nome))
+                .ToList();
+
+            if (!categorias.Any())
+                return NotFound("Categoria não encontrada.");
+
+            return Ok(categorias);
         }
 
         [HttpGet]

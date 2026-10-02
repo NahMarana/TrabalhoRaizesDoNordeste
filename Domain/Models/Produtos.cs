@@ -7,9 +7,9 @@
         public required string DescricaoProduto { get; set; }
         public required decimal PrecoUnitario { get; set; }
         public required bool ProdutoSazonal { get; set; }
-        public required DateOnly DataInicioSazonal { get; set; }
-        public required DateOnly DataFimSazonal { get; set; }
-        public required bool ProdutoAtivo { get; set; }
+        public DateOnly DataInicioSazonal { get; set; }
+        public DateOnly DataFimSazonal { get; set; }
+        public bool ProdutoAtivo { get; set; }
         public int CategoriaId { get; set; }
         public Categorias? Categoria { get; set; }
 

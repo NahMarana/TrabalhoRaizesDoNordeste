@@ -1,0 +1,37 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeProduto": "Café",
+  "descricaoProduto": "Café com leite",
+  "precoUnitario": 35.90,
+  "produtoSazonal": false,
+  "produtoAtivo": true,
+  "categoriaId": 2
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/2
+
+###
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/3
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeProduto": "Bauru",
+  "descricaoProduto": "Café com leite",
+  "precoUnitario": 35.90,
+  "produtoSazonal": false,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
