@@ -4,7 +4,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
 {
     public class UnidadesEstabelecimento
     {
-        public required int Id { get; set; }
+        public int Id { get; set; }
         public required string NomeEstabelecimento { get; set; }
         public required string CNPJ { get; set; }
         public required bool UnidadeAtiva { get; set; }
