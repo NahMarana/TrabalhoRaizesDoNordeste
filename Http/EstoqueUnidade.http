@@ -1,0 +1,33 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+{
+  "ProdutoId": 5,
+  "EstabelecimentoId": 1,
+  "QtdEstoqueDisponivel": 35,
+  "VendaDisponivel": false
+}
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/1
+Content-Type: application/json
+Accept: application/json
+{
+  "produtoId": 5,
+  "estabelecimentoId": 1,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/2

@@ -2,7 +2,7 @@
 {
     public class EstoqueUnidade
     {
-        public required int Id { get; set; }
+        public int Id { get; set; }
         public required int ProdutoId { get; set; }
         public required int EstabelecimentoId { get; set; }
         public required int QtdEstoqueDisponivel { get; set; }

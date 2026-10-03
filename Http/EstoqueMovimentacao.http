@@ -1,0 +1,37 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/
+Content-Type: application/json
+Accept: application/json
+{
+  "EstoqueId": 1,
+  "PedidoId": 2,
+  "UsuarioUsadoId": 3,
+  "QtdEmEstoque": 12,
+  "TipoMovimento": 0,
+  "MotivoMovimentacao": "Entrada de produto - café"
+}
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/1
+Content-Type: application/json
+Accept: application/json
+{
+  "estoqueId": 1,
+  "pedidoId": 2,
+  "usuarioUsadoId": 3,
+  "qtdEmEstoque": 1,
+  "tipoMovimento": 1,
+  "motivoMovimentacao": "Saída por venda - pedido 2"
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/2
