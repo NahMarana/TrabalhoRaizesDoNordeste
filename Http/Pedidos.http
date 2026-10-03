@@ -10,28 +10,30 @@ POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/
 Content-Type: application/json
 Accept: application/json
 {
-  "nomeProduto": "Café",
-  "descricaoProduto": "Café com leite",
-  "precoUnitario": 35.90,
-  "produtoSazonal": false,
-  "produtoAtivo": true,
-  "categoriaId": 2
+  "UsuarioId": 1,
+  "EstabelecimentoId": 1,
+  "CanalPedido": 2,
+  "ModoReceber": 1,
+  "StatusPedido": 0,
+  "ValorTotalPedido": 14.95,
+  "Descricao": "Sem cebola"
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/3
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/2
 Content-Type: application/json
 Accept: application/json
 {
-  "nomeProduto": "Bauru",
-  "descricaoProduto": "Café com leite",
-  "precoUnitario": 35.90,
-  "produtoSazonal": false,
-  "produtoAtivo": true,
-  "categoriaId": 3
+  "UsuarioId": 1,
+  "EstabelecimentoId": 1,
+  "CanalPedido": 1,
+  "ModoReceber": 1,
+  "StatusPedido": 1,
+  "ValorTotalPedido": 14.95,
+  "Descricao": "Sem açúcar"
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/2
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/1

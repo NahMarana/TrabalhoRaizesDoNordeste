@@ -14,5 +14,66 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             _appDbContext = appDbContext;
         }
+
+        [HttpGet("{id:int}")]
+        public IActionResult BuscarPedidoPorId(int id)
+        {
+            var pedido = _appDbContext.Pedidos.Find(id);
+
+            if (pedido == null)
+                return NoContent();
+
+            return Ok(pedido);
+        }
+
+        [HttpGet]
+        public IActionResult ListarPedidos()
+        {
+            var pedido = _appDbContext.Pedidos.ToList();
+
+            return Ok(pedido);
+        }
+
+        [HttpPost]
+        public IActionResult CriarPedido(Pedidos pedido)
+        {
+            _appDbContext.Pedidos.Add(pedido);
+            _appDbContext.SaveChanges();
+
+            return Created();
+        }
+
+        [HttpPatch("{id}")]
+        public IActionResult PedidoUpdate(int id, Pedidos pedido)
+        {
+            var pedidos = _appDbContext.Pedidos.Find(id);
+            if (pedidos == null)
+                return NoContent();
+
+            pedidos.CanalPedido = pedido.CanalPedido;
+            pedidos.StatusPedido = pedido.StatusPedido;
+            pedidos.ModoReceber = pedido.ModoReceber;
+            pedidos.ValorTotalPedido = pedido.ValorTotalPedido;
+            pedidos.DataHoraPedido = pedido.DataHoraPedido;
+            pedidos.Descricao = pedido.Descricao;
+
+            _appDbContext.Pedidos.Update(pedidos);
+            _appDbContext.SaveChanges();
+
+            return Ok("Pedido atualizado!");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePedido(int id)
+        {
+            var pedido = _appDbContext.Pedidos.Find(id);
+            if (pedido == null)
+                return NoContent();
+
+            _appDbContext.Pedidos.Remove(pedido);
+            _appDbContext.SaveChanges();
+
+            return Ok("Pedido deletado com sucesso!");
+        }
     }
 }
