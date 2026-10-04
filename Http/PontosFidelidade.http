@@ -1,0 +1,33 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pontosFidelidade/
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pontosFidelidade/
+Content-Type: application/json
+Accept: application/json
+{
+  "FidelizacaoId": 1,
+  "PedidoId": 2,
+  "TipoMovimentacaoPontos": 0,
+  "Pontos": 100
+}
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pontosFidelidade/1
+Content-Type: application/json
+Accept: application/json
+{
+  "FidelizacaoId": 1,
+  "PedidoId": 2,
+  "TipoMovimentacaoPontos": 0,
+  "Pontos": 50
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pontosFidelidade/2
