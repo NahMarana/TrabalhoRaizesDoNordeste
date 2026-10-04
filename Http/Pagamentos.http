@@ -1,0 +1,40 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/
+Content-Type: application/json
+Accept: application/json
+{
+  "PedidoId": 2,
+  "TipoPagamento": 0,
+  "StatusPagamento": 2,
+  "ValorPagamento": 93.40,
+  "DataConfirmaPg": "2026-10-03T18:41:30",
+  "IdTransacaoExterna": "CREDITO-E12345678202610031740ABC124",
+  "RespostaPayload": "{\"id\":\"CREDITO-E12345678202610031740ABC124\",\"status\":\"approved\",\"valor\":93.40,\"metodo\":\"credito\",\"data_aprovacao\":\"2026-10-03T18:41:30\"}"
+}
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/1
+Content-Type: application/json
+Accept: application/json
+{
+  "pedidoId": 2,
+  "tipoPagamento": 3,
+  "statusPagamento": 1,
+  "valorPagamento": 107.7,
+  "dataPagamento": "2026-10-03T20:46:51.3973936",
+  "dataConfirmaPg": "2026-10-03T17:41:30",
+  "idTransacaoExterna": "PIX-E12345678202610031740ABC123",
+  "respostaPayload": "{\"id\":\"PIX-E12345678202610031740ABC123\",\"status\":\"approved\",\"valor\":107.70,\"metodo\":\"pix\",\"data_aprovacao\":\"2026-10-03T17:41:30\"}"
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/2

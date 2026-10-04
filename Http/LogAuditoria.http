@@ -1,0 +1,37 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/
+Content-Type: application/json
+Accept: application/json
+{
+  "UsuarioId": 3,
+  "Acao": "UPDATE",
+  "EntidadeAfetada": "EstoqueMovimentacao",
+  "EntidadeAfetadaId": 1,
+  "DadosAnteriores": "{\"TelefoneUnidade\":\"(11) 1234-5678\",\"TipoUnidade\":0}",
+  "DadosNovos": "{\"TelefoneUnidade\":\"(11) 3322-4455\",\"TipoUnidade\":1}"
+}
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/1
+Content-Type: application/json
+Accept: application/json
+{
+  "usuarioId": 3,
+  "acao": "UPDATE",
+  "entidadeAfetada": "Produtos",
+  "entidadeAfetadaId": 1,
+  "dadosNovos": "{\"TelefoneUnidade\":\"(11) 3322-4455\",\"TipoUnidade\":1}",
+  "dadosAnteriores": "{\"TelefoneUnidade\":\"(11) 1234-5678\",\"TipoUnidade\":0}"
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/2
