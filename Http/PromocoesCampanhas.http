@@ -1,0 +1,37 @@
+@TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
+
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/1
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+{
+  "EstabelecimentoId": 1,
+  "ProdutoId": 5,
+  "Descricao": "Semana do Café - desconto especial",
+  "ValorPromocional": 29.90,
+  "StatusPromoCampanha": 0,
+  "DataFim": "2026-10-15"
+}
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/1
+Content-Type: application/json
+Accept: application/json
+{
+  "EstabelecimentoId": 1,
+  "ProdutoId": 5,
+  "Descricao": "Semana do Café - desconto especial",
+  "ValorPromocional": 29.90,
+  "StatusPromoCampanha": 1,
+  "DataFim": "2026-10-15"
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/1
