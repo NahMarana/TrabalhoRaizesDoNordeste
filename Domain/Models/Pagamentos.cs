@@ -13,5 +13,6 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public DateTime DataConfirmaPg { get; set; }
         public string? IdTransacaoExterna { get; set; }
         public string? RespostaPayload { get; set; }
+        public Pedidos? Pedidos { get; set; }
     }
 }

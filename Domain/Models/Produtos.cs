@@ -12,6 +12,9 @@
         public bool ProdutoAtivo { get; set; }
         public int CategoriaId { get; set; }
         public Categorias? Categoria { get; set; }
+        public ICollection<EstoqueUnidade>? EstoqueUnidades { get; set; }
+        public ICollection<ItensPedido>? ItensPedidos { get; set; }
+        public ICollection<PromocoesCampanhas>? PromocoesCampanhas { get; set; }
 
     }
 }

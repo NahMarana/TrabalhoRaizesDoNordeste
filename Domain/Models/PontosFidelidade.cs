@@ -10,5 +10,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required TipoMovimentacaoPontos TipoMovimentacaoPontos { get; set; }
         public required decimal Pontos { get; set; }
         public DateTime DataPontos { get; set; } = DateTime.Now;
+        public Fidelidade? Fidelidade { get; set; }
+        public Pedidos? Pedidos { get; set; }
     }
 }

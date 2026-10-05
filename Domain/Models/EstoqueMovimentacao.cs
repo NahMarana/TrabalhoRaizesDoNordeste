@@ -12,6 +12,9 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required TipoMovimento TipoMovimento { get; set; }
         public required string MotivoMovimentacao { get; set; }
         public DateTime DataMovimentacao { get; set; } = DateTime.Now;
+        public EstoqueUnidade? EstoqueUnidade { get; set; }
+        public Usuario? UsuarioUsado { get; set; }
+        public Pedidos? Pedidos { get; set; }
 
     }
 }

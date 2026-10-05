@@ -13,6 +13,11 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required decimal ValorTotalPedido { get; set; }
         public DateTime DataHoraPedido { get; set; } = DateTime.Now;
         public string? Descricao { get; set; }
-
+        public Usuario? Usuarios { get; set; }
+        public UnidadesEstabelecimento? UnidadesEstabelecimento { get; set; }
+        public ICollection<EstoqueMovimentacao>? EstoquesMovimentacao { get; set; }
+        public ICollection<ItensPedido>? ItensPedidos { get; set; }
+        public Pagamentos? Pagamentos { get; set; }
+        public ICollection<PontosFidelidade>? PontosFidelidades { get; set; }
     }
 }

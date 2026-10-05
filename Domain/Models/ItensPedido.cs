@@ -8,5 +8,7 @@
         public required int QtdItens { get; set; }
         public decimal PrecoUnitario { get; set; }
         public decimal PrecoTotal { get; set; }
+        public Pedidos? Pedidos { get; set; }
+        public Produtos? Produtos { get; set; }
     }
 }

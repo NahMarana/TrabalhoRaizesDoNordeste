@@ -12,5 +12,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required StatusPromoCampanha StatusPromoCampanha { get; set; }
         public DateOnly DataInicio { get; set; } = DateOnly.FromDateTime(DateTime.Now);
         public DateOnly DataFim { get; set; }
+        public Produtos? Produtos { get; set; }
+        public UnidadesEstabelecimento? UnidadesEstabelecimento { get; set; }
     }
 }

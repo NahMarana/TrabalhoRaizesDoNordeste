@@ -64,6 +64,12 @@ namespace TrabalhoRaizesDoNordeste.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EstoqueId");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("UsuarioUsadoId");
+
                     b.ToTable("EstoquesMovimentacao");
                 });
 
@@ -87,6 +93,10 @@ namespace TrabalhoRaizesDoNordeste.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EstabelecimentoId");
+
+                    b.HasIndex("ProdutoId");
+
                     b.ToTable("EstoquesUnidade");
                 });
 
@@ -103,6 +113,9 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId")
+                        .IsUnique();
 
                     b.ToTable("Fidelidades");
                 });
@@ -129,6 +142,10 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PedidoId");
+
+                    b.HasIndex("ProdutoId");
 
                     b.ToTable("ItensPedido");
                 });
@@ -184,14 +201,12 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("IdTransacaoExterna")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PedidoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("RespostaPayload")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StatusPagamento")
@@ -204,6 +219,9 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PedidoId")
+                        .IsUnique();
 
                     b.ToTable("Pagamentos");
                 });
@@ -221,7 +239,6 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("EstabelecimentoId")
@@ -240,6 +257,10 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstabelecimentoId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Pedidos");
                 });
@@ -266,6 +287,10 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FidelizacaoId");
+
+                    b.HasIndex("PedidoId");
 
                     b.ToTable("PontosFidelidade");
                 });
@@ -337,6 +362,10 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstabelecimentoId");
+
+                    b.HasIndex("ProdutoId");
 
                     b.ToTable("PromocoesCampanha");
                 });
@@ -477,18 +506,145 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
+                    b.HasIndex("EstabelecimentoId");
+
                     b.ToTable("Usuarios");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.EstoqueMovimentacao", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.EstoqueUnidade", "EstoqueUnidade")
+                        .WithMany("EstoquesMovimentacao")
+                        .HasForeignKey("EstoqueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                        .WithMany("EstoquesMovimentacao")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", "UsuarioUsado")
+                        .WithMany("EstoquesMovimentacao")
+                        .HasForeignKey("UsuarioUsadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EstoqueUnidade");
+
+                    b.Navigation("Pedidos");
+
+                    b.Navigation("UsuarioUsado");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.EstoqueUnidade", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.UnidadesEstabelecimento", "UnidadesEstabelecimento")
+                        .WithMany("EstoqueUnidades")
+                        .HasForeignKey("EstabelecimentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", "Produtos")
+                        .WithMany("EstoqueUnidades")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produtos");
+
+                    b.Navigation("UnidadesEstabelecimento");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Fidelidade", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", "Usuarios")
+                        .WithOne("Fidelidade")
+                        .HasForeignKey("TrabalhoRaizesDoNordeste.Domain.Models.Fidelidade", "UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.ItensPedido", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                        .WithMany("ItensPedidos")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", "Produtos")
+                        .WithMany("ItensPedidos")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedidos");
+
+                    b.Navigation("Produtos");
                 });
 
             modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.LogAuditoria", b =>
                 {
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", "Usuario")
-                        .WithMany()
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", "Usuarios")
+                        .WithMany("LogAuditorias")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Usuario");
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pagamentos", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                        .WithOne("Pagamentos")
+                        .HasForeignKey("TrabalhoRaizesDoNordeste.Domain.Models.Pagamentos", "PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedidos");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.UnidadesEstabelecimento", "UnidadesEstabelecimento")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("EstabelecimentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", "Usuarios")
+                        .WithMany("Pedidos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UnidadesEstabelecimento");
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.PontosFidelidade", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Fidelidade", "Fidelidade")
+                        .WithMany("PontosFidelidade")
+                        .HasForeignKey("FidelizacaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                        .WithMany("PontosFidelidades")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Fidelidade");
+
+                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", b =>
@@ -502,9 +658,91 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Navigation("Categoria");
                 });
 
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.PromocoesCampanhas", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.UnidadesEstabelecimento", "UnidadesEstabelecimento")
+                        .WithMany("PromocoesCampanhas")
+                        .HasForeignKey("EstabelecimentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", "Produtos")
+                        .WithMany("PromocoesCampanhas")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Produtos");
+
+                    b.Navigation("UnidadesEstabelecimento");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", b =>
+                {
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.UnidadesEstabelecimento", "UnidadesEstabelecimento")
+                        .WithMany("Usuarios")
+                        .HasForeignKey("EstabelecimentoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UnidadesEstabelecimento");
+                });
+
             modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Categorias", b =>
                 {
                     b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.EstoqueUnidade", b =>
+                {
+                    b.Navigation("EstoquesMovimentacao");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Fidelidade", b =>
+                {
+                    b.Navigation("PontosFidelidade");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", b =>
+                {
+                    b.Navigation("EstoquesMovimentacao");
+
+                    b.Navigation("ItensPedidos");
+
+                    b.Navigation("Pagamentos");
+
+                    b.Navigation("PontosFidelidades");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", b =>
+                {
+                    b.Navigation("EstoqueUnidades");
+
+                    b.Navigation("ItensPedidos");
+
+                    b.Navigation("PromocoesCampanhas");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.UnidadesEstabelecimento", b =>
+                {
+                    b.Navigation("EstoqueUnidades");
+
+                    b.Navigation("Pedidos");
+
+                    b.Navigation("PromocoesCampanhas");
+
+                    b.Navigation("Usuarios");
+                });
+
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Usuario", b =>
+                {
+                    b.Navigation("EstoquesMovimentacao");
+
+                    b.Navigation("Fidelidade");
+
+                    b.Navigation("LogAuditorias");
+
+                    b.Navigation("Pedidos");
                 });
 #pragma warning restore 612, 618
         }

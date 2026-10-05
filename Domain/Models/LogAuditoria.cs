@@ -10,6 +10,6 @@
         public required string DadosNovos { get; set; }
         public required string DadosAnteriores { get; set; }
         public DateTime DataOrigem { get; set; } = DateTime.Now;
-        public Usuario? Usuario { get; set; }
+        public Usuario? Usuarios { get; set; }
     }
 }

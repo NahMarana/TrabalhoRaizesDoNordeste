@@ -5,5 +5,7 @@
         public int Id { get; set; }
         public required int UsuarioId { get; set; }
         public required decimal QtdPontos { get; set; }
+        public Usuario? Usuarios { get; set; }
+        public ICollection<PontosFidelidade>? PontosFidelidade { get; set; }
     }
 }

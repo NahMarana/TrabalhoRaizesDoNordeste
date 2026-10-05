@@ -7,5 +7,8 @@
         public required int EstabelecimentoId { get; set; }
         public required int QtdEstoqueDisponivel { get; set; }
         public required bool VendaDisponivel { get; set; }
+        public Produtos? Produtos { get; set; }
+        public UnidadesEstabelecimento? UnidadesEstabelecimento { get; set; }
+        public ICollection<EstoqueMovimentacao>? EstoquesMovimentacao { get; set; }
     }
 }

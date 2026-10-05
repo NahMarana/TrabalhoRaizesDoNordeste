@@ -25,5 +25,10 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public bool UsuarioAtivo { get; set; } = true;
         public DateTime DataCadastro { get; set; } = DateTime.Now;
         public int EstabelecimentoId { get; set; }
+        public UnidadesEstabelecimento? UnidadesEstabelecimento { get; set; }
+        public ICollection<LogAuditoria>? LogAuditorias { get; set; }
+        public Fidelidade? Fidelidade { get; set; }
+        public ICollection<Pedidos>? Pedidos { get; set; }
+        public ICollection<EstoqueMovimentacao>? EstoquesMovimentacao { get; set; }
     }
 }
