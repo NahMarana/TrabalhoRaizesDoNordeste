@@ -1,10 +1,10 @@
 ﻿namespace TrabalhoRaizesDoNordeste.Domain.Models
 {
-    public class Categorias
+    public class Categoria
     {
         public int Id { get; set; }
-        public string? NomeCategoria { get; set; }
+        public required string NomeCategoria { get; set; }
         public bool CategoriaAtiva { get; set; } = true;
-        public ICollection<Produtos>? Produtos { get; set; }
+        public ICollection<Produto>? Produtos { get; set; }
     }
 }

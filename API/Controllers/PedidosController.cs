@@ -35,7 +35,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarPedido(Pedidos pedido)
+        public IActionResult CriarPedido(Pedido pedido)
         {
             _appDbContext.Pedidos.Add(pedido);
             _appDbContext.SaveChanges();
@@ -44,7 +44,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PedidoUpdate(int id, Pedidos pedido)
+        public IActionResult PedidoUpdate(int id, Pedido pedido)
         {
             var pedidos = _appDbContext.Pedidos.Find(id);
             if (pedidos == null)

@@ -11,6 +11,6 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required decimal Pontos { get; set; }
         public DateTime DataPontos { get; set; } = DateTime.Now;
         public Fidelidade? Fidelidade { get; set; }
-        public Pedidos? Pedidos { get; set; }
+        public Pedido? Pedidos { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarPagamento(Pagamentos pagamento)
+        public IActionResult CriarPagamento(Pagamento pagamento)
         {
             _appDbContext.Pagamentos.Add(pagamento);
             _appDbContext.SaveChanges();
@@ -44,7 +44,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PagamentoUpdate(int id, Pagamentos pagamento)
+        public IActionResult PagamentoUpdate(int id, Pagamento pagamento)
         {
             var pagamentos = _appDbContext.Pagamentos.Find(id);
             if (pagamentos == null)

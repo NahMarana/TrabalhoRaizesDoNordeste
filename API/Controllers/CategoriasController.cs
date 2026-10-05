@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,19 +10,21 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly CategoriaService _service;
 
-        public CategoriasController(AppDbContext appDbContext)
+        public CategoriasController(AppDbContext appDbContext, CategoriaService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id}")]
         public IActionResult BuscarCategoriaPorId(int id)
         {
-            var categoria = _appDbContext.Categorias.Find(id);
+            var categoria = _service.BuscaPorId(id);
 
             if (categoria == null)
-                return NoContent();
+                return NotFound("Categoria não encontrada.");
 
             return Ok(categoria);
         }
@@ -29,11 +32,9 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("buscar")]
         public IActionResult BuscarCategoriaPorNome(string nome)
         {
-            var categorias = _appDbContext.Categorias
-                .Where(c => c.NomeCategoria.Contains(nome))
-                .ToList();
+            var categorias = _service.BuscarPorNome(nome);
 
-            if (!categorias.Any())
+            if (categorias == null)
                 return NotFound("Categoria não encontrada.");
 
             return Ok(categorias);
@@ -42,48 +43,39 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet]
         public IActionResult ListarCategorias() 
         {
-            var categorias = _appDbContext.Categorias.ToList();
+            var categorias = _service.ListarCategorias();
 
             return Ok(categorias);
         }
 
         [HttpPost]
-        public IActionResult CriarCategoria(Categorias categorias)
+        public IActionResult CriarCategoria(Categoria categoria)
         {
-            _appDbContext.Categorias.Add(categorias);
-            _appDbContext.SaveChanges();
+            _service.CriarCategoria(categoria);
             
             return Created();                
         }
 
         [HttpPatch("{id}")]
-        public IActionResult CategoriaUpdate(int id, Categorias categorias)
+        public IActionResult CategoriaUpdate(int id, Categoria categoria)
         {
-            var categoria = _appDbContext.Categorias.Find(id);
-            if (categoria == null)
-                return NoContent();
+           var categorias = _service.AtualizarCategoria(id, categoria);
 
-            categoria.NomeCategoria = categorias.NomeCategoria;
-            categoria.CategoriaAtiva = categorias.CategoriaAtiva;
-
-            _appDbContext.Categorias.Update(categoria);
-            _appDbContext.SaveChanges();
+           if (categorias == null)
+                return NotFound("Categoria não encontrada.");
 
             return Ok("Categoria Atualizada!");
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCategoria(int id)
+        public ActionResult DeleteCategoria(int id)
         {
-            var categoria = _appDbContext.Categorias.Find(id);
+            var categoria = _service.DeletarCategoria(id);
+
             if (categoria == null)
                 return NoContent();
 
-            _appDbContext.Categorias.Remove(categoria);
-            _appDbContext.SaveChanges();
-
             return Ok("Categoria deletada com sucesso!");
         }
-
     }
 }

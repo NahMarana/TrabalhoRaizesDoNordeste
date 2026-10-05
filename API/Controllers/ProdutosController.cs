@@ -101,7 +101,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarProduto(Produtos produtos)
+        public IActionResult CriarProduto(Produto produtos)
         {
             if (produtos.CategoriaId == 0)
             {
@@ -123,7 +123,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult ProdutoUpdate(int id, Produtos produtos)
+        public IActionResult ProdutoUpdate(int id, Produto produtos)
         {
             var produto = _appDbContext.Produtos.Find(id);
             if (produto == null)

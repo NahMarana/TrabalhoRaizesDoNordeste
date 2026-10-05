@@ -2,7 +2,7 @@
 
 namespace TrabalhoRaizesDoNordeste.Domain.Models
 {
-    public class Pedidos
+    public class Pedido
     {
         public int Id { get; set; }
         public required int UsuarioId { get; set; }
@@ -17,7 +17,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public UnidadesEstabelecimento? UnidadesEstabelecimento { get; set; }
         public ICollection<EstoqueMovimentacao>? EstoquesMovimentacao { get; set; }
         public ICollection<ItensPedido>? ItensPedidos { get; set; }
-        public Pagamentos? Pagamentos { get; set; }
+        public Pagamento? Pagamentos { get; set; }
         public ICollection<PontosFidelidade>? PontosFidelidades { get; set; }
     }
 }

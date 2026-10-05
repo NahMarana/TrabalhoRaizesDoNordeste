@@ -17,7 +17,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    NomeCategoria = table.Column<string>(type: "TEXT", nullable: true),
+                    NomeCategoria = table.Column<string>(type: "TEXT", nullable: false),
                     CategoriaAtiva = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -55,7 +55,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     NomeProduto = table.Column<string>(type: "TEXT", nullable: false),
-                    DescricaoProduto = table.Column<string>(type: "TEXT", nullable: false),
+                    DescricaoProduto = table.Column<string>(type: "TEXT", nullable: true),
                     PrecoUnitario = table.Column<decimal>(type: "TEXT", nullable: false),
                     ProdutoSazonal = table.Column<bool>(type: "INTEGER", nullable: false),
                     DataInicioSazonal = table.Column<DateOnly>(type: "TEXT", nullable: false),

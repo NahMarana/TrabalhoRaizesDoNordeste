@@ -11,7 +11,7 @@ using TrabalhoRaizesDoNordeste.Context;
 namespace TrabalhoRaizesDoNordeste.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261005173550_InitialCreate")]
+    [Migration("20261005223225_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.12");
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Categorias", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Categoria", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,6 +30,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NomeCategoria")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -191,7 +192,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.ToTable("LogsAuditoria");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pagamentos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pagamento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -229,7 +230,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.ToTable("Pagamentos");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -298,7 +299,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.ToTable("PontosFidelidade");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -314,7 +315,6 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DescricaoProduto")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("NomeProduto")
@@ -522,7 +522,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", "Pedidos")
                         .WithMany("EstoquesMovimentacao")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -549,7 +549,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", "Produtos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produto", "Produtos")
                         .WithMany("EstoqueUnidades")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -573,13 +573,13 @@ namespace TrabalhoRaizesDoNordeste.Migrations
 
             modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.ItensPedido", b =>
                 {
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", "Pedidos")
                         .WithMany("ItensPedidos")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", "Produtos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produto", "Produtos")
                         .WithMany("ItensPedidos")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -601,18 +601,18 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Navigation("Usuarios");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pagamentos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pagamento", b =>
                 {
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", "Pedidos")
                         .WithOne("Pagamentos")
-                        .HasForeignKey("TrabalhoRaizesDoNordeste.Domain.Models.Pagamentos", "PedidoId")
+                        .HasForeignKey("TrabalhoRaizesDoNordeste.Domain.Models.Pagamento", "PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Pedidos");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", b =>
                 {
                     b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.UnidadesEstabelecimento", "UnidadesEstabelecimento")
                         .WithMany("Pedidos")
@@ -639,7 +639,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", "Pedidos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", "Pedidos")
                         .WithMany("PontosFidelidades")
                         .HasForeignKey("PedidoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -650,9 +650,9 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Navigation("Pedidos");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produto", b =>
                 {
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Categorias", "Categoria")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Categoria", "Categoria")
                         .WithMany("Produtos")
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -669,7 +669,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", "Produtos")
+                    b.HasOne("TrabalhoRaizesDoNordeste.Domain.Models.Produto", "Produtos")
                         .WithMany("PromocoesCampanhas")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -691,7 +691,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Navigation("UnidadesEstabelecimento");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Categorias", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Categoria", b =>
                 {
                     b.Navigation("Produtos");
                 });
@@ -706,7 +706,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Navigation("PontosFidelidade");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedidos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Pedido", b =>
                 {
                     b.Navigation("EstoquesMovimentacao");
 
@@ -717,7 +717,7 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Navigation("PontosFidelidades");
                 });
 
-            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produtos", b =>
+            modelBuilder.Entity("TrabalhoRaizesDoNordeste.Domain.Models.Produto", b =>
                 {
                     b.Navigation("EstoqueUnidades");
 

@@ -12,16 +12,16 @@ namespace TrabalhoRaizesDoNordeste.Context
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<UnidadesEstabelecimento> UnidadesEstabelecimento { get; set; }
         public DbSet<PromocoesCampanhas> PromocoesCampanha { get; set; }
-        public DbSet<Produtos> Produtos { get; set; }
+        public DbSet<Produto> Produtos { get; set; }
         public DbSet<PontosFidelidade> PontosFidelidade { get; set; }
-        public DbSet<Pedidos> Pedidos { get; set; }
-        public DbSet<Pagamentos> Pagamentos { get; set; }
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<Pagamento> Pagamentos { get; set; }
         public DbSet<LogAuditoria> LogsAuditoria { get; set; }
         public DbSet<ItensPedido> ItensPedido { get; set; }
         public DbSet<Fidelidade> Fidelidades { get; set; }
         public DbSet<EstoqueUnidade> EstoquesUnidade { get; set; }
         public DbSet<EstoqueMovimentacao> EstoquesMovimentacao { get; set; }
-        public DbSet<Categorias> Categorias { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace TrabalhoRaizesDoNordeste.Context
             modelBuilder.Entity<UnidadesEstabelecimento>().HasIndex(u => u.CNPJ).IsUnique();
 
             //Categoria -> Produtos
-            modelBuilder.Entity<Categorias>()
+            modelBuilder.Entity<Categoria>()
                 .HasMany(c => c.Produtos)
                 .WithOne(p => p.Categoria)
                 .HasForeignKey(fk => fk.CategoriaId);
@@ -85,43 +85,43 @@ namespace TrabalhoRaizesDoNordeste.Context
                 .HasForeignKey(fk => fk.EstabelecimentoId);
 
             //Produtos -> EstoqueUnidade
-            modelBuilder.Entity<Produtos>()
+            modelBuilder.Entity<Produto>()
                 .HasMany(pr => pr.EstoqueUnidades)
                 .WithOne(eu => eu.Produtos)
                 .HasForeignKey(fk => fk.ProdutoId);
 
             //Produtos -> ItensPedido
-            modelBuilder.Entity<Produtos>()
+            modelBuilder.Entity<Produto>()
                 .HasMany(pr => pr.ItensPedidos)
                 .WithOne(i => i.Produtos)
                 .HasForeignKey(fk => fk.ProdutoId);
 
             //Produtos -> PromocoesCampanhas
-            modelBuilder.Entity<Produtos>()
+            modelBuilder.Entity<Produto>()
                 .HasMany(pr => pr.PromocoesCampanhas)
                 .WithOne(pc => pc.Produtos)
                 .HasForeignKey(fk => fk.ProdutoId);
 
             //Pedidos -> EstoqueMovimentacao
-            modelBuilder.Entity<Pedidos>()
+            modelBuilder.Entity<Pedido>()
                 .HasMany(p => p.EstoquesMovimentacao)
                 .WithOne(m => m.Pedidos)
                 .HasForeignKey(fk => fk.PedidoId);
 
             //Pedidos -> ItensPedido
-            modelBuilder.Entity<Pedidos>()
+            modelBuilder.Entity<Pedido>()
                 .HasMany(p => p.ItensPedidos)
                 .WithOne(i => i.Pedidos)
                 .HasForeignKey(fk => fk.PedidoId);
 
             //Pedidos -> Pagamentos
-            modelBuilder.Entity<Pedidos>()
+            modelBuilder.Entity<Pedido>()
                 .HasOne(p => p.Pagamentos)
                 .WithOne(pg => pg.Pedidos)
-                .HasForeignKey<Pagamentos>(fk => fk.PedidoId);
+                .HasForeignKey<Pagamento>(fk => fk.PedidoId);
 
             //Pedidos -> PontosFidelidade
-            modelBuilder.Entity<Pedidos>()
+            modelBuilder.Entity<Pedido>()
                 .HasMany(p => p.PontosFidelidades)
                 .WithOne(pf => pf.Pedidos)
                 .HasForeignKey(fk => fk.PedidoId);

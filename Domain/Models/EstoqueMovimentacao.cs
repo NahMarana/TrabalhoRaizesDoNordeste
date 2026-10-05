@@ -14,7 +14,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public DateTime DataMovimentacao { get; set; } = DateTime.Now;
         public EstoqueUnidade? EstoqueUnidade { get; set; }
         public Usuario? UsuarioUsado { get; set; }
-        public Pedidos? Pedidos { get; set; }
+        public Pedido? Pedidos { get; set; }
 
     }
 }

@@ -16,7 +16,7 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public required string Estado { get; set; }
         public required string CEP { get; set; }
         public required string TelefoneUnidade { get; set; }
-        public ICollection<Pedidos>? Pedidos { get; set; }
+        public ICollection<Pedido>? Pedidos { get; set; }
         public ICollection<EstoqueUnidade>? EstoqueUnidades { get; set; }
         public ICollection<PromocoesCampanhas>? PromocoesCampanhas { get; set; }
         public ICollection<Usuario>? Usuarios { get; set; }
