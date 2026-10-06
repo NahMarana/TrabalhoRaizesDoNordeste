@@ -58,8 +58,8 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     DescricaoProduto = table.Column<string>(type: "TEXT", nullable: true),
                     PrecoUnitario = table.Column<decimal>(type: "TEXT", nullable: false),
                     ProdutoSazonal = table.Column<bool>(type: "INTEGER", nullable: false),
-                    DataInicioSazonal = table.Column<DateOnly>(type: "TEXT", nullable: false),
-                    DataFimSazonal = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    DataInicioSazonal = table.Column<DateOnly>(type: "TEXT", nullable: true),
+                    DataFimSazonal = table.Column<DateOnly>(type: "TEXT", nullable: true),
                     ProdutoAtivo = table.Column<bool>(type: "INTEGER", nullable: false),
                     CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },

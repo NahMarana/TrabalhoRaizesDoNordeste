@@ -1,22 +1,5 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
-Content-Type: application/json
-Accept: application/json
-{
-  "nomeProduto": "Café",
-  "descricaoProduto": "Café com leite",
-  "precoUnitario": 35.90,
-  "produtoSazonal": false,
-  "produtoAtivo": true,
-  "categoriaId": 2
-}
-
-###
-
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/2
-
-###
 
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
 Content-Type: application/json
@@ -24,14 +7,37 @@ Accept: application/json
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/3
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
 Content-Type: application/json
 Accept: application/json
 {
-  "nomeProduto": "Bauru",
-  "descricaoProduto": "Café com leite",
-  "precoUnitario": 35.90,
-  "produtoSazonal": false,
+  "nomeProduto": "Suco de Cajá",
+  "descricaoProduto": "Suco natural de cajá, disponível durante o período da safra.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-01-26",
+  "dataFimSazonal": "2026-03-31",
   "produtoAtivo": true,
-  "categoriaId": 3
+  "categoriaId": 1
 }
+
+###
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/2
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeProduto": "Suco de Cajá",
+  "descricaoProduto": "Suco natural de cajá, disponível durante o período da safra.",
+  "precoUnitario": 12.90,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-01-26",
+  "dataFimSazonal": "2026-03-31",
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/1
+

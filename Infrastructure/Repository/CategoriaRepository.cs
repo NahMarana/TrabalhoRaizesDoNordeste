@@ -11,15 +11,14 @@ public class CategoriaRepository(AppDbContext _context)
     {
         return _context.Categorias
             .Include(p => p.Produtos)
-            .FirstOrDefault();
+            .FirstOrDefault(c => c.Id == id);
     }
 
     public Categoria? BuscarCategoriaPorNome(string nome)
     {
         return _context.Categorias
-            .Where(c => c.NomeCategoria.Contains(nome))
             .Include(p => p.Produtos)
-            .FirstOrDefault();
+            .FirstOrDefault(c => c.NomeCategoria.ToLower().Contains(nome.ToLower()));
     }
 
     public ICollection<Categoria>? ListarCategorias()

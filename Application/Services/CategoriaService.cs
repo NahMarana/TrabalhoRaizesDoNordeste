@@ -14,6 +14,12 @@ public class CategoriaService(CategoriaRepository repository)
         }
 
         var categoria = repository.BuscaCagetoriaPorId(id);
+
+        if(categoria == null)
+        {
+            return null;
+        }
+
         var categoriaDTO = CriarObjeto(categoria);
 
         return categoriaDTO;
@@ -27,6 +33,12 @@ public class CategoriaService(CategoriaRepository repository)
         }
 
         var categoria = repository.BuscarCategoriaPorNome(nome);
+        
+        if (categoria == null)
+        {
+            return null;
+        }
+
         var categoriaDTO = CriarObjeto(categoria);
 
         return categoriaDTO;

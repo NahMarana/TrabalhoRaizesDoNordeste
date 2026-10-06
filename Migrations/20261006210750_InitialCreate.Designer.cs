@@ -11,7 +11,7 @@ using TrabalhoRaizesDoNordeste.Context;
 namespace TrabalhoRaizesDoNordeste.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261005223225_InitialCreate")]
+    [Migration("20261006210750_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -308,10 +308,10 @@ namespace TrabalhoRaizesDoNordeste.Migrations
                     b.Property<int>("CategoriaId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("DataFimSazonal")
+                    b.Property<DateOnly?>("DataFimSazonal")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateOnly>("DataInicioSazonal")
+                    b.Property<DateOnly?>("DataInicioSazonal")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DescricaoProduto")

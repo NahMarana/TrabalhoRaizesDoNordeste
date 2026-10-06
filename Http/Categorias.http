@@ -1,6 +1,6 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/buscar?nome=bebidas
 Content-Type: application/json
 Accept: application/json
 
@@ -10,7 +10,8 @@ POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
 Content-Type: application/json
 Accept: application/json
 {
-  "nomeCategoria": "Comida Salgada"
+  "nomeCategoria": "Bebidas",
+  "categoriaAtiva": true
 }
 
 ###

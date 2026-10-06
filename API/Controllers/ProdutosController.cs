@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -10,67 +11,33 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class ProdutosController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ProdutoService _service;
 
-        public ProdutosController(AppDbContext appDbContext)
+        public ProdutosController(AppDbContext appDbContext, ProdutoService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("buscar")]
         public IActionResult BuscarProdutosPorNome(string nome)
         {
-            nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
-            var produtos = _appDbContext.Produtos
-                .Where(p => p.NomeProduto.Contains(nome))
-                .Select(p => new
-                {
-                    p.Id,
-                    p.NomeProduto,
-                    p.DescricaoProduto,
-                    p.PrecoUnitario,
-                    p.ProdutoSazonal,
-                    p.DataInicioSazonal,
-                    p.DataFimSazonal,
-                    p.ProdutoAtivo,
-                    Categoria = new
-                    {
-                        p.CategoriaId,
-                        NomeCategoria = p.Categoria!.NomeCategoria
-                    }
-                })
-                .ToList(); ;
+            var produtos = _service.BuscarPorNome(nome);
 
-            if (!produtos.Any())
+            if (produtos == null)
                 return NotFound("Produto não encontrado.");
 
             return Ok(produtos);
+
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarProdutosPorId(int id)
         {
-            var produto = _appDbContext.Produtos
-                .Where(p => p.Id == id)
-                .Select(p => new
-            {
-                    p.Id,
-                    p.NomeProduto,
-                    p.DescricaoProduto,
-                    p.PrecoUnitario,
-                    p.ProdutoSazonal,
-                    p.DataInicioSazonal,
-                    p.DataFimSazonal,
-                    p.ProdutoAtivo,
-                    Categoria = new
-                    {
-                        p.CategoriaId,
-                        NomeCategoria = p.Categoria!.NomeCategoria
-                    }
-            })
-            .FirstOrDefault();
+            var produto = _service.BuscaPorId(id);
 
             if (produto == null)
-                return NoContent();
+                return NotFound("Produto não encontrada.");
 
             return Ok(produto);
         }
@@ -78,24 +45,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet]
         public IActionResult ListarProdutos()
         {
-            var produtos = _appDbContext.Produtos
-            .Select(p => new
-            {
-                p.Id,
-                p.NomeProduto,
-                p.DescricaoProduto,
-                p.PrecoUnitario,
-                p.ProdutoSazonal,
-                p.DataInicioSazonal,
-                p.DataFimSazonal,
-                p.ProdutoAtivo,
-                Categoria = new
-                {
-                    p.CategoriaId,
-                    NomeCategoria = p.Categoria!.NomeCategoria
-                }
-            })
-            .ToList();
+            var produtos = _service.ListarProdutos();
 
             return Ok(produtos);
         }
@@ -108,51 +58,28 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 return BadRequest("Categoria do produto não identificado!");
             }
 
-            var categoria = _appDbContext.Categorias.FirstOrDefault(c => c.Id == produtos.CategoriaId);
-
-            if (categoria == null)
-            {
-                return BadRequest("Categoria não encontrada");
-            }
-
-            produtos.Categoria = categoria;
-            _appDbContext.Produtos.Add(produtos);
-            _appDbContext.SaveChanges();
+            var produtoCriado = _service.CriarProduto(produtos);
 
             return Created();
         }
 
         [HttpPatch("{id}")]
-        public IActionResult ProdutoUpdate(int id, Produto produtos)
+        public IActionResult ProdutoUpdate(int id, Produto produto)
         {
-            var produto = _appDbContext.Produtos.Find(id);
-            if (produto == null)
-                return NoContent();
+            var produtos = _service.AtualizarProduto(id, produto);
 
-            produto.NomeProduto = produtos.NomeProduto;
-            produto.CategoriaId = produtos.CategoriaId;
-            produto.DescricaoProduto = produtos.DescricaoProduto;
-            produto.PrecoUnitario = produtos.PrecoUnitario;
-            produto.ProdutoSazonal = produtos.ProdutoSazonal;
-            produto.DataInicioSazonal = produtos.DataInicioSazonal;
-            produto.DataFimSazonal = produtos.DataFimSazonal;
-            produto.ProdutoAtivo = produtos.ProdutoAtivo;
+            if (produtos == null)
+                return NotFound("Produto não encontrada.");
 
-            _appDbContext.Produtos.Update(produto);
-            _appDbContext.SaveChanges();
-
-            return Ok("Produto atualizado!");
+            return Ok("Produto Atualizado!");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteProduto(int id)
         {
-            var produto = _appDbContext.Produtos.Find(id);
+            var produto = _service.DeletarProduto(id);
             if (produto == null)
                 return NoContent();
-
-            _appDbContext.Produtos.Remove(produto);
-            _appDbContext.SaveChanges();
 
             return Ok("Produto deletado com sucesso!");
         }
