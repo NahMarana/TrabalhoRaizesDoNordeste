@@ -1,5 +1,7 @@
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
+using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<AppDbContext, AppDbContext>();
+builder.Services.AddScoped<CategoriaService, CategoriaService>();
+builder.Services.AddScoped<CategoriaRepository, CategoriaRepository>();
 
 var app = builder.Build();
 

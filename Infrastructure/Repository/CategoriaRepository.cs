@@ -22,11 +22,11 @@ public class CategoriaRepository(AppDbContext _context)
             .FirstOrDefault();
     }
 
-    public Categoria? ListarCategorias()
+    public ICollection<Categoria>? ListarCategorias()
     {
         return _context.Categorias
             .Include(c => c.Produtos)
-            .FirstOrDefault();
+            .ToList();
     }
 
     public Categoria CriarCategoria(Categoria categoria)

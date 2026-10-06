@@ -1,29 +1,29 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
-Content-Type: application/json
-Accept: application/json
-{
-  "nomeCategoria": "Comida Salgada"
-
-}
-
-###
-
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/3
-
-###
-
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
 Content-Type: application/json
 Accept: application/json
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/1
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Comida Salgada"
+}
+
+###
+
+
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/2
 Content-Type: application/json
 Accept: application/json
 {
   "nomeCategoria": "Doces",
-  "categoriaAtiva": false
+  "categoriaAtiva": true
 }
+
+###
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/2

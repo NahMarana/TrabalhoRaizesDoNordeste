@@ -31,10 +31,10 @@ public class CategoriaService(CategoriaRepository repository)
 
         return categoriaDTO;
     }
-    public CategoriaDTO ListarCategorias()
+    public ICollection<CategoriaDTO> ListarCategorias()
     {
         var categoria = repository.ListarCategorias();
-        var categoriaDTO = CriarObjeto(categoria);
+        var categoriaDTO = CriarObjetoCollection(categoria);
 
         return categoriaDTO;
     }
@@ -91,5 +91,27 @@ public class CategoriaService(CategoriaRepository repository)
             }).ToList()
         }; 
         return categoriaDTO;
+    }
+
+    public ICollection<CategoriaDTO> CriarObjetoCollection(ICollection<Categoria> categoria)
+    {
+        var auxiliarCategoria = new List<CategoriaDTO>();
+        foreach (var item in categoria)
+        {
+            var categoriaDTO = new CategoriaDTO
+            {
+                Id = item.Id,
+                NomeCategoria = item.NomeCategoria,
+                CategoriaAtiva = item.CategoriaAtiva,
+                Produtos = item.Produtos.Select(p => new ProdutoDTO
+                {
+                    Id = p.Id,
+                    NomeProduto = p.NomeProduto
+                }).ToList()
+            };
+            auxiliarCategoria.Add(categoriaDTO);
+        }
+       
+        return auxiliarCategoria;
     }
 }
