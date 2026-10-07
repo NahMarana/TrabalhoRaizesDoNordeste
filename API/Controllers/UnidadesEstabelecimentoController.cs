@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,23 +10,23 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class UnidadesEstabelecimentoController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly UnidadeEstabelecimentoService _service;
 
-        public UnidadesEstabelecimentoController(AppDbContext appDbContext)
+        public UnidadesEstabelecimentoController(AppDbContext appDbContext, UnidadeEstabelecimentoService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
 
         [HttpGet("buscar")]
         public IActionResult BuscarEstabelecimentoPorNome(string nome)
         {
-            nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
-            var unidade = _appDbContext.UnidadesEstabelecimento
-              .Where(c => c.NomeEstabelecimento.Contains(nome))
-              .ToList();
+            //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
+            var unidade = _service.BuscarPorNome(nome);
 
-            if (!unidade.Any())
-                return NotFound("Unidade não encontrada.");
+            if (unidade == null)
+                return NotFound("Categoria não encontrada.");
 
             return Ok(unidade);
         }
@@ -33,10 +34,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("{id:int}")]
         public IActionResult BuscarUnidadePorId(int id)
         {
-            var unidade = _appDbContext.UnidadesEstabelecimento.Find(id);
+            var unidade = _service.BuscaPorId(id);
 
             if (unidade == null)
-                return NoContent();
+                return NotFound("Categoria não encontrada.");
 
             return Ok(unidade);
         }
@@ -44,16 +45,15 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet]
         public IActionResult ListarUnidades()
         {
-            var unidades = _appDbContext.UnidadesEstabelecimento.ToList();
+            var unidade = _service.ListarUnidades();
 
-            return Ok(unidades);
+            return Ok(unidade);
         }
 
         [HttpPost]
         public IActionResult CriarUnidade(UnidadesEstabelecimento unidade)
         {
-            _appDbContext.UnidadesEstabelecimento.Add(unidade);
-            _appDbContext.SaveChanges();
+            var unidadeEstabelecimentoCriado = _service.CriarUnidade(unidade);
 
             return Created();
         }
@@ -61,38 +61,24 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpPatch("{id}")]
         public IActionResult UnidadeUpdate(int id, UnidadesEstabelecimento unidades)
         {
-            var unidade = _appDbContext.UnidadesEstabelecimento.Find(id);
+            var unidade = _service.AtualizarUnidade(id, unidades);
+
             if (unidade == null)
-                return NoContent();
+                return NotFound("Unidade Estabelecimento não encontrada.");
 
-            unidade.NomeEstabelecimento = unidades.NomeEstabelecimento;
-            unidade.CNPJ = unidades.CNPJ;
-            unidade.UnidadeAtiva = unidades.UnidadeAtiva;
-            unidade.TipoUnidade = unidades.TipoUnidade;
-            unidade.Rua = unidades.Rua;
-            unidade.Numero = unidades.Numero;
-            unidade.Bairro = unidades.Bairro;
-            unidade.Cidade = unidades.Cidade;
-            unidade.Estado = unidades.Estado;
-            unidade.CEP = unidades.CEP;
-
-            _appDbContext.UnidadesEstabelecimento.Update(unidade);
-            _appDbContext.SaveChanges();
-
-            return Ok("Unidade atualizada!");
+            return Ok("Unidade Atualizada!");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteUnidade(int id)
         {
-            var unidade = _appDbContext.UnidadesEstabelecimento.Find(id);
+            var unidade = _service.DeletarUnidade(id);
             if (unidade == null)
+
                 return NoContent();
 
-            _appDbContext.UnidadesEstabelecimento.Remove(unidade);
-            _appDbContext.SaveChanges();
-
-            return Ok("Unidade deletada com sucesso!");
+            return Ok("Unidade Estabelecimento deletado com sucesso!");
         }
+
     }
 }

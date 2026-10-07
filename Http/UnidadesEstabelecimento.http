@@ -1,32 +1,27 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+###
+
 POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/
 Content-Type: application/json
 Accept: application/json
 {
-  "Id": 2,
-  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Shopping",
-  "CNPJ": "88.234.567/0001-40",
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Londrina Shopping",
+  "CNPJ": "12.891.501/0001-40",
   "UnidadeAtiva": true,
-  "TipoUnidade": 0,
-  "Rua": "Centro Universitário",
-  "Numero": "456",
-  "Bairro": "Jardim do Sol",
+  "TipoUnidade": 1,
+  "Rua": "Rua Sergipe",
+  "Numero": "297",
+  "Bairro": "Centro",
   "Cidade": "Londrina",
   "Estado": "PR",
-  "CEP": "80801-123",
-  "TelefoneUnidade": "(43) 9876-5432"
+  "CEP": "88117-403",
+  "TelefoneUnidade": "(43) 3304-2089"
 }
-
-###
-
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/2
-
-###
-
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/
-Content-Type: application/json
-Accept: application/json
 
 ###
 
@@ -34,15 +29,18 @@ PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/1
 Content-Type: application/json
 Accept: application/json
 {
-  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Centro",
-  "CNPJ": "22.333.444/0001-90",
-  "UnidadeAtiva": true,
-  "TipoUnidade": 1,
-  "Rua": "Rua das Flores",
-  "Numero": "123",
-  "Bairro": "Centro",
-  "Cidade": "São Paulo",
-  "Estado": "SP",
-  "CEP": "01001-000",
-  "TelefoneUnidade": "(11) 3322-4455"
+  "nomeEstabelecimento": "Raízes do Nordeste - Unidade Centro",
+  "cnpj": "88.234.567/0001-40",
+  "unidadeAtiva": true,
+  "tipoUnidade": 0,
+  "rua": "Centro Universitário",
+  "numero": "456",
+  "bairro": "Jardim do Sol",
+  "cidade": "Florianópolis",
+  "estado": "SC",
+  "cep": "80801-123",
+  "telefoneUnidade": "(48) 99876-5432"
 }
+
+###
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/3
