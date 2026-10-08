@@ -7,23 +7,24 @@ Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/3
 Content-Type: application/json
 Accept: application/json
 {
-  "Nome": "Leonardo Regioli",
-  "Email": "leo.regioli@email.com",
-  "CPF": "098.765.432-10",
-  "Telefone": "(23) 9876-5432",
-  "Perfil": 0,
-  "Rua": "José Victor da Rosa",
-  "Numero": "300",
-  "Complemento": "Apto 603",
-  "Bairro": "Barreiros",
-  "Cidade": "São José",
+  "Nome": "Julia Moreno",
+  "Email": "ju.moreno@email.com",
+  "CPF": "256.899.100-00",
+  "Telefone": "(48) 99220-8795",
+  "Perfil": 3,
+  "Rua": "Rua Fugini",
+  "Numero": "789",
+  "Complemento": "Apto 201",
+  "Bairro": "Centro",
+  "Cidade": "Florianópolis",
   "Estado": "SC",
-  "CEP": "88117-405",
-  "senha": "Senha@456",
+  "CEP": "88206-340",
+  "senha": "Senha@888",
+  "EstabelecimentoId": 2,
   "ConsentimentoLGPD": true,
   "ParticipaFidelidade": false,
   "UsuarioAtivo": true
@@ -35,26 +36,25 @@ PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/3
 Content-Type: application/json
 Accept: application/json
 {
-  "nome": "Nathalia Marana",
-  "email": "nah.marana@email.com",
-  "cpf": "123.456.789-09",
-  "telefone": "(11) 1234-5678",
-  "perfil": 3,
-  "rua": "Rua das Flores",
-  "numero": "123",
-  "complemento": "",
-  "bairro": "Centro",
-  "cidade": "São Paulo",
-  "estado": "SP",
-  "cep": "01001-000",
-  "senha": "Senha@123",
-  "consentimentoLGPD": true,
-  "participaFidelidade": false,
-  "usuarioAtivo": true,
-  "dataCadastro": "2026-10-02T16:55:48.8497336",
-  "estabelecimentoId": 0
+  "Nome": "Julia Moreno",
+  "Email": "ju.moreno@email.com",
+  "CPF": "256.899.100-00",
+  "Telefone": "(48) 99220-8795",
+  "Perfil": 0,
+  "Rua": "Rua Fugini",
+  "Numero": "789",
+  "Complemento": "Apto 201",
+  "Bairro": "Centro",
+  "Cidade": "Florianópolis",
+  "Estado": "SC",
+  "CEP": "88206-340",
+  "senha": "Senha@888",
+  "EstabelecimentoId": 2,
+  "ConsentimentoLGPD": true,
+  "ParticipaFidelidade": false,
+  "UsuarioAtivo": true
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/4
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/3

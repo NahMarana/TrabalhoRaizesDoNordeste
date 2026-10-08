@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,21 +10,22 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly UsuarioService _service;
 
-        public UsuariosController(AppDbContext appDbContext)
+        public UsuariosController(AppDbContext appDbContext, UsuarioService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
+
         }
 
         [HttpGet("buscar")]
         public IActionResult BuscarUsuarioPorNome(string nome)
         {
-            nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
-            var usuario = _appDbContext.Usuarios
-              .Where(c => c.Nome.Contains(nome))
-              .ToList();
+            //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
+            var usuario = _service.BuscarPorNome(nome);
 
-            if (!usuario.Any())
+            if (usuario == null)
                 return NotFound("Usuário não encontrado.");
 
             return Ok(usuario);
@@ -32,10 +34,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("{id:int}")]
         public IActionResult BuscarUsuarioPorId(int id)
         {
-            var usuario = _appDbContext.Usuarios.Find(id);
+            var usuario = _service.BuscaPorId(id);
 
             if (usuario == null)
-                return NoContent();
+                return NotFound("Usuário não encontrado.");
 
             return Ok(usuario);
         }
@@ -43,59 +45,51 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet]
         public IActionResult ListarUsuarios()
         {
-            var usuarios = _appDbContext.Usuarios.ToList();
+            var usuario = _service.ListarUsuarios();
 
-            return Ok(usuarios);
+            return Ok(usuario);
         }
 
         [HttpPost]
         public IActionResult CriarUsuario(Usuario usuario)
         {
-            _appDbContext.Usuarios.Add(usuario);
-            _appDbContext.SaveChanges();
+            try
+            {
+                var UsuarioCriado = _service.CriarUsuario(usuario);
 
-            return Created();
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         public IActionResult UsuarioUpdate(int id, Usuario usuario)
         {
-            var usuarios = _appDbContext.Usuarios.Find(id);
-            if (usuarios == null)
-                return NoContent();
+            try
+            {
+                var usuarios = _service.AtualizarUsuario(id, usuario);
 
-            usuarios.Nome = usuario.Nome;
-            usuarios.Email = usuario.Email;
-            usuarios.CPF = usuario.CPF;
-            usuarios.Telefone = usuario.Telefone;
-            usuarios.Perfil = usuario.Perfil;
-            usuarios.Rua = usuario.Rua;
-            usuarios.Numero = usuario.Numero;
-            usuarios.Complemento = usuario.Complemento;
-            usuarios.Bairro = usuario.Bairro;
-            usuarios.Cidade = usuario.Cidade;
-            usuarios.Estado = usuario.Estado;
-            usuarios.CEP = usuario.CEP;
-            usuarios.SenhaHash = usuario.SenhaHash;
-            usuarios.ConsentimentoLGPD = usuario.ConsentimentoLGPD;
-            usuarios.ParticipaFidelidade = usuario.ParticipaFidelidade;
-            usuarios.UsuarioAtivo = usuario.UsuarioAtivo;
+                if (usuario == null)
+                    return NotFound("Usuário não encontrado(a).");
 
-            _appDbContext.Usuarios.Update(usuarios);
-            _appDbContext.SaveChanges();
-
-            return Ok("Usuário atualizado!");
+                return Ok("Usuário(a) Atualizado(a)!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteUsuario(int id)
         {
-            var usuario = _appDbContext.Usuarios.Find(id);
+            var usuario = _service.DeletarUsuario(id);
+
             if (usuario == null)
                 return NoContent();
-
-            _appDbContext.Usuarios.Remove(usuario);
-            _appDbContext.SaveChanges();
 
             return Ok("Usuário deletado com sucesso!");
         }
