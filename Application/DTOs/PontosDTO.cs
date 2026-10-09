@@ -1,16 +1,17 @@
 ﻿using TrabalhoRaizesDoNordeste.Domain.Enums;
+using TrabalhoRaizesDoNordeste.Domain.Models;
 
-namespace TrabalhoRaizesDoNordeste.Domain.Models
+namespace TrabalhoRaizesDoNordeste.Application.DTOs
 {
-    public class PontosFidelidade
+    public class PontosDTO
     {
         public int Id { get; set; }
         public required int FidelizacaoId { get; set; }
-        public required int PedidoId { get; set; }
         public required TipoMovimentoPontos TipoMovimentacaoPontos { get; set; }
         public required decimal Pontos { get; set; }
         public DateTime DataPontos { get; set; } = DateTime.Now;
-        public Fidelidade? Fidelidade { get; set; }
-        public Pedido? Pedidos { get; set; }
+        public PontosDoPedidoDTO? Pedidos { get; set; }
     }
 }
+
+

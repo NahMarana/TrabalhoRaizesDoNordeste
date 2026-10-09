@@ -7,27 +7,26 @@ Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/3
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/
 Content-Type: application/json
 Accept: application/json
 {
-  "Nome": "Julia Moreno",
-  "Email": "ju.moreno@email.com",
-  "CPF": "256.899.100-00",
-  "Telefone": "(48) 99220-8795",
-  "Perfil": 3,
-  "Rua": "Rua Fugini",
-  "Numero": "789",
-  "Complemento": "Apto 201",
-  "Bairro": "Centro",
-  "Cidade": "Florianópolis",
-  "Estado": "SC",
-  "CEP": "88206-340",
-  "senha": "Senha@888",
-  "EstabelecimentoId": 2,
-  "ConsentimentoLGPD": true,
-  "ParticipaFidelidade": false,
-  "UsuarioAtivo": true
+  "nome": "Neusa Marana",
+  "email": "neusa.marana@example.com",
+  "cpf": "52998224725",
+  "telefone": "81999998888",
+  "perfil": 3,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 1
 }
 
 ###
@@ -57,4 +56,4 @@ Accept: application/json
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/3
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/4

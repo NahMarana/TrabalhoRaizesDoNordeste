@@ -6,7 +6,7 @@ using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 namespace TrabalhoRaizesDoNordeste.Application.Services
 {
-    public class UsuarioService(UsuarioRepository repository)
+    public class UsuarioService(UsuarioRepository repository, FidelidadeService fidelidadeService)
     {
         public UsuarioServiceDTO BuscaPorId(int id)
         {
@@ -96,6 +96,19 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             }
 
             var usuarioCriado = repository.CriarUsuario(usuario);
+
+            if (usuario.ParticipaFidelidade)
+            {
+                var usuarioDTO = new UsuarioFidelidadeDTO
+                { 
+                    Id = usuario.Id,
+                    Nome = usuario.Nome,
+                    ParticipaFidelidade = usuario.ParticipaFidelidade,
+                    Perfil = usuario.Perfil
+                };
+                fidelidadeService.CriarFidelidade(usuarioDTO);
+            }
+
             return usuarioCriado;
         }
 
@@ -139,6 +152,15 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 }
             }
 
+            var usuarioDTO = new UsuarioFidelidadeDTO
+            {
+                Id = usuario.Id,
+                Nome = usuario.Nome,
+                ParticipaFidelidade = usuario.ParticipaFidelidade,
+                Perfil = usuario.Perfil
+            };
+            fidelidadeService.CriarFidelidade(usuarioDTO);
+
             var usuarioAtualizado = repository.AtualizarUsuario(id, usuario);
             return usuarioAtualizado;
         }
@@ -157,6 +179,20 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         public UsuarioServiceDTO CriarObjeto(Usuario usuario)
         {
+            FidelidadeDTO? fidelidadeDTO = null;
+
+            if (usuario.Perfil == TipoPerfil.CLIENTE && usuario.ParticipaFidelidade)
+            {
+                if (usuario.Fidelidade != null)
+                {
+                    fidelidadeDTO = new FidelidadeDTO
+                    {
+                        Id = usuario.Fidelidade.Id,
+                        QtdPontos = usuario.Fidelidade.QtdPontos
+                    };
+                }
+            }
+
             var usuarioServiceDTO = new UsuarioServiceDTO
             {
                 Id = usuario.Id,
@@ -176,22 +212,19 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 ParticipaFidelidade = usuario.ParticipaFidelidade,
                 DataCadastro = usuario.DataCadastro,
                 UsuarioAtivo = usuario.UsuarioAtivo,
+
                 UnidadesEstabelecimento = usuario.UnidadesEstabelecimento == null
-                ? null : new EstabelecimentoDTO
-                {
-                    Id = usuario.UnidadesEstabelecimento.Id,
-                    NomeEstabelecimento = usuario.UnidadesEstabelecimento.NomeEstabelecimento,
-                    CNPJ = usuario.UnidadesEstabelecimento.CNPJ,
-                    Estado = usuario.UnidadesEstabelecimento.Estado,
-                    Cidade = usuario.UnidadesEstabelecimento.Cidade,
-                },
-                Fidelidade = usuario.Perfil == TipoPerfil.CLIENTE && usuario.ParticipaFidelidade == true &&
-                usuario.Fidelidade == null
-                ? new FidelidadeDTO
-                {
-                    Id = usuario.Fidelidade.Id,
-                    QtdPontos = usuario.Fidelidade.QtdPontos,
-                } : null
+                        ? null
+                        : new EstabelecimentoDTO
+                        {
+                            Id = usuario.UnidadesEstabelecimento.Id,
+                            NomeEstabelecimento = usuario.UnidadesEstabelecimento.NomeEstabelecimento,
+                            CNPJ = usuario.UnidadesEstabelecimento.CNPJ,
+                            Estado = usuario.UnidadesEstabelecimento.Estado,
+                            Cidade = usuario.UnidadesEstabelecimento.Cidade
+                        },
+
+                Fidelidade = fidelidadeDTO
             };
             return usuarioServiceDTO;
         }

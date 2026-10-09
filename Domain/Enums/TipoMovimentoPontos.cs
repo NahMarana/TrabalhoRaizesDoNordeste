@@ -1,6 +1,6 @@
 ﻿namespace TrabalhoRaizesDoNordeste.Domain.Enums
 {
-    public enum TipoMovimentacaoPontos
+    public enum TipoMovimentoPontos
     {
         ACUMULO,
         RESGATE

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,66 +11,73 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class FidelidadeController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly FidelidadeService _service;
 
-        public FidelidadeController(AppDbContext appDbContext)
+        public FidelidadeController(AppDbContext appDbContext, FidelidadeService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarFidelizacaoPorId(int id)
         {
-            var fidelidade = _appDbContext.Fidelidades.Find(id);
+            try
+            {
+                var fidelidade = _service.BuscaPorId(id);
 
-            if (fidelidade == null)
-                return NoContent();
+                if (fidelidade == null)
+                    return NotFound("Fidelidade não encontrada.");
 
-            return Ok(fidelidade);
+                return Ok(fidelidade);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpGet]
         public IActionResult ListarFidelidades()
         {
-            var fidelidade = _appDbContext.Fidelidades.ToList();
+            try
+            {
+                var fidelidade = _service.ListarFidelidades();
 
-            return Ok(fidelidade);
+                return Ok(fidelidade);
+            } 
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult CriarFidelizacao(Fidelidade fidelidade)
+        public IActionResult CriarFidelizacao(UsuarioFidelidadeDTO usuario)
         {
-            _appDbContext.Fidelidades.Add(fidelidade);
-            _appDbContext.SaveChanges();
+            try
+            {
+                var fidelidadeCriada = _service.CriarFidelidade(usuario);
 
-            return Created();
+                return Created();
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
-        public IActionResult FidelizacaoUpdate(int id, Fidelidade fid)
+        public IActionResult FidelizacaoUpdate(int id, Fidelidade fidelidade)
         {
-            var fidelizacao = _appDbContext.Fidelidades.Find(id);
-            if (fidelizacao == null)
-                return NoContent();
-
-            fidelizacao.QtdPontos = fid.QtdPontos;
-
-            _appDbContext.Fidelidades.Update(fidelizacao);
-            _appDbContext.SaveChanges();
-
-            return Ok("Fidelização atualizada!");
+            throw new NotImplementedException();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletarFidelidade(int id)
         {
-            var fidelizacao = _appDbContext.Fidelidades.Find(id);
-            if (fidelizacao == null)
-                return NoContent();
-
-            _appDbContext.Fidelidades.Remove(fidelizacao);
-            _appDbContext.SaveChanges();
-
-            return Ok("Fidelização deletada com sucesso!");
+            throw new NotImplementedException();
         }
     }
 }

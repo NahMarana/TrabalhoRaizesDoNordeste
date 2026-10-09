@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,69 +10,73 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class PontosFidelidadeController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly PontosFidelidadeService _service;
 
-        public PontosFidelidadeController(AppDbContext appDbContext)
+        public PontosFidelidadeController(AppDbContext appDbContext, PontosFidelidadeService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarPontosPorId(int id)
         {
-            var pontos = _appDbContext.PontosFidelidade.Find(id);
+            try
+            {
+                var pontos = _service.BuscaPorId(id);
 
-            if (pontos == null)
-                return NoContent();
+                if (pontos == null)
+                    return NotFound("Pontos por fidelidade não encontrada.");
 
-            return Ok(pontos);
+                return Ok(pontos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarPontosPorFidelidade()
         {
-            var pontos = _appDbContext.PontosFidelidade.ToList();
+            try
+            {
+                var pontos = _service.ListarPontosFidelidade();
 
-            return Ok(pontos);
+                return Ok(pontos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CriarPontosPorFidelidade(PontosFidelidade pontos)
         {
-            _appDbContext.PontosFidelidade.Add(pontos);
-            _appDbContext.SaveChanges();
+            try
+            {
+                var pontosCriados = _service.CriarPontos(pontos);
 
-            return Created();
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpPatch("{id}")]
         public IActionResult PontosUpdate(int id, PontosFidelidade ponto)
         {
-            var pontos = _appDbContext.PontosFidelidade.Find(id);
-            if (pontos == null)
-                return NoContent();
-
-            pontos.PedidoId = ponto.PedidoId;
-            pontos.TipoMovimentacaoPontos = ponto.TipoMovimentacaoPontos;
-            pontos.Pontos = ponto.Pontos;
-            pontos.DataPontos = ponto.DataPontos;
-
-            _appDbContext.PontosFidelidade.Update(pontos);
-            _appDbContext.SaveChanges();
-
-            return Ok("Pontos por Fidelidade atualizada!");
+            throw new NotImplementedException();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletarPontos(int id)
         {
-            var pontos = _appDbContext.PontosFidelidade.Find(id);
-            if (pontos == null)
-                return NoContent();
-
-            _appDbContext.PontosFidelidade.Remove(pontos);
-            _appDbContext.SaveChanges();
-
-            return Ok("Pontos por Fidelidade deletada com sucesso!");
+            throw new NotImplementedException();
         }
     }
 }

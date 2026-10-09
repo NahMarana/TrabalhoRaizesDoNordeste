@@ -24,6 +24,14 @@ builder.Services.AddScoped<UnidadeEstabelecimentoRepository, UnidadeEstabelecime
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
 builder.Services.AddScoped<UsuarioRepository, UsuarioRepository>();
 
+builder.Services.AddScoped<FidelidadeService, FidelidadeService>();
+builder.Services.AddScoped<FidelidadeRepository, FidelidadeRepository>();
+
+builder.Services.AddScoped<PontosFidelidadeService, PontosFidelidadeService>();
+builder.Services.AddScoped<PontosFidelidadeRepository, PontosFidelidadeRepository>();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
