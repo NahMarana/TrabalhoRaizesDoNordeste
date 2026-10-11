@@ -10,5 +10,10 @@
         public decimal PrecoTotal { get; set; }
         public Pedido? Pedidos { get; set; }
         public Produto? Produtos { get; set; }
+
+        public void CalcularPrecoTotal()
+        {
+            PrecoTotal = PrecoUnitario * QtdItens;
+        }
     }
 }

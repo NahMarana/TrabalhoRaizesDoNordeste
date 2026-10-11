@@ -19,5 +19,15 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public ICollection<ItensPedido>? ItensPedidos { get; set; }
         public Pagamento? Pagamentos { get; set; }
         public ICollection<PontosFidelidade>? PontosFidelidades { get; set; }
+
+        public void CalcularValorTotalPedido()
+        {
+            ValorTotalPedido = 0;
+
+            foreach (var preco in ItensPedidos)
+            {
+                ValorTotalPedido += preco.PrecoTotal;
+            }
+        }
     }
 }

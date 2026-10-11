@@ -101,16 +101,16 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return auxiliaPontosFidelidade;
         }
 
-        public void ConsumirSaldo(PontosFidelidade fidelidade)
-        {
-            if (fidelidade.TipoMovimentacaoPontos == TipoMovimentoPontos.ACUMULO) 
-            {
+        //public void ConsumirSaldo(PontosFidelidade fidelidade)
+        //{
+        //    if (fidelidade.TipoMovimentacaoPontos == TipoMovimentoPontos.ACUMULO) 
+        //    {
 
-                //metodo para acumular pontos
-                return;
-            }
+        //        //metodo para acumular pontos
+        //        return;
+        //    }
 
-            //meotodo para resgatar pontos
-        }
+        //    //meotodo para resgatar pontos
+        //}
     }
 }
