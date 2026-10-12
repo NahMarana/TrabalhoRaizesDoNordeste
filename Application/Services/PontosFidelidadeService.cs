@@ -53,6 +53,36 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return pontosCriados;
         }
 
+        public void RegistrarPontuacao(PontosFidelidade pontos)
+        {
+            if (pontos.Pontos < 0)
+            {
+                throw new ArgumentException("A quantidade de pontos não pode ser negativa.");
+            }
+
+            if (!Enum.IsDefined(pontos.TipoMovimentacaoPontos))
+            {
+                throw new ArgumentException("Tipo de movimentação inválido.");
+            }
+
+            var fidelidade = repository.BuscaFidelidadePorId(pontos.FidelizacaoId);
+
+            if (pontos.TipoMovimentacaoPontos == TipoMovimentoPontos.ACUMULO)
+            {
+                repository.PossuiPontuacao(pontos.PedidoId);
+            }
+
+            if (pontos.TipoMovimentacaoPontos == TipoMovimentoPontos.RESGATE)
+            {
+                if(fidelidade.QtdPontos < pontos.Pontos)
+                {
+                    throw new ArgumentException("Saldo de pontos foram resgatados.");
+                }
+            }
+
+            repository.RegistarPontuacao(pontos);
+        }
+
         public PontosDTO CriarObjeto(PontosFidelidade pontos)
         {
             var pontosDTO = new PontosDTO

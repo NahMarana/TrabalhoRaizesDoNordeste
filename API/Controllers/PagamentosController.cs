@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,70 +10,69 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class PagamentosController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly PagamentoService _service;
 
-        public PagamentosController(AppDbContext appDbContext)
+        public PagamentosController(AppDbContext appDbContext, PagamentoService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarPagamentoPorId(int id)
         {
-            var pagamento = _appDbContext.Pagamentos.Find(id);
+            try
+            {
+                var pagamento = _service.BuscaPorId(id);
 
-            if (pagamento == null)
-                return NoContent();
+                if (pagamento == null)
+                    return NotFound("Pagamento não encontrado.");
 
-            return Ok(pagamento);
+                return Ok(pagamento);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarPagamentos()
         {
-            var pagamento = _appDbContext.Pagamentos.ToList();
+            try
+            {
+                var pagamento = _service.ListarPagamentos();
 
-            return Ok(pagamento);
+                return Ok(pagamento);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult CriarPagamento(Pagamento pagamento)
+        public IActionResult CriarPagamento(Pagamento pagamento, bool usarPontos = false)
         {
-            _appDbContext.Pagamentos.Add(pagamento);
-            _appDbContext.SaveChanges();
-
-            return Created();
+            try
+            {
+                var pagamentoCriado = _service.CriarPagamento(pagamento, usarPontos);
+                return Created();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         public IActionResult PagamentoUpdate(int id, Pagamento pagamento)
         {
-            var pagamentos = _appDbContext.Pagamentos.Find(id);
+            var pagamentos = _service.AtualizarPagamento(id, pagamento);
             if (pagamentos == null)
                 return NoContent();
 
-            pagamentos.TipoPagamento = pagamento.TipoPagamento;
-            pagamentos.StatusPagamento = pagamento.StatusPagamento;
-            pagamentos.ValorPagamento = pagamento.ValorPagamento;
-            pagamentos.DataPagamento = pagamento.DataPagamento;
-            pagamentos.DataConfirmaPg = pagamento.DataConfirmaPg;
-
-            _appDbContext.Pagamentos.Update(pagamentos);
-            _appDbContext.SaveChanges();
-
             return Ok("Pagamento atualizado!");
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeletarPagamento(int id)
-        {
-            var pagamento = _appDbContext.Pagamentos.Find(id);
-            if (pagamento == null)
-                return NoContent();
-
-            _appDbContext.Pagamentos.Remove(pagamento);
-            _appDbContext.SaveChanges();
-
-            return Ok("Pagamento deletado com sucesso!");
         }
     }
 }

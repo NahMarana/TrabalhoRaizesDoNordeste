@@ -117,6 +117,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var pedido = _service.CancelarPedido(id);
                 return Ok("Pedido cancelado com sucesso!");
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
