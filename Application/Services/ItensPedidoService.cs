@@ -59,6 +59,8 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Id do pedido é obrigatória.");
             }
 
+            pedido.ValidarEditarPedido();
+
             var produto = repository.BuscaProdutoPorId(item.ProdutoId);
 
             if (item.ProdutoId <= 0)
@@ -95,6 +97,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             }
 
             var itemEncontrado = repository.BuscaItensPedidoPorId(id);
+
+            var pedido = repository.BuscaPedidoPorId(itemEncontrado.PedidoId);
+            pedido.ValidarEditarPedido();
 
             if (item.QtdItens == 0)
             {
