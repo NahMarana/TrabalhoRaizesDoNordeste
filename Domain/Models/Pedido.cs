@@ -29,5 +29,18 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
                 ValorTotalPedido += preco.PrecoTotal;
             }
         }
+
+        public void ValidarEditarPedido()
+        {
+            if (StatusPedido != StatusPedido.PENDENTE)
+            {
+                throw new InvalidOperationException("A alteração do pedido só é possível enquanto constar status do Pedido for PENDENTE");
+            }
+
+            if (Pagamentos != null) 
+            {
+                throw new InvalidOperationException("Não é possível alterar pedido. Pagamento já foi computado!");
+            } 
+        }
     }
 }

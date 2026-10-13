@@ -87,22 +87,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             var itensPedido = AdicionaItensPedido(pedido.ItensPedidos);
 
-            var pedidoAtualizado = new Pedido
-            {
-                Id = id,
-                UsuarioId = pedidoEncontrado.UsuarioId,
-                EstabelecimentoId = pedidoEncontrado.EstabelecimentoId,
-                CanalPedido = pedido.CanalPedido,
-                ModoReceber = pedido.ModoReceber,
-                StatusPedido = pedidoEncontrado.StatusPedido,
-                ValorTotalPedido = 0,
-                Descricao = pedidoEncontrado.Descricao,
-                ItensPedidos = itensPedido
-            };
+            pedidoEncontrado.ValidarEditarPedido();
 
-            pedidoAtualizado.CalcularValorTotalPedido();
-
-            return repository.AtualizarPedido(id, pedidoAtualizado);
+            return repository.AtualizarPedido(id, pedido);
         }
 
         public ICollection<ItensPedido> AdicionaItensPedido(
