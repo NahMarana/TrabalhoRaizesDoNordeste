@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,82 +10,87 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class ItensPedidoController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ItensPedidoService _service;
 
-        public ItensPedidoController(AppDbContext appDbContext)
+        public ItensPedidoController(AppDbContext appDbContext, ItensPedidoService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarItemPedidoPorId(int id)
         {
-            var item = _appDbContext.ItensPedido.Find(id);
+            try
+            {
+                var item = _service.BuscaPorId(id);
 
-            if (item == null)
-                return NoContent();
+                if (item == null)
+                    return NotFound("Item do Produto não encontrado.");
 
-            return Ok(item);
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarItensPedidos()
         {
-            var item = _appDbContext.ItensPedido.ToList();
+            try
+            {
+                var item = _service.ListarItensPedidos();
 
-            return Ok(item);
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CriarItensPedido(ItensPedido itens)
         {
-            _appDbContext.ItensPedido.Add(itens);
-            _appDbContext.SaveChanges();
+            try
+            {
+                if (itens.PedidoId == 0)
+                {
+                    return BadRequest("Pedido não identificado!");
+                }
 
-            return Created();
+                if (itens.ProdutoId == 0)
+                {
+                    return BadRequest("Produto não identificado!");
+                }
+
+                var ItemPedidoCriado = _service.CriarItemPedido(itens);
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         public IActionResult ItemPedidoUpdate(int id, ItensPedido item)
         {
-            var itens = _appDbContext.ItensPedido.Find(id);
-            if (itens == null)
-                return NotFound("Item não encontrado.");
-
-            itens.ProdutoId = item.ProdutoId;
-            itens.QtdItens = item.QtdItens;
-            itens.PrecoUnitario = item.PrecoUnitario;
-            itens.PrecoTotal = item.PrecoTotal;
-
-            _appDbContext.ItensPedido.Update(itens);
-            _appDbContext.SaveChanges();
-
-            if (itens.QtdItens < 0)
-                return BadRequest("Não permitido quantidade negativa.");
-
-            if (itens.QtdItens == 0)
+            try
             {
-                _appDbContext.ItensPedido.Remove(itens);
-                _appDbContext.SaveChanges();
+                var itemAtualizado = _service.AtualizarItemPedido(id, item);
 
-                return Ok("Item foi removido do pedido.");
+                if (itemAtualizado == null)
+                    return NotFound("Item não encontrado.");
+
+                return Ok("Os itens desse pedido foram atualizados!");
             }
-
-            _appDbContext.SaveChanges();
-
-            return Ok("Os itens desse pedido foram atualizados!");
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteTodosItensPedidos(int id)
-        {
-            var item = _appDbContext.ItensPedido.Find(id);
-            if (item == null)
-                return NoContent();
-
-            _appDbContext.ItensPedido.Remove(item);
-            _appDbContext.SaveChanges();
-
-            return Ok("Os itens do seu pedido foram deletados com sucesso!");
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

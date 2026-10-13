@@ -118,11 +118,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                     DataPontos = item.DataPontos,
                     Pedidos = item.Pedidos == null
                 ? null : new PontosDoPedidoDTO
-                {
-                    Id = item.Pedidos.Id,
-                    UsuarioId = item.Pedidos.UsuarioId,
-                    ValorTotalPedido = item.Pedidos.ValorTotalPedido,
-                }
+                    {
+                        Id = item.Pedidos.Id,
+                        UsuarioId = item.Pedidos.UsuarioId,
+                        ValorTotalPedido = item.Pedidos.ValorTotalPedido,
+                    }
                 };
 
                 auxiliaPontosFidelidade.Add(pontosDTO);
