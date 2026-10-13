@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,68 +10,114 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class EstoqueUnidadeController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly EstoqueUnidadeService _service;
 
-        public EstoqueUnidadeController(AppDbContext appDbContext)
+        public EstoqueUnidadeController(AppDbContext appDbContext, EstoqueUnidadeService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarEstoqueDeUnidadePorId(int id)
         {
-            var unidadeEstoque = _appDbContext.EstoquesUnidade.Find(id);
+            try
+            {
+                var estoque = _service.BuscaPorId(id);
 
-            if (unidadeEstoque == null)
-                return NoContent();
+                if (estoque == null)
+                    return NoContent();
 
-            return Ok(unidadeEstoque);
+                return Ok(estoque);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarEstoqueDeUnidades()
         {
-            var unidadeEstoque = _appDbContext.EstoquesUnidade.ToList();
+            try
+            {
+                var estoque =_service.ListarEstoqueDaUnidade();
 
-            return Ok(unidadeEstoque);
+                return Ok(estoque);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
-        public IActionResult CriarEstoqueDeUnidade(EstoqueUnidade unidadeEstoque)
+        public IActionResult CriarEstoqueDeUnidade(EstoqueUnidade estoque)
         {
-            _appDbContext.EstoquesUnidade.Add(unidadeEstoque);
-            _appDbContext.SaveChanges();
+            try
+            {
+                if (estoque.ProdutoId == 0)
+                {
+                    return BadRequest("Pedido não identificado!");
+                }
 
-            return Created();
+                if (estoque.EstabelecimentoId == 0)
+                {
+                    return BadRequest("Produto não identificado!");
+                }
+
+                var estoqueCriado = _service.CriarEstoque(estoque);
+
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
-        public IActionResult EstoqueDeUnidadeUpdate(int id, EstoqueUnidade unidadeEstoque)
+        public IActionResult EstoqueDeUnidadeUpdate(int id, EstoqueUnidade estoque)
         {
-            var estUnidade = _appDbContext.EstoquesUnidade.Find(id);
-            if (estUnidade == null)
-                return NoContent();
+            try
+            {
+                var estoqueAtualizad = _service.AtualizarEstoque(id, estoque);
 
-            estUnidade.ProdutoId = unidadeEstoque.ProdutoId;
-            estUnidade.QtdEstoqueDisponivel = unidadeEstoque.QtdEstoqueDisponivel;
-            estUnidade.VendaDisponivel = unidadeEstoque.VendaDisponivel;
+                if (estoque == null)
+                    return NotFound("Estoque não encontrado!");
 
-            _appDbContext.EstoquesUnidade.Update(estUnidade);
-            _appDbContext.SaveChanges();
-
-            return Ok("Unidade de estoque atualizado!");
+                return Ok("Os dados do estoque foram atualizados.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeletarUnidadeDeEstoque(int id)
+        [HttpPatch("baixa")]
+        public IActionResult DarBaixaNoEstoque(int estabelecimentoId, int produtoId, int quantidade)
         {
-            var unidadeEstoque = _appDbContext.EstoquesUnidade.Find(id);
-            if (unidadeEstoque == null)
-                return NoContent();
+            try
+            {
+                return Ok(_service.DarBaixaNoEstoque(estabelecimentoId, produtoId, quantidade));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-            _appDbContext.EstoquesUnidade.Remove(unidadeEstoque);
-            _appDbContext.SaveChanges();
-
-            return Ok("Unidade de Estoque foi deletado com sucesso!");
+        [HttpPatch("repor")]
+        public IActionResult ReporNoEstoque(int estabelecimentoId, int produtoId, int quantidade)
+        {
+            try
+            {
+                return Ok(_service.ReporNoEstoque(estabelecimentoId, produtoId, quantidade));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

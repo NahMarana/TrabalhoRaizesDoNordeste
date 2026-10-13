@@ -39,6 +39,9 @@ builder.Services.AddScoped<PagamentoRepository, PagamentoRepository>();
 builder.Services.AddScoped<ItensPedidoService, ItensPedidoService>();
 builder.Services.AddScoped<ItensPedidoRepository, ItensPedidoRepository>();
 
+builder.Services.AddScoped<EstoqueUnidadeService, EstoqueUnidadeService>();
+builder.Services.AddScoped<EstoqueUnidadeRepository, EstoqueUnidadeRepository>();
+
 
 var app = builder.Build();
 
