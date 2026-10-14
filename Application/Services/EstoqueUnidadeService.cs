@@ -7,7 +7,7 @@ using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 namespace TrabalhoRaizesDoNordeste.Application.Services
 {
-    public class EstoqueUnidadeService(EstoqueUnidadeRepository repository)
+    public class EstoqueUnidadeService(EstoqueUnidadeRepository repository, EstoqueMovimentacaoService movimentacaoService)
     {
         public EstoqueDaUnidadeDTO BuscaPorId(int id)
         {
@@ -125,23 +125,29 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
         }
 
         //Saída de quantidade do estoque
-        public EstoqueDaUnidadeDTO DarBaixaNoEstoque(int estabelecimentoId, int produtoId, int qtdEstoque)
+        public void DarBaixaNoEstoque(int estabelecimentoId, int produtoId, int qtdEstoque, int pedidoId, int usuarioId)
         {
             var estoque = BuscarEstoque(estabelecimentoId, produtoId);
+
+            if (!estoque.PossuiEstoqueSuficiente(qtdEstoque))
+            {
+                throw new InvalidOperationException($"Estoque insuficiente. Disponível: {estoque.QtdEstoqueDisponivel}");
+            }
+
             estoque.DarBaixaEstoque(qtdEstoque);
 
             repository.SalvarEstoque(estoque);
-            return CriarObjeto(estoque);
+            movimentacaoService.RegistrarMovimentacao(estoque.Id, pedidoId, usuarioId, TipoMovimento.SAIDA, qtdEstoque, "Saída de produto para pedido");
         }
 
         //Entrada ou retorno de quantidade de produto do estoque
-        public EstoqueDaUnidadeDTO ReporNoEstoque(int estabelecimentoId, int produtoId, int qtdEstoque)
+        public void ReporNoEstoque(int estabelecimentoId, int produtoId, int qtdEstoque, int pedidoId, int usuarioId)
         {
             var estoque = BuscarEstoque(estabelecimentoId, produtoId);
             estoque.ReporEstoque(qtdEstoque);
 
             repository.SalvarEstoque(estoque);
-            return CriarObjeto(estoque);
+            movimentacaoService.RegistrarMovimentacao(estoque.Id, pedidoId, usuarioId, TipoMovimento.ENTRADA, qtdEstoque, "Devolução de produto do pedido");
         }
 
 

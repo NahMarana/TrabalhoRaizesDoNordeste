@@ -93,31 +93,5 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPatch("baixa")]
-        public IActionResult DarBaixaNoEstoque(int estabelecimentoId, int produtoId, int quantidade)
-        {
-            try
-            {
-                return Ok(_service.DarBaixaNoEstoque(estabelecimentoId, produtoId, quantidade));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPatch("repor")]
-        public IActionResult ReporNoEstoque(int estabelecimentoId, int produtoId, int quantidade)
-        {
-            try
-            {
-                return Ok(_service.ReporNoEstoque(estabelecimentoId, produtoId, quantidade));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
     }
 }
