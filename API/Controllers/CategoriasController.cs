@@ -21,50 +21,85 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("{id}")]
         public IActionResult BuscarCategoriaPorId(int id)
         {
-            var categoria = _service.BuscaPorId(id);
+            try
+            {
+                var categoria = _service.BuscaPorId(id);
 
-            if (categoria == null)
-                return NotFound("Categoria não encontrada.");
+                if (categoria == null)
+                    return NotFound("Categoria não encontrada.");
 
-            return Ok(categoria);
+                return Ok(categoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("buscar")]
         public IActionResult BuscarCategoriaPorNome(string nome)
         {
-            var categorias = _service.BuscarPorNome(nome);
+            try
+            {
+                var categorias = _service.BuscarPorNome(nome);
 
-            if (categorias == null)
-                return NotFound("Categoria não encontrada.");
+                if (categorias == null)
+                    return NotFound("Categoria não encontrada.");
 
-            return Ok(categorias);
+                return Ok(categorias);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarCategorias() 
         {
-            var categorias = _service.ListarCategorias();
+            try
+            {
+                var categorias = _service.ListarCategorias();
 
-            return Ok(categorias);
+                return Ok(categorias);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CriarCategoria(Categoria categoria)
         {
-            _service.CriarCategoria(categoria);
-            
-            return Created();                
+           try
+           {
+               var categorias = _service.CriarCategoria(categoria);
+
+               return Created();
+           }
+           catch (Exception ex)
+           {
+               return BadRequest(ex.Message);
+           }
         }
 
         [HttpPatch("{id}")]
         public IActionResult CategoriaUpdate(int id, Categoria categoria)
         {
-           var categorias = _service.AtualizarCategoria(id, categoria);
+           try
+           {
+               var categorias = _service.AtualizarCategoria(id, categoria);
 
-           if (categorias == null)
-                return NotFound("Categoria não encontrada.");
+               if (categorias == null)
+                    return NotFound("Categoria não encontrada.");
 
-            return Ok("Categoria Atualizada!");
+               return Ok("Categoria Atualizada!");
+           }
+           catch (Exception ex)
+           {
+               return BadRequest(ex.Message);
+           }
         }
 
         [HttpDelete("{id}")]

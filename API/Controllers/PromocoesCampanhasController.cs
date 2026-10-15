@@ -18,51 +18,79 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("{id:int}")]
         public IActionResult BuscarPromocoesECampanhasPorId(int id)
         {
-            var pc = _appDbContext.PromocoesCampanha.Find(id);
+            try
+            {
+                var pc = _appDbContext.PromocoesCampanha.Find(id);
 
-            if (pc == null)
-                return NoContent();
+                if (pc == null)
+                    return NoContent();
 
-            return Ok(pc);
+                return Ok(pc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarPromocoesECampanhas()
         {
-            var pc = _appDbContext.PromocoesCampanha.ToList();
+            try
+            {
+                var pc = _appDbContext.PromocoesCampanha.ToList();
 
-            return Ok(pc);
+                return Ok(pc);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CriarPromocoesECampanhas(PromocoesCampanhas pc)
         {
-            _appDbContext.PromocoesCampanha.Add(pc);
-            _appDbContext.SaveChanges();
+            try
+            {
+                _appDbContext.PromocoesCampanha.Add(pc);
+                _appDbContext.SaveChanges();
 
-            return Created();
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         public IActionResult PromoECampanhasUpdate(int id, PromocoesCampanhas promoCampanha)
         {
-            var pc = _appDbContext.PromocoesCampanha.Find(id);
-            if (pc == null)
-                return NoContent();
+            try
+            {
+                var pc = _appDbContext.PromocoesCampanha.Find(id);
+                if (pc == null)
+                    return NoContent();
 
-            pc.EstabelecimentoId = promoCampanha.EstabelecimentoId;
-            pc.ProdutoId = promoCampanha.ProdutoId;
-            pc.Descricao = promoCampanha.Descricao;
-            pc.ValorPromocional = promoCampanha.ValorPromocional;
-            pc.StatusPromoCampanha = promoCampanha.StatusPromoCampanha;
-            pc.DataInicio = promoCampanha.DataInicio;
-            pc.DataFim = promoCampanha.DataFim;
+                pc.EstabelecimentoId = promoCampanha.EstabelecimentoId;
+                pc.ProdutoId = promoCampanha.ProdutoId;
+                pc.Descricao = promoCampanha.Descricao;
+                pc.ValorPromocional = promoCampanha.ValorPromocional;
+                pc.StatusPromoCampanha = promoCampanha.StatusPromoCampanha;
+                pc.DataInicio = promoCampanha.DataInicio;
+                pc.DataFim = promoCampanha.DataFim;
 
 
-            _appDbContext.PromocoesCampanha.Update(pc);
-            _appDbContext.SaveChanges();
+                _appDbContext.PromocoesCampanha.Update(pc);
+                _appDbContext.SaveChanges();
 
-            return Ok("Promoções ou Campanha atualizada!");
+                return Ok("Promoções ou Campanha atualizada!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]

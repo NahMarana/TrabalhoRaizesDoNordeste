@@ -22,56 +22,90 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("buscar")]
         public IActionResult BuscarProdutosPorNome(string nome)
         {
-            var produtos = _service.BuscarPorNome(nome);
+            try
+            {
+                var produtos = _service.BuscarPorNome(nome);
 
-            if (produtos == null)
-                return NotFound("Produto não encontrado.");
+                if (produtos == null)
+                    return NotFound("Produto não encontrado.");
 
-            return Ok(produtos);
-
+                return Ok(produtos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarProdutosPorId(int id)
         {
-            var produto = _service.BuscaPorId(id);
+            try
+            {
+                var produto = _service.BuscaPorId(id);
 
-            if (produto == null)
-                return NotFound("Produto não encontrada.");
+                if (produto == null)
+                    return NotFound("Produto não encontrada.");
 
-            return Ok(produto);
+                return Ok(produto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarProdutos()
         {
-            var produtos = _service.ListarProdutos();
+            try
+            {
+                var produtos = _service.ListarProdutos();
 
-            return Ok(produtos);
+                return Ok(produtos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CriarProduto(Produto produtos)
         {
-            if (produtos.CategoriaId == 0)
+            try
             {
-                return BadRequest("Categoria do produto não identificado!");
+                if (produtos.CategoriaId == 0)
+                {
+                    return BadRequest("Categoria do produto não identificado!");
+                }
+
+                var produtoCriado = _service.CriarProduto(produtos);
+
+                return Created();
             }
-
-            var produtoCriado = _service.CriarProduto(produtos);
-
-            return Created();
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         public IActionResult ProdutoUpdate(int id, Produto produto)
         {
-            var produtos = _service.AtualizarProduto(id, produto);
+            try
+            {
+                var produtos = _service.AtualizarProduto(id, produto);
 
-            if (produtos == null)
-                return NotFound("Produto não encontrada.");
+                if (produtos == null)
+                    return NotFound("Produto não encontrada.");
 
-            return Ok("Produto Atualizado!");
+                return Ok("Produto Atualizado!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
