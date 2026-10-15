@@ -71,17 +71,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Categoria do produto é obrigatória.");
             }
 
-            if (produto.ProdutoSazonal == true)
-            {
-                if(produto.DataInicioSazonal == null)
-                    throw new ArgumentException("Data de início sazonal requerido.");
-
-                if (produto.DataFimSazonal == null)
-                    throw new ArgumentException("Data de fim do produto sazonal.");
-
-                if (produto.DataFimSazonal < produto.DataInicioSazonal)
-                    throw new ArgumentException("A data final do produto sazonal não pode ser menor que a data início.");
-            }
+            ValidarProdutoSazonal(produto);
 
             var produtoCriado = repository.CriarProduto(produto);
             return produtoCriado;
@@ -93,6 +83,8 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
+
+            ValidarProdutoSazonal(produto);
 
             var produtoAtualizado = repository.AtualizarProduto(id, produto);
             return produtoAtualizado;
@@ -107,6 +99,28 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             var produtoDeletado = repository.DeletarProduto(id);
             return produtoDeletado;
+        }
+
+        private static void ValidarProdutoSazonal(Produto produto)
+        {
+            if (!produto.ProdutoSazonal)
+            {
+                produto.DataInicioSazonal = null;
+                produto.DataFimSazonal = null;
+                return;
+            }
+
+            if (produto.ProdutoSazonal == true)
+            {
+                if (produto.DataInicioSazonal == null)
+                    throw new ArgumentException("Data de início do produto sazonal.");
+
+                if (produto.DataFimSazonal == null)
+                    throw new ArgumentException("Data de fim do produto sazonal.");
+
+                if (produto.DataFimSazonal < produto.DataInicioSazonal)
+                    throw new ArgumentException("A data final do produto sazonal não pode ser menor que a data início.");
+            }
         }
 
 

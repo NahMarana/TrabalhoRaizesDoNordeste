@@ -15,6 +15,5 @@
         public ICollection<EstoqueUnidade>? EstoqueUnidades { get; set; }
         public ICollection<ItensPedido>? ItensPedidos { get; set; }
         public ICollection<PromocoesCampanhas>? PromocoesCampanhas { get; set; }
-
     }
 }

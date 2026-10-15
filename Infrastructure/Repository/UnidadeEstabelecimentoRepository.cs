@@ -32,13 +32,18 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
 
         public ICollection<EstoqueUnidade>? ConsultarCardapio(int unidadeId)
         {
+            var ProdutoSazonalEstaAtivo = (DateOnly.FromDateTime(DateTime.Today));
             return _context.EstoquesUnidade
                 .Include(eu => eu.Produtos!)
                     .ThenInclude(p => p.Categoria)
                 .Where(eu => eu.EstabelecimentoId == unidadeId
                           && eu.VendaDisponivel
                           && eu.QtdEstoqueDisponivel > 0
-                          && eu.Produtos!.ProdutoAtivo)
+                          && eu.Produtos!.ProdutoAtivo
+                          &&
+                          (
+                            (!eu.Produtos.ProdutoSazonal || (eu.Produtos.DataInicioSazonal <= ProdutoSazonalEstaAtivo && eu.Produtos.DataFimSazonal >= ProdutoSazonalEstaAtivo)))
+                          )
                 .ToList();
         }
 
