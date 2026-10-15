@@ -6,7 +6,7 @@ using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 namespace TrabalhoRaizesDoNordeste.Application.Services
 {
-    public class PedidoService(PedidoRepository repository)
+    public class PedidoService(PedidoRepository repository, LogAuditoriaService auditoriaService)
     {
         public PedidoDTO? BuscaPorId(int id)
         {
@@ -72,8 +72,20 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             novoPedido.CalcularValorTotalPedido();
 
-            return repository.CriarPedido(novoPedido);
+            var pedidoCriado = repository.CriarPedido(novoPedido);
 
+            auditoriaService.RegistrarLog(
+                pedidoCriado.UsuarioId,
+                "CRIAR_PEDIDO",
+                "Pedido",
+                pedidoCriado.Id,
+                "",
+                $"Status: {pedidoCriado.StatusPedido}; Valor: {pedidoCriado.ValorTotalPedido}; Canal: {pedidoCriado.CanalPedido}"
+            );
+
+            return pedidoCriado;
+
+            //return repository.CriarPedido(novoPedido);
         }
 
         public Pedido? AtualizarPedido(int id, Pedido pedido)
@@ -126,7 +138,24 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         public Pedido AtualizarStatusPedido(int id, StatusPedido statusPedido)
         {
-            return repository.AtualizarStatusPedido(id, statusPedido);
+            var pedido = repository.BuscaPedidoPorId(id);
+
+            var statusPedidoAnterior = pedido.StatusPedido;
+
+            var statusPedidoAtualizado = repository.AtualizarStatusPedido(id, statusPedido);
+
+            auditoriaService.RegistrarLog(
+                pedido.UsuarioId,
+                "ALTERAR_STATUS_PEDIDO",
+                "Pedido",
+                id,
+                $"Status: {statusPedidoAnterior}",
+                $"Status: {statusPedido}"
+            );
+
+            return statusPedidoAtualizado;
+
+            //return repository.AtualizarStatusPedido(id, statusPedido);
         }
 
         public Pedido CancelarPedido(int id)
@@ -138,7 +167,21 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Pedido cancelado.");
             }
 
-            return repository.CancelarPedido(id);
+            var statusAnterior = pedido.StatusPedido;
+
+            var pedidoCancelado = repository.CancelarPedido(id);
+
+            auditoriaService.RegistrarLog(
+                pedido.UsuarioId,
+                "CANCELAR_PEDIDO",
+                "Pedido",
+                id,
+                $"Status: {statusAnterior}",
+                "Status: CANCELADO");
+
+            return pedidoCancelado;
+
+            //return repository.CancelarPedido(id);
         }
 
         public PedidoDTO CriarObjeto(Pedido pedido)

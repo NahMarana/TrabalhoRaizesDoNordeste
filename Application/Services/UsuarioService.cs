@@ -6,7 +6,7 @@ using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 namespace TrabalhoRaizesDoNordeste.Application.Services
 {
-    public class UsuarioService(UsuarioRepository repository, FidelidadeService fidelidadeService)
+    public class UsuarioService(UsuarioRepository repository, FidelidadeService fidelidadeService, LogAuditoriaService auditoriaService)
     {
         public UsuarioServiceDTO BuscaPorId(int id)
         {
@@ -55,6 +55,12 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return usuarioServiceDTO;
         }
 
+        public ICollection<UsuarioServiceDTO> ListarFuncionariosInativos()
+        {
+            var usuarios = repository.ListarFuncionariosInativos();
+            return CriarObjetoCollection(usuarios);
+        }
+
         public Usuario CriarUsuario(Usuario usuario)
         {
             if (usuario == null)
@@ -65,6 +71,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (string.IsNullOrEmpty(usuario.Nome))
             {
                 throw new ArgumentNullException("Nome do usuário é obrigatório");
+            }
+
+            if (usuario.ParticipaFidelidade && !usuario.ConsentimentoLGPD)
+            {
+                throw new ArgumentException("Para participar do programa de fidelidade é necessário aceitar os termos da LGPD.");
             }
 
             if (usuario.EstabelecimentoId <= 0)
@@ -109,6 +120,18 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 fidelidadeService.CriarFidelidade(usuarioDTO);
             }
 
+            if (usuarioCriado.ConsentimentoLGPD)
+            {
+                auditoriaService.RegistrarLog(
+                    usuarioCriado.Id,
+                    "ACEITA_LGPD",
+                    "Usuario",
+                    usuarioCriado.Id,
+                    "",
+                    $"Consentimento LGPD aceito em {usuarioCriado.DataCadastro}"
+                );
+            }
+
             return usuarioCriado;
         }
 
@@ -134,6 +157,13 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("ID fornecido é inválido.");
             }
 
+            if (usuario.ParticipaFidelidade && !usuario.ConsentimentoLGPD)
+            {
+                throw new ArgumentException("Para participar do programa de fidelidade é necessário aceitar os termos da LGPD.");
+            }
+
+            var usuarioEncontrado = repository.BuscaUsuarioPorId(id);
+
             if (usuario.Perfil == TipoPerfil.GERENTE)
             {
                 if (BuscarPerfilGerente(usuario.EstabelecimentoId))
@@ -152,6 +182,13 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 }
             }
 
+            var perfilAnterior = usuarioEncontrado.Perfil;
+            var unidadeAnterior = usuarioEncontrado.EstabelecimentoId;
+            var consentimentoAnterior = usuarioEncontrado.ConsentimentoLGPD;
+            var possuiFidelidade = usuarioEncontrado.Fidelidade != null;
+
+            var usuarioAtualizado = repository.AtualizarUsuario(id, usuario);
+
             var usuarioDTO = new UsuarioFidelidadeDTO
             {
                 Id = usuario.Id,
@@ -161,19 +198,61 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             };
             fidelidadeService.CriarFidelidade(usuarioDTO);
 
-            var usuarioAtualizado = repository.AtualizarUsuario(id, usuario);
+            auditoriaService.RegistrarLog(
+                id,
+                "ATUALIZAR_USUARIO",
+                "Usuario",
+                id,
+                $"Perfil: {perfilAnterior}; Unidade: {unidadeAnterior}",
+                $"Perfil: {usuario.Perfil}; Unidade: {usuario.EstabelecimentoId}"
+            );
+
+            if (!consentimentoAnterior && usuario.ConsentimentoLGPD)
+            {
+                auditoriaService.RegistrarLog(
+                    id,
+                    "ACEITA_LGPD",
+                    "Usuario",
+                    id,
+                    "Consentimento: não",
+                    $"Consentimento LGPD aceito em {DateTime.Now}"
+                );
+            }
+
             return usuarioAtualizado;
         }
 
-        public bool DeletarUsuario(int id)
+        public Usuario? DesativarUsuario(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
 
-            var UsuarioDeletado = repository.DeletarUsuario(id);
-            return UsuarioDeletado;
+            var usuario = repository.BuscaUsuarioPorId(id);
+
+            if (usuario == null)
+            {
+                return null;
+            }
+
+            if (!usuario.UsuarioAtivo)
+            {
+                throw new InvalidOperationException("Este usuário está inativo.");
+            }
+
+            var usuarioDesativado = repository.DesativarUsuario(id);
+
+            auditoriaService.RegistrarLog(
+                id,
+                "DESATIVAR_USUARIO",
+                "Usuario",
+                id,
+                "Ativo: true",
+                "Ativo: false"
+            );
+
+            return usuarioDesativado;
         }
 
 

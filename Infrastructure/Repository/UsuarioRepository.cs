@@ -28,6 +28,15 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return _context.Usuarios
                 .Include(ue => ue.UnidadesEstabelecimento)
                 .Include(f => f.Fidelidade)
+                .Where(u => u.UsuarioAtivo)
+                .ToList();
+        }
+
+        public ICollection<Usuario>? ListarFuncionariosInativos()
+        {
+            return _context.Usuarios
+                .Include(ue => ue.UnidadesEstabelecimento)
+                .Where(u => !u.UsuarioAtivo && u.Perfil != Domain.Enums.TipoPerfil.CLIENTE)
                 .ToList();
         }
 
@@ -48,7 +57,9 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
 
         public bool BuscarPerfilAdmin(int estabelecimentoId)
         {
-            return _context.Usuarios.Any(u => u.EstabelecimentoId == estabelecimentoId && u.Perfil == Domain.Enums.TipoPerfil.ADMIN && u.UsuarioAtivo);
+            return _context.Usuarios.Any(u => u.EstabelecimentoId == estabelecimentoId && 
+                u.Perfil == Domain.Enums.TipoPerfil.ADMIN && 
+                u.UsuarioAtivo);
         }
 
         public Usuario? AtualizarUsuario(int id, Usuario usuario)
@@ -76,13 +87,19 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return usuarioEncontrado;
         }
 
-        public bool DeletarUsuario(int id)
+        public Usuario? DesativarUsuario(int id)
         {
             var usuario = _context.Usuarios.Find(id);
-            _context.Usuarios.Remove(usuario);
-            var response = _context.SaveChanges();
 
-            return response > 0;
+            if (usuario == null)
+                return null;
+
+            usuario.UsuarioAtivo = false;
+
+            _context.Usuarios.Update(usuario);
+            _context.SaveChanges();
+
+            return usuario;
         }
     }
 }

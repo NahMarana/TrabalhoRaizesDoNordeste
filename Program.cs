@@ -45,6 +45,9 @@ builder.Services.AddScoped<EstoqueUnidadeRepository, EstoqueUnidadeRepository>()
 builder.Services.AddScoped<EstoqueMovimentacaoService, EstoqueMovimentacaoService>();
 builder.Services.AddScoped<EstoqueMovimentacaoRepository, EstoqueMovimentacaoRepository>();
 
+builder.Services.AddScoped<LogAuditoriaService, LogAuditoriaService>();
+builder.Services.AddScoped<LogAuditoriaRepository, LogAuditoriaRepository>();
+
 
 var app = builder.Build();
 

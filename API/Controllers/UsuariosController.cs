@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
@@ -23,32 +24,67 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         public IActionResult BuscarUsuarioPorNome(string nome)
         {
             //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
-            var usuario = _service.BuscarPorNome(nome);
+            try
+            {
+                var usuario = _service.BuscarPorNome(nome);
 
-            if (usuario == null)
-                return NotFound("Usuário não encontrado.");
+                if (usuario == null)
+                    return NotFound("Usuário não encontrado.");
 
-            return Ok(usuario);
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarUsuarioPorId(int id)
         {
-            var usuario = _service.BuscaPorId(id);
+            try
+            {
+                var usuario = _service.BuscaPorId(id);
 
-            if (usuario == null)
-                return NotFound("Usuário não encontrado.");
+                if (usuario == null)
+                    return NotFound("Usuário não encontrado.");
 
-            return Ok(usuario);
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarUsuarios()
         {
-            var usuario = _service.ListarUsuarios();
+            try
+            {
+                var usuario = _service.ListarUsuarios();
 
-            return Ok(usuario);
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+        [HttpGet("funcionarios/inativos")]
+        public IActionResult ListarFuncionariosInativos()
+        {
+            try
+            {
+                return Ok(_service.ListarFuncionariosInativos());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPost]
         public IActionResult CriarUsuario(Usuario usuario)
@@ -83,15 +119,23 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUsuario(int id)
+        [HttpPatch("{id}/desativar")]
+        public IActionResult DesativarUsuario(int id)
         {
-            var usuario = _service.DeletarUsuario(id);
+            try
+            {
+                var usuario = _service.DesativarUsuario(id);
 
-            if (usuario == null)
-                return NoContent();
+                if (usuario == null)
+                    return NotFound("Usuário não encontrado.");
 
-            return Ok("Usuário deletado com sucesso!");
+                return Ok("Usuário desativado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
     }
 }

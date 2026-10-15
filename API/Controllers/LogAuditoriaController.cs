@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,71 +10,81 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class LogAuditoriaController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly LogAuditoriaService _service;
 
-        public LogAuditoriaController(AppDbContext appDbContext)
+        public LogAuditoriaController(AppDbContext appDbContext, LogAuditoriaService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
         }
 
         [HttpGet("{id:int}")]
-        public IActionResult BuscarAuditoriaPorId(int id)
+        public IActionResult BuscarAuditoriaPorId(int id, int usuarioId)
         {
-            var auditoria = _appDbContext.LogsAuditoria.Find(id);
+            try
+            {
+                var auditoria = _service.BuscaPorId(id, usuarioId);
 
-            if (auditoria == null)
-                return NoContent();
+                if (auditoria == null)
+                    return NoContent();
 
-            return Ok(auditoria);
+                return Ok(auditoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpGet]
-        public IActionResult ListarAuditorias()
+        public IActionResult ListarAuditorias(int usuarioId)
         {
-            var auditoria = _appDbContext.LogsAuditoria.ToList();
+            try
+            {
+                var auditoria = _service.ListarAuditorias(usuarioId);
 
-            return Ok(auditoria);
+                return Ok(auditoria);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
-        [HttpPost]
-        public IActionResult CriarLogAuditoria(LogAuditoria auditoria)
-        {
-            _appDbContext.LogsAuditoria.Add(auditoria);
-            _appDbContext.SaveChanges();
+        //[HttpPost]
+        //public IActionResult CriarLogAuditoria(LogAuditoria auditoria)
+        //{
+        //    try
+        //    {
+        //        auditoria = _service.CriarAuditoria(auditoria);
+        //        return Created();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
-            return Created();
-        }
+        //[HttpPatch("{id}")]
+        //public IActionResult AuditoriaUpdate(int id, LogAuditoria auditoria)
+        //{
+        //    var logs = _appDbContext.LogsAuditoria.Find(id);
+        //    if (logs == null)
+        //        return NoContent();
 
-        [HttpPatch("{id}")]
-        public IActionResult AuditoriaUpdate(int id, LogAuditoria auditoria)
-        {
-            var logs = _appDbContext.LogsAuditoria.Find(id);
-            if (logs == null)
-                return NoContent();
+        //    logs.Acao = auditoria.Acao;
+        //    logs.EntidadeAfetada = auditoria.EntidadeAfetada;
+        //    logs.EntidadeAfetadaId = auditoria.EntidadeAfetadaId;
+        //    logs.DadosNovos = auditoria.DadosNovos;
+        //    logs.DadosAnteriores = auditoria.DadosAnteriores;
+        //    logs.DataOrigem = auditoria.DataOrigem;
 
-            logs.Acao = auditoria.Acao;
-            logs.EntidadeAfetada = auditoria.EntidadeAfetada;
-            logs.EntidadeAfetadaId = auditoria.EntidadeAfetadaId;
-            logs.DadosNovos = auditoria.DadosNovos;
-            logs.DadosAnteriores = auditoria.DadosAnteriores;
-            logs.DataOrigem = auditoria.DataOrigem;
+        //    _appDbContext.LogsAuditoria.Update(logs);
+        //    _appDbContext.SaveChanges();
 
-            _appDbContext.LogsAuditoria.Update(logs);
-            _appDbContext.SaveChanges();
-
-            return Ok("Auditoria atualizada!");
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeletarAuditoria(int id)
-        {
-            var auditoria = _appDbContext.LogsAuditoria.Find(id);
-            if (auditoria == null)
-                return NoContent();
-
-            _appDbContext.LogsAuditoria.Remove(auditoria);
-            _appDbContext.SaveChanges();
-
-            return Ok("Auditoria deletada com sucesso!");
-        }
+        //    return Ok("Auditoria atualizada!");
+        //}
     }
 }
