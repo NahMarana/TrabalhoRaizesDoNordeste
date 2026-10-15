@@ -22,62 +22,119 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpGet("buscar")]
         public IActionResult BuscarEstabelecimentoPorNome(string nome)
         {
-            //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
-            var unidade = _service.BuscarPorNome(nome);
+            try
+            {
+                //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
+                var unidade = _service.BuscarPorNome(nome);
 
-            if (unidade == null)
-                return NotFound("Categoria não encontrada.");
+                if (unidade == null)
+                    return NotFound("Categoria não encontrada.");
 
-            return Ok(unidade);
+                return Ok(unidade);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
 
         [HttpGet("{id:int}")]
         public IActionResult BuscarUnidadePorId(int id)
         {
-            var unidade = _service.BuscaPorId(id);
+            try
+            {
+                var unidade = _service.BuscaPorId(id);
 
-            if (unidade == null)
-                return NotFound("Categoria não encontrada.");
+                if (unidade == null)
+                    return NotFound("Categoria não encontrada.");
 
-            return Ok(unidade);
+                return Ok(unidade);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public IActionResult ListarUnidades()
         {
-            var unidade = _service.ListarUnidades();
+            try
+            {
+                var unidade = _service.ListarUnidades();
 
-            return Ok(unidade);
+                return Ok(unidade);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id:int}/cardapio")]
+        public IActionResult ConsultarCardapio(int id)
+        {
+            try
+            {
+                var unidade = _service.ConsultarCardapio(id);
+                return Ok(unidade);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
         public IActionResult CriarUnidade(UnidadesEstabelecimento unidade)
         {
-            var unidadeEstabelecimentoCriado = _service.CriarUnidade(unidade);
+            try
+            {
+                var unidadeEstabelecimentoCriado = _service.CriarUnidade(unidade);
 
-            return Created();
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("{id}")]
         public IActionResult UnidadeUpdate(int id, UnidadesEstabelecimento unidades)
         {
-            var unidade = _service.AtualizarUnidade(id, unidades);
+            try
+            {
+                var unidade = _service.AtualizarUnidade(id, unidades);
 
-            if (unidade == null)
-                return NotFound("Unidade Estabelecimento não encontrada.");
+                if (unidade == null)
+                    return NotFound("Unidade Estabelecimento não encontrada.");
 
-            return Ok("Unidade Atualizada!");
+                return Ok("Unidade Atualizada!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteUnidade(int id)
+        [HttpPatch("{id}/desativar")]
+        public IActionResult DesativarUnidade(int id)
         {
-            var unidade = _service.DeletarUnidade(id);
-            if (unidade == null)
+            try
+            {
+                var unidade = _service.DesativarUnidade(id);
 
-                return NoContent();
+                if (unidade == null)
+                    return NotFound("Unidade não encontrada.");
 
-            return Ok("Unidade Estabelecimento deletado com sucesso!");
+                return Ok("Unidade desativada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

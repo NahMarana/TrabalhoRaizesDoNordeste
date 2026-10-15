@@ -95,17 +95,61 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return unidadeAtualizada;
         }
 
-        public bool DeletarUnidade(int id)
+        public UnidadesEstabelecimento? DesativarUnidade(int id)
         {
             if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
 
-            var unidadeDeletada = repository.DeletarUnidade(id);
-            return unidadeDeletada;
+            var unidade = repository.BuscaUnidadePorId(id);
+
+            if (unidade == null)
+            {
+                return null;
+            }
+
+            if (!unidade.UnidadeAtiva)
+            {
+                throw new InvalidOperationException("Esta unidade está inativa.");
+            }
+
+            return repository.DesativarUnidade(id);
         }
 
+        public ICollection<EstoqueUnidadeDTO> ConsultarCardapio(int unidadeId)
+        {
+            if (unidadeId <= 0)
+            {
+                throw new ArgumentException("ID fornecido é inválido.");
+            }
+
+            var unidade = repository.BuscaUnidadePorId(unidadeId);
+
+            if (unidade == null)
+            {
+                throw new KeyNotFoundException("Unidade não encontrada.");
+            }
+
+            if (!unidade.UnidadeAtiva)
+            {
+                throw new InvalidOperationException("Esta unidade está desativada e não possui cardápio disponível.");
+            }
+
+            var itens = repository.ConsultarCardapio(unidadeId) ?? new List<EstoqueUnidade>();
+
+            return itens.Select(eu => new EstoqueUnidadeDTO
+            {
+                Id = eu.Id,
+                QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
+                ProdutoId = eu.ProdutoId,
+                NomeProduto = eu.Produtos!.NomeProduto,
+                DescricaoProduto = eu.Produtos.DescricaoProduto,
+                PrecoUnitario = eu.Produtos.PrecoUnitario,
+                ProdutoSazonal = eu.Produtos.ProdutoSazonal,
+                NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? ""
+            }).ToList();
+        }
 
         public UnidadeDTO CriarObjeto(UnidadesEstabelecimento unidade)
         {
@@ -128,6 +172,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                     Id = eu.Id,
                     QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
                     ProdutoId = eu.ProdutoId,
+                    NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? "",
                     NomeProduto = eu.Produtos!.NomeProduto,
                     DescricaoProduto = eu.Produtos.DescricaoProduto,
                     PrecoUnitario = eu.Produtos.PrecoUnitario,
@@ -170,6 +215,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                         Id = eu.Id,
                         QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
                         ProdutoId = eu.ProdutoId,
+                        NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? "",
                         NomeProduto = eu.Produtos!.NomeProduto,
                         DescricaoProduto = eu.Produtos.DescricaoProduto,
                         PrecoUnitario = eu.Produtos.PrecoUnitario,

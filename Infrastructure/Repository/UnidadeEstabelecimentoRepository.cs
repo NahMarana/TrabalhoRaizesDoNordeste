@@ -9,7 +9,7 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public UnidadesEstabelecimento? BuscaUnidadePorId(int id)
         {
             return _context.UnidadesEstabelecimento
-                .Include(eu => eu.EstoqueUnidades)
+                .Include(eu => eu.EstoqueUnidades!).ThenInclude(e => e.Produtos).ThenInclude(p => p.Categoria)
                 .Include(u => u.Usuarios)
                 .FirstOrDefault(c => c.Id == id);
         }
@@ -17,7 +17,7 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public UnidadesEstabelecimento? BuscarUnidadePorNome(string nome)
         {
             return _context.UnidadesEstabelecimento
-                .Include(eu => eu.EstoqueUnidades)
+                .Include(eu => eu.EstoqueUnidades!).ThenInclude(e => e.Produtos).ThenInclude(p => p.Categoria)
                 .Include(u => u.Usuarios)
                 .FirstOrDefault(ue => ue.NomeEstabelecimento.ToLower().Contains(nome.ToLower()));
         }
@@ -27,6 +27,18 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return _context.UnidadesEstabelecimento
                 .Include(eu => eu.EstoqueUnidades)
                 .Include(u => u.Usuarios)
+                .ToList();
+        }
+
+        public ICollection<EstoqueUnidade>? ConsultarCardapio(int unidadeId)
+        {
+            return _context.EstoquesUnidade
+                .Include(eu => eu.Produtos!)
+                    .ThenInclude(p => p.Categoria)
+                .Where(eu => eu.EstabelecimentoId == unidadeId
+                          && eu.VendaDisponivel
+                          && eu.QtdEstoqueDisponivel > 0
+                          && eu.Produtos!.ProdutoAtivo)
                 .ToList();
         }
 
@@ -62,13 +74,19 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return unidadeEncontrada;
         }
 
-        public bool DeletarUnidade(int id)
+        public UnidadesEstabelecimento? DesativarUnidade(int id)
         {
             var unidade = _context.UnidadesEstabelecimento.Find(id);
-            _context.UnidadesEstabelecimento.Remove(unidade);
-            var response = _context.SaveChanges();
 
-            return response > 0;
+            if (unidade == null)
+                return null;
+
+            unidade.UnidadeAtiva = false;
+
+            _context.UnidadesEstabelecimento.Update(unidade);
+            _context.SaveChanges();
+
+            return unidade;
         }
     }
 }
