@@ -6,7 +6,7 @@ using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 namespace TrabalhoRaizesDoNordeste.Application.Services
 {
-    public class ItensPedidoService(ItensPedidoRepository repository)
+    public class ItensPedidoService(ItensPedidoRepository repository, EstoqueUnidadeService estoqueUnidadeService)
     {
         public ItensDoPedidoDTO BuscaPorId(int id)
         {
@@ -68,6 +68,8 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Id do produto é obrigatória.");
             }
 
+            estoqueUnidadeService.DarBaixaNoEstoque(pedido.EstabelecimentoId, produto.Id, item.QtdItens, pedido.Id, pedido.UsuarioId);
+
             var novoItem = new ItensPedido
             {
                 PedidoId = pedido.Id,
@@ -85,26 +87,49 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         public ItensDoPedidoDTO? AtualizarItemPedido(int id, ItensPedido item)
         {
-            
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
 
             if (item.QtdItens < 0)
             {
-                throw new ArgumentException("É obrigatório pelo menos ter um produto.");
+                throw new ArgumentException("Não é permitida quantidade de produto negativa.");
             }
 
             var itemEncontrado = repository.BuscaItensPedidoPorId(id);
 
+            if (itemEncontrado == null)
+            {
+                throw new KeyNotFoundException("Item não encontrado.");
+            }
+
             var pedido = repository.BuscaPedidoPorId(itemEncontrado.PedidoId);
+
+            if (pedido == null)
+            {
+                throw new KeyNotFoundException("Pedido não encontrado.");
+            }
+
             pedido.ValidarEditarPedido();
 
             if (item.QtdItens == 0)
             {
+                estoqueUnidadeService.ReporNoEstoque(pedido.EstabelecimentoId, itemEncontrado.ProdutoId, itemEncontrado.QtdItens, pedido.Id, pedido.UsuarioId);
+
                 repository.RemoverItemPedido(itemEncontrado);
                 return null;
+            }
+
+            var diferenca = item.QtdItens - itemEncontrado.QtdItens;
+
+            if (diferenca > 0)
+            {
+                estoqueUnidadeService.DarBaixaNoEstoque(pedido.EstabelecimentoId, itemEncontrado.ProdutoId, diferenca, pedido.Id, pedido.UsuarioId);
+            }
+            else if (diferenca < 0)
+            {
+                estoqueUnidadeService.ReporNoEstoque(pedido.EstabelecimentoId, itemEncontrado.ProdutoId, -diferenca, pedido.Id, pedido.UsuarioId);
             }
 
             var itemAtualizado = repository.AtualizarItemPedido(id, item);
