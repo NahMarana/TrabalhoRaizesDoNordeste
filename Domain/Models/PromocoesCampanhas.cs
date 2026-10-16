@@ -14,5 +14,13 @@ namespace TrabalhoRaizesDoNordeste.Domain.Models
         public DateOnly DataFim { get; set; }
         public Produto? Produtos { get; set; }
         public UnidadesEstabelecimento? UnidadesEstabelecimento { get; set; }
+
+        // Verifica se a promoção está ativa e dentro do período
+        public bool VerificaPromoEstaVigente(DateOnly data)
+        {
+            return StatusPromoCampanha == StatusPromoCampanha.ATIVO
+                && data >= DataInicio
+                && data <= DataFim;
+        }
     }
 }

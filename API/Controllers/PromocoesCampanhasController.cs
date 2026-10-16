@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
@@ -9,10 +10,13 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     public class PromocoesCampanhasController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly PromocoesCampanhasService _service;
 
-        public PromocoesCampanhasController(AppDbContext appDbContext)
+        public PromocoesCampanhasController(AppDbContext appDbContext, PromocoesCampanhasService service)
         {
             _appDbContext = appDbContext;
+            _service = service;
+
         }
 
         [HttpGet("{id:int}")]
@@ -20,12 +24,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var pc = _appDbContext.PromocoesCampanha.Find(id);
+                var promo = _service.BuscaPorId(id);
 
-                if (pc == null)
-                    return NoContent();
+                if (promo == null)
+                    return NotFound("Promoção não encontrada.");
 
-                return Ok(pc);
+                return Ok(promo);
             }
             catch (Exception ex)
             {
@@ -38,9 +42,22 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var pc = _appDbContext.PromocoesCampanha.ToList();
+                var promo = _service.ListarPromocoesCampanhas();
 
-                return Ok(pc);
+                return Ok(promo);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("promocoesCampanhas/inativos")]
+        public IActionResult ListarPromocoesCampanhasInativas()
+        {
+            try
+            {
+                return Ok(_service.ListarPromocoesCampanhasInativas());
             }
             catch (Exception ex)
             {
@@ -49,12 +66,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarPromocoesECampanhas(PromocoesCampanhas pc)
+        public IActionResult CriarPromocoesECampanhas(PromocoesCampanhas promo)
         {
             try
             {
-                _appDbContext.PromocoesCampanha.Add(pc);
-                _appDbContext.SaveChanges();
+                var promoCriada = _service.CriarPromoCampanha(promo);
 
                 return Created();
             }
@@ -65,27 +81,16 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult PromoECampanhasUpdate(int id, PromocoesCampanhas promoCampanha)
+        public IActionResult PromoUpdate(int id, PromocoesCampanhas promos)
         {
             try
             {
-                var pc = _appDbContext.PromocoesCampanha.Find(id);
-                if (pc == null)
-                    return NoContent();
+                var promo = _service.AtualizarPromoCampanha(id, promos);
 
-                pc.EstabelecimentoId = promoCampanha.EstabelecimentoId;
-                pc.ProdutoId = promoCampanha.ProdutoId;
-                pc.Descricao = promoCampanha.Descricao;
-                pc.ValorPromocional = promoCampanha.ValorPromocional;
-                pc.StatusPromoCampanha = promoCampanha.StatusPromoCampanha;
-                pc.DataInicio = promoCampanha.DataInicio;
-                pc.DataFim = promoCampanha.DataFim;
+                if (promo == null)
+                    return NotFound("Promoção não encontrada.");
 
-
-                _appDbContext.PromocoesCampanha.Update(pc);
-                _appDbContext.SaveChanges();
-
-                return Ok("Promoções ou Campanha atualizada!");
+                return Ok("Promoção Atualizada!");
             }
             catch (Exception ex)
             {
@@ -93,17 +98,22 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeletarPromoECampanha(int id)
+        [HttpPatch("{id}/desativar")]
+        public IActionResult DesativarPromo(int id)
         {
-            var pc = _appDbContext.PromocoesCampanha.Find(id);
-            if (pc == null)
-                return NoContent();
+            try
+            {
+                var promo = _service.DesativarPromo(id);
 
-            _appDbContext.PromocoesCampanha.Remove(pc);
-            _appDbContext.SaveChanges();
+                if (promo == null)
+                    return NotFound("Promoção não encontrada.");
 
-            return Ok("Promoção ou Campanha deletada com sucesso!");
+                return Ok("Promoção desativada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
