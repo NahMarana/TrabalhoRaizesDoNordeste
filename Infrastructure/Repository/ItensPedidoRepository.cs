@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
@@ -38,6 +39,15 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             return _context.EstoquesUnidade
                 .FirstOrDefault(e => e.EstabelecimentoId == estabelecimentoId && e.ProdutoId == produtoId);
+        }
+
+        public ICollection<PromocoesCampanhas> BuscaPromocoesDoProduto(int estabelecimentoId, int produtoId)
+        {
+            return _context.PromocoesCampanha
+                .Where(pc => pc.EstabelecimentoId == estabelecimentoId
+                          && pc.ProdutoId == produtoId
+                          && pc.StatusPromoCampanha == StatusPromoCampanha.ATIVO)
+                .ToList();
         }
 
         public ItensPedido CriarItensPedido(ItensPedido item)

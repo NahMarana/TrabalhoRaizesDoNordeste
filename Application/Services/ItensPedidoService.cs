@@ -68,6 +68,27 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Id do produto é obrigatória.");
             }
 
+            if (produto.PrecoUnitario <= 0)
+            {
+                throw new ArgumentException("É obrigatório produto possuir valor.");
+            }
+
+            var datePromo = DateOnly.FromDateTime(DateTime.Today);
+
+            var promocao = repository.BuscaPromocoesDoProduto(pedido.EstabelecimentoId, produto.Id)
+                .FirstOrDefault(pc => pc.VerificaPromoEstaVigente(datePromo));
+
+            decimal precoUnitario;
+
+            if (promocao != null)
+            {
+                precoUnitario = promocao.ValorPromocional;
+            }
+            else
+            {
+                precoUnitario = produto.PrecoUnitario;
+            }
+
             estoqueUnidadeService.DarBaixaNoEstoque(pedido.EstabelecimentoId, produto.Id, item.QtdItens, pedido.Id, pedido.UsuarioId);
 
             var novoItem = new ItensPedido
