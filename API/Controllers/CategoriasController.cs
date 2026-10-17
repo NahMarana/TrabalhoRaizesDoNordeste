@@ -26,7 +26,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var categoria = _service.BuscaPorId(id);
 
                 if (categoria == null)
-                    return NotFound("Categoria não encontrada.");
+                    return NotFound("Categoria por ID não encontrada.");
 
                 return Ok(categoria);
             }
@@ -37,14 +37,14 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("buscar")]
-        public IActionResult BuscarCategoriaPorNome(string nome)
+        public IActionResult BuscarCategoriaPorNome([FromQuery] string? nome)
         {
             try
             {
                 var categorias = _service.BuscarPorNome(nome);
 
-                if (categorias == null)
-                    return NotFound("Categoria não encontrada.");
+                if (categorias.Count == 0)
+                    return NotFound("Categoria por nome não encontrada.");
 
                 return Ok(categorias);
             }
@@ -105,12 +105,19 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteCategoria(int id)
         {
-            var categoria = _service.DeletarCategoria(id);
+            try
+            {
+                var categoriaDeletada = _service.DeletarCategoria(id);
 
-            if (categoria == null)
-                return NoContent();
+                if (!categoriaDeletada)
+                    return NotFound("Categoria ID não encontrada");
 
-            return Ok("Categoria deletada com sucesso!");
+                return Ok("Categoria deletada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

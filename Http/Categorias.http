@@ -1,11 +1,47 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/buscar?nome=bebidas
+//------------ ACERTOS GET ------------
+
+//Listar todos as categorias
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
 Content-Type: application/json
 Accept: application/json
 
 ###
 
+//Buscar categoria por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/2
+Content-Type: application/json
+Accept: application/json
+
+###
+
+//Buscar categoria por nome
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/buscar?nome=pratos
+Content-Type: application/json
+Accept: application/json
+
+###
+
+//------------ ERROS GET ------------
+
+//Buscar categoria por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/0
+Content-Type: application/json
+Accept: application/json
+
+###
+
+//Buscar categoria por nome
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/buscar?nome=
+Content-Type: application/json
+Accept: application/json
+
+###
+
+//------------ ACERTOS: CRIAÇÃO DAS CATEGORIAS ------------
+
+//Categoria = Bebidas
 POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
 Content-Type: application/json
 Accept: application/json
@@ -16,8 +52,30 @@ Accept: application/json
 
 ###
 
+//Categoria = Petiscos
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Petiscos",
+  "categoriaAtiva": true
+}
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/2
+###
+
+//Categoria = Tapiocas
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Tapiocas",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = Doces
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
 Content-Type: application/json
 Accept: application/json
 {
@@ -27,4 +85,150 @@ Accept: application/json
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/2
+//Categoria = Sucos Naturais
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Sucos Naturais",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = Cafés
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Cafés",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = Pratos Sazonais
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Pratos Sazonais",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = Café da manhã
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Café da manhã",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = Pratos Principais/PF
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Pratos Principais/PF",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = Bebidas Alcoólicas
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Bebidas Alcoólicas",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = COMBOS (TESTE)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "combos",
+  "categoriaAtiva": true
+}
+
+###
+
+//------------ ERRO: CRIAÇÃO DA CATEGORIA ------------
+
+//Categoria = COMBOS (TESTE) - Nome de categoria requerida
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "",
+  "categoriaAtiva": true
+}
+
+###
+
+//------------ ACERTO: ATUALIZAÇÃO DA CATEGORIA ------------
+
+//Categoria = COMBOS (TESTE)
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Combo",
+  "categoriaAtiva": true
+}
+
+###
+
+//------------ ERRO: ATUALIZAÇÃO DA CATEGORIA ------------
+
+//Categoria = COMBOS (TESTE) - Id fornecido inválido
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/-1
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Combo",
+  "categoriaAtiva": true
+}
+
+###
+
+//Categoria = COMBOS (TESTE) - Categoria não encontrada
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/25
+Content-Type: application/json
+Accept: application/json
+{
+  "nomeCategoria": "Combo",
+  "categoriaAtiva": true
+}
+
+###
+
+//------------ ACERTO: DESATIVAR/DELETAR CATEGORIA ------------
+
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/11
+
+###
+
+//------------ ERRO: DESATIVAR/DELETAR CATEGORIA ------------
+
+//Categoria não ID encontrada
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/25
+
+###
+
+//ID fornecido inválido
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/categorias/0
+
+###

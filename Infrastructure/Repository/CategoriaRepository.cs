@@ -14,11 +14,12 @@ public class CategoriaRepository(AppDbContext _context)
             .FirstOrDefault(c => c.Id == id);
     }
 
-    public Categoria? BuscarCategoriaPorNome(string nome)
+    public ICollection<Categoria>? BuscarCategoriaPorNome(string nome)
     {
         return _context.Categorias
-            .Include(p => p.Produtos)
-            .FirstOrDefault(c => c.NomeCategoria.ToLower().Contains(nome.ToLower()));
+        .Include(p => p.Produtos)
+        .Where(c => c.NomeCategoria.ToLower().Contains(nome.ToLower()))
+        .ToList();
     }
 
     public ICollection<Categoria>? ListarCategorias()
@@ -39,6 +40,9 @@ public class CategoriaRepository(AppDbContext _context)
     {
         var categoriaEncontrada = _context.Categorias.Find(id);
 
+        if (categoriaEncontrada == null)
+            return null;
+
         categoriaEncontrada.NomeCategoria = categoria.NomeCategoria;
         categoriaEncontrada.CategoriaAtiva = categoria.CategoriaAtiva;
 
@@ -52,10 +56,12 @@ public class CategoriaRepository(AppDbContext _context)
     {
         var categoria = _context.Categorias.Find(id);
 
+        if (categoria == null)
+            return false;
+
         _context.Categorias.Remove(categoria);
         var response = _context.SaveChanges();
 
         return response > 0;
     }
-
 }

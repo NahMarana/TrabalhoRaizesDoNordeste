@@ -25,24 +25,18 @@ public class CategoriaService(CategoriaRepository repository)
         return categoriaDTO;
     }
 
-    public CategoriaDTO BuscarPorNome(string nome)
+    public ICollection<CategoriaDTO> BuscarPorNome(string nome)
     {
-        if (nome == null)
+        if (string.IsNullOrWhiteSpace(nome))
         {
             throw new ArgumentException("Nome da categoria não informada.");
         }
 
-        var categoria = repository.BuscarCategoriaPorNome(nome);
-        
-        if (categoria == null)
-        {
-            return null;
-        }
+        var categorias = repository.BuscarCategoriaPorNome(nome);
 
-        var categoriaDTO = CriarObjeto(categoria);
-
-        return categoriaDTO;
+        return CriarObjetoCollection(categorias);
     }
+
     public ICollection<CategoriaDTO> ListarCategorias()
     {
         var categoria = repository.ListarCategorias();
@@ -55,12 +49,12 @@ public class CategoriaService(CategoriaRepository repository)
     {
         if (categoria == null)
         {
-            throw new ArgumentNullException("Categoria vazia");
+            throw new ArgumentException("Categoria vazia");
         }
 
         if (string.IsNullOrEmpty(categoria.NomeCategoria))
         {
-            throw new ArgumentNullException("Nome da categoria requerida");
+            throw new ArgumentException("Nome da categoria requerida");
         }
 
         var categoriaCriada = repository.CriarCategoria(categoria);
@@ -69,7 +63,7 @@ public class CategoriaService(CategoriaRepository repository)
 
     public Categoria? AtualizarCategoria(int id, Categoria categoria)
     {
-        if (id < 0)
+        if (id <= 0)
         {
             throw new ArgumentException("ID fornecido é inválido.");
         }
