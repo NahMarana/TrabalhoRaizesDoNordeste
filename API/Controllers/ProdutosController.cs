@@ -20,13 +20,13 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("buscar")]
-        public IActionResult BuscarProdutosPorNome(string nome)
+        public IActionResult BuscarProdutosPorNome([FromQuery] string? nome)
         {
             try
             {
                 var produtos = _service.BuscarPorNome(nome);
 
-                if (produtos == null)
+                if (produtos.Count == 0)
                     return NotFound("Produto não encontrado.");
 
                 return Ok(produtos);
@@ -45,7 +45,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var produto = _service.BuscaPorId(id);
 
                 if (produto == null)
-                    return NotFound("Produto não encontrada.");
+                    return NotFound("Produto não encontrado.");
 
                 return Ok(produto);
             }
@@ -111,11 +111,19 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteProduto(int id)
         {
-            var produto = _service.DeletarProduto(id);
-            if (produto == null)
-                return NoContent();
+            try
+            {
+                var produtoDeletado = _service.DeletarProduto(id);
 
-            return Ok("Produto deletado com sucesso!");
+                if (!produtoDeletado)
+                    return NotFound("Produto ID não encontrado.");
+
+                return Ok("Produto deletado com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

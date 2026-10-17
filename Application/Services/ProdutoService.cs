@@ -27,7 +27,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return prodServiceDTO;
         }
 
-        public ProdutoServiceDTO BuscarPorNome(string nome)
+        public ICollection<ProdutoServiceDTO> BuscarPorNome(string nome)
         {
             if (nome == null)
             {
@@ -36,14 +36,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             var produto = repository.BuscarProdutoPorNome(nome);
 
-            if(produto == null)
-            {
-                return null;
-            }
-
-            var prodServiceDTO = CriarObjeto(produto);
-
-            return prodServiceDTO;
+            return CriarObjetoCollection(produto);
         }
 
         public ICollection<ProdutoServiceDTO> ListarProdutos()
@@ -63,7 +56,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             if (string.IsNullOrEmpty(produto.NomeProduto))
             {
-                throw new ArgumentNullException("Nome do produto é obrigatório");
+                throw new ArgumentException("Nome do produto é obrigatório");
             }
 
             if (produto.CategoriaId <= 0)
@@ -113,10 +106,10 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (produto.ProdutoSazonal == true)
             {
                 if (produto.DataInicioSazonal == null)
-                    throw new ArgumentException("Data de início do produto sazonal.");
+                    throw new ArgumentException("É obrigatório possuir data de início do produto sazonal.");
 
                 if (produto.DataFimSazonal == null)
-                    throw new ArgumentException("Data de fim do produto sazonal.");
+                    throw new ArgumentException("É obrigatório possuir data de fim do produto sazonal.");
 
                 if (produto.DataFimSazonal < produto.DataInicioSazonal)
                     throw new ArgumentException("A data final do produto sazonal não pode ser menor que a data início.");

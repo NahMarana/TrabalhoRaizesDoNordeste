@@ -1,15 +1,457 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
+//------------ ACERTOS: GET ------------
 
+//Listar todos os produtos criados
+//Esperado: 200
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
-Content-Type: application/json
 Accept: application/json
 
 ###
 
+//Buscar produto por ID
+//Esperado: 200
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/5
+Accept: application/json
+
+###
+
+//Buscar produto por nome
+//Esperado: 200
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/buscar?nome=queijo
+Accept: application/json
+
+###
+
+//------------ ERROS: GET ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/0
+Accept: application/json
+
+###
+
+//Buscar produto sem informando ID inválido
+//Esperado: 404 - "Produto não encontrado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/999
+Accept: application/json
+
+###
+
+//Buscar produto sem informar o nome
+//Esperado: 400 - "Nome do Produto não informado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/buscar?nome=
+Accept: application/json
+
+###
+
+//Buscar produto por nome que não existe
+//Esperado: 404 - "Produto não encontrado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/buscar?nome=lasanha
+Accept: application/json
+
+###
+
+//------------ ACERTOS: CRIAÇÃO DOS PRODUTOS ------------
+// Esperado em todos: 201 Created
+
+
+// ---------- Categoria Bebidas (ID 1) ----------
+
+//Produto ID 3 = Água sem gás
 POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
 Content-Type: application/json
 Accept: application/json
+
+{
+  "nomeProduto": "Água sem gás",
+  "descricaoProduto": "Água mineral sem gás, garrafa de 500 ml.",
+  "precoUnitario": 4.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Produto ID 4 = Água com gás
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Água com gás",
+  "descricaoProduto": "Água mineral com gás, garrafa de 500 ml.",
+  "precoUnitario": 4.50,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Produto ID 5 = Refrigerante
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Refrigerante",
+  "descricaoProduto": "Refrigerante em lata de 350 ml, sabores variados.",
+  "precoUnitario": 6.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Produto ID 6 = Água de coco
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Água de coco",
+  "descricaoProduto": "Água de coco natural, servida gelada, 400 ml.",
+  "precoUnitario": 8.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+
+// ---------- Categoria Petiscos (ID 2) ----------
+
+//Produto ID 7 = Dadinho de tapioca
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Dadinho de tapioca",
+  "descricaoProduto": "Porção de dadinhos de tapioca com queijo coalho, acompanha geleia de pimenta.",
+  "precoUnitario": 22.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 2
+}
+
+###
+
+//Produto ID 8 = Bolinho de mandioca com carne seca
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Bolinho de mandioca com carne seca",
+  "descricaoProduto": "Porção com 8 bolinhos de mandioca recheados com carne seca.",
+  "precoUnitario": 26.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 2
+}
+
+###
+
+//Produto ID 9 = Queijo coalho grelhado
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Queijo coalho grelhado",
+  "descricaoProduto": "Espetinhos de queijo coalho grelhados, servidos com melaço de cana.",
+  "precoUnitario": 19.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 2
+}
+
+###
+
+//Produto ID 10 = Macaxeira frita
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Macaxeira frita",
+  "descricaoProduto": "Porção de macaxeira frita crocante.",
+  "precoUnitario": 18.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 2
+}
+
+###
+
+//Produto ID 11 = Pastelzinho de carne seca
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Pastelzinho de carne seca",
+  "descricaoProduto": "Porção com 10 pastéis pequenos recheados com carne seca.",
+  "precoUnitario": 24.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 2
+}
+
+###
+
+// ---------- Categoria Tapiocas (ID 3) ----------
+
+//Produto ID 13 = Tapioca de carne seca
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Tapioca de carne seca",
+  "descricaoProduto": "Tapioca recheada com carne seca desfiada e queijo coalho.",
+  "precoUnitario": 18.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
+
+###
+
+//Produto ID 14 = Tapioca de queijo coalho
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Tapioca de queijo coalho",
+  "descricaoProduto": "Tapioca recheada com queijo coalho derretido.",
+  "precoUnitario": 14.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
+
+###
+
+//Produto ID 15 = Tapioca de frango com requeijão
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Tapioca de frango com requeijão",
+  "descricaoProduto": "Tapioca recheada com frango desfiado e requeijão cremoso.",
+  "precoUnitario": 16.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
+
+###
+
+//Produto ID 16 = Tapioca de doce de leite
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Tapioca de doce de leite",
+  "descricaoProduto": "Tapioca recheada com doce de leite.",
+  "precoUnitario": 13.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
+
+###
+
+//Produto ID 17 = Tapioca de doce de leite com coco
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Tapioca de doce de leite com coco",
+  "descricaoProduto": "Tapioca recheada com doce de leite e coco ralado.",
+  "precoUnitario": 14.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
+
+###
+
+//Produto ID 18 = Tapioca com goiabada
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Tapioca com goiabada",
+  "descricaoProduto": "Tapioca recheada com goiabada cremosa e queijo.",
+  "precoUnitario": 13.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 3
+}
+
+###
+
+
+// ---------- Categoria Doces (ID 4) ----------
+
+//Produto ID 19 = Bolo de macaxeira
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Bolo de macaxeira",
+  "descricaoProduto": "Fatia de bolo de macaxeira cremoso.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 4
+}
+
+###
+
+//Produto ID 20 = Cartola
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Cartola",
+  "descricaoProduto": "Banana frita com queijo coalho, açúcar e canela.",
+  "precoUnitario": 15.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 4
+}
+
+###
+
+//Produto ID 21 = Pudim de tapioca
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Pudim de tapioca",
+  "descricaoProduto": "Fatia de pudim de tapioca com calda de caramelo.",
+  "precoUnitario": 10.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 4
+}
+
+###
+
+//Produto ID 22 = Bolo de rolo
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Bolo de rolo",
+  "descricaoProduto": "Fatia de bolo de rolo recheado com goiabada.",
+  "precoUnitario": 10.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 4
+}
+
+###
+
+//Produto ID 23 = Bolo de aipim
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Bolo de aipim",
+  "descricaoProduto": "Fatia de bolo de aipim com coco.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 4
+}
+
+###
+
+//Produto ID 24 = Doce de leite com queijo coalho
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Doce de leite com queijo coalho",
+  "descricaoProduto": "Doce de leite caseiro servido com fatias de queijo coalho.",
+  "precoUnitario": 12.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 4
+}
+
+###
+
+
+// ---------- Categoria Sucos Naturais (ID 5) ----------
+
+//Produto ID 25 = Suco de Cajá (SAZONAL: período da safra)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
 {
   "nomeProduto": "Suco de Cajá",
   "descricaoProduto": "Suco natural de cajá, disponível durante o período da safra.",
@@ -18,26 +460,971 @@ Accept: application/json
   "dataInicioSazonal": "2026-01-26",
   "dataFimSazonal": "2026-03-31",
   "produtoAtivo": true,
-  "categoriaId": 1
+  "categoriaId": 5
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/2
+//Produto ID 26 = Suco de Caju
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "nomeProduto": "Suco de Cajá",
-  "descricaoProduto": "Suco natural de cajá, disponível durante o período da safra.",
+  "nomeProduto": "Suco de Caju",
+  "descricaoProduto": "Suco natural de caju, 500 ml.",
+  "precoUnitario": 8.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+//Produto ID 27 = Suco de Umbu
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Suco de Umbu",
+  "descricaoProduto": "Suco natural de umbu, 500 ml.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+//Produto ID 28 = Suco de Graviola
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Suco de Graviola",
+  "descricaoProduto": "Suco natural de graviola, 500 ml.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+//Produto ID 29 = Suco de Maracujá
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Suco de Maracujá",
+  "descricaoProduto": "Suco natural de maracujá, 500 ml.",
+  "precoUnitario": 8.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+//Produto ID 30 = Suco de Laranja
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Suco de Laranja",
+  "descricaoProduto": "Suco natural de laranja, 500 ml.",
+  "precoUnitario": 7.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+//Produto ID 31 = Suco de Morango
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Suco de Morango",
+  "descricaoProduto": "Suco natural de morango, 500 ml.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+//Produto ID 32 = Suco de Manga
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Suco de Manga",
+  "descricaoProduto": "Suco natural de manga, 500 ml.",
+  "precoUnitario": 8.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 5
+}
+
+###
+
+
+// ---------- Categoria Cafés (ID 6) ----------
+
+//Produto ID 33 = Café coado
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Café coado",
+  "descricaoProduto": "Café coado na hora, xícara de 200 ml.",
+  "precoUnitario": 5.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 6
+}
+
+###
+
+//Produto ID 34 = Café com leite
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Café com leite",
+  "descricaoProduto": "Café coado com leite quente, xícara de 250 ml.",
+  "precoUnitario": 6.50,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 6
+}
+
+###
+
+//Produto ID 35 = Café Nordestino
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Café Nordestino",
+  "descricaoProduto": "Café coado forte, aromatizado com cravo e canela.",
+  "precoUnitario": 7.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 6
+}
+
+###
+
+//Produto ID 36 = Café com rapadura
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Café com rapadura",
+  "descricaoProduto": "Café coado adoçado com rapadura.",
+  "precoUnitario": 6.50,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 6
+}
+
+###
+
+//Produto ID 37 = Cappuccino
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Cappuccino",
+  "descricaoProduto": "Café expresso com leite vaporizado e espuma.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 6
+}
+
+###
+
+//Produto ID 38 = Mocaccino
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Mocaccino",
+  "descricaoProduto": "Café expresso com leite vaporizado e chocolate.",
+  "precoUnitario": 10.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 6
+}
+
+###
+
+
+// ---------- Categoria Pratos Sazonais (ID 7) ----------
+// Todos sazonais do período junino (01/06 a 31/07)
+
+//Produto ID 39 = Canjica
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Canjica",
+  "descricaoProduto": "Canjica de milho cremosa com canela, servida no período junino.",
   "precoUnitario": 12.90,
   "produtoSazonal": true,
-  "dataInicioSazonal": "2026-01-26",
-  "dataFimSazonal": "2026-03-31",
+  "dataInicioSazonal": "2026-06-01",
+  "dataFimSazonal": "2026-07-31",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//Produto ID 40 = Pamonha
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Pamonha",
+  "descricaoProduto": "Pamonha de milho verde, doce ou salgada, servida no período junino.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-06-01",
+  "dataFimSazonal": "2026-07-31",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//Produto ID 41 = Milho cozido
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Milho cozido",
+  "descricaoProduto": "Espiga de milho verde cozida com manteiga, servida no período junino.",
+  "precoUnitario": 7.90,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-06-01",
+  "dataFimSazonal": "2026-07-31",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//Produto ID 42 = Bolo de milho
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Bolo de milho",
+  "descricaoProduto": "Fatia de bolo de milho verde, servida no período junino.",
+  "precoUnitario": 9.90,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-06-01",
+  "dataFimSazonal": "2026-07-31",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//Produto ID 43 = Curau
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Curau",
+  "descricaoProduto": "Curau de milho verde com canela, servido no período junino.",
+  "precoUnitario": 10.90,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-06-01",
+  "dataFimSazonal": "2026-07-31",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+
+// ---------- Categoria Café da manhã (ID 8) ----------
+
+//Produto ID 44 = Cuscuz recheado
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Cuscuz recheado",
+  "descricaoProduto": "Cuscuz de milho recheado com queijo coalho e carne seca.",
+  "precoUnitario": 19.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 8
+}
+
+###
+
+//Produto ID 45 = Pão com ovos mexidos
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Pão com ovos mexidos",
+  "descricaoProduto": "Pão francês na chapa com ovos mexidos.",
+  "precoUnitario": 12.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 8
+}
+
+###
+
+//Produto ID 46 = Macaxeira com carne de sol
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Macaxeira com carne de sol",
+  "descricaoProduto": "Macaxeira cozida com carne de sol acebolada e manteiga de garrafa.",
+  "precoUnitario": 24.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 8
+}
+
+###
+
+//Produto ID 47 = Munguzá
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Munguzá",
+  "descricaoProduto": "Munguzá doce de milho branco com leite de coco e canela.",
+  "precoUnitario": 12.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 8
+}
+
+###
+
+
+// ---------- Categoria Pratos Principais/PF (ID 9) ----------
+// A descrição informa os acompanhamentos de cada prato
+
+//Produto ID 48 = Baião de dois
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Baião de dois",
+  "descricaoProduto": "Baião de dois com queijo coalho e carne de sol. Acompanha farofa, vinagrete e salada.",
+  "precoUnitario": 39.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 9
+}
+
+###
+
+//Produto ID 49 = Buchada
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Buchada",
+  "descricaoProduto": "Buchada de bode. Acompanha arroz, feijão e farofa.",
+  "precoUnitario": 42.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 9
+}
+
+###
+
+//Produto ID 50 = Carne de bode
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Carne de bode",
+  "descricaoProduto": "Carne de bode assada. Acompanha arroz, feijão verde, farofa e salada.",
+  "precoUnitario": 49.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 9
+}
+
+###
+
+//Produto ID 51 = Carne de sol frita
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Carne de sol frita",
+  "descricaoProduto": "Carne de sol frita na manteiga de garrafa. Acompanha arroz, feijão, macaxeira frita e vinagrete.",
+  "precoUnitario": 44.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 9
+}
+
+###
+
+//Produto ID 52 = Galinhada
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Galinhada",
+  "descricaoProduto": "Galinhada com açafrão. Acompanha feijão e salada.",
+  "precoUnitario": 34.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 9
+}
+
+###
+
+//Produto ID 53 = Peixada
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Peixada",
+  "descricaoProduto": "Peixada nordestina com legumes. Acompanha arroz, pirão e salada.",
+  "precoUnitario": 49.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 9
+}
+
+###
+
+
+// ---------- Categoria Bebidas Alcoólicas (ID 10) ----------
+
+//Produto ID 54 = Licor de Jenipapo
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Licor de Jenipapo",
+  "descricaoProduto": "Dose de licor artesanal de jenipapo, 50 ml.",
+  "precoUnitario": 12.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+//Produto ID 55 = Cangaceira
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Cangaceira",
+  "descricaoProduto": "Drink com cachaça, limão e mel.",
+  "precoUnitario": 22.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+//Produto ID 56 = Axé da Caatinga
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Axé da Caatinga",
+  "descricaoProduto": "Drink com cachaça, maracujá e hortelã.",
+  "precoUnitario": 22.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+//Produto ID 57 = Nordestino Sour
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Nordestino Sour",
+  "descricaoProduto": "Drink com cachaça, limão e xarope de rapadura.",
+  "precoUnitario": 24.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+//Produto ID 58 = Cachaça artesanal
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Cachaça artesanal",
+  "descricaoProduto": "Dose de cachaça artesanal do Nordeste, 50 ml.",
+  "precoUnitario": 10.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+//Produto ID 59 = Batida de coco
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Batida de coco",
+  "descricaoProduto": "Batida de cachaça com leite de coco e leite condensado.",
+  "precoUnitario": 18.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+//Produto ID 60 = Cerveja
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Cerveja",
+  "descricaoProduto": "Cerveja long neck, 355 ml.",
+  "precoUnitario": 12.90,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 10
+}
+
+###
+
+
+// ---------- Produto TESTE (usado nos testes de atualização e exclusão) ----------
+
+//Produto ID 61 = Produto TESTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Produto criado apenas para os testes de atualização e exclusão.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
   "produtoAtivo": true,
   "categoriaId": 1
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/1
 
+//------------ ERROS: CRIAÇÃO DOS PRODUTOS ------------
+
+//Nome do produto vazio
+//Esperado: 400 - "Nome do produto é obrigatório"
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "",
+  "descricaoProduto": "Produto sem nome.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Categoria não informada (categoriaId = 0) - validação do Controller
+//Esperado: 400 - "Categoria do produto não identificado!"
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto sem categoria",
+  "descricaoProduto": "Produto com categoria zerada.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 0
+}
+
+###
+
+//Categoria inválida (categoriaId negativo) - validação do Service
+//Esperado: 400 - "Categoria do produto é obrigatória."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto com categoria inválida",
+  "descricaoProduto": "Produto com categoria negativa.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": -1
+}
+
+###
+
+//Produto sazonal sem data de início
+//Esperado: 400 - "Data de início do produto sazonal."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto sazonal sem início",
+  "descricaoProduto": "Produto sazonal sem data de início.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": "2026-07-31",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//Produto sazonal sem data de fim
+//Esperado: 400 - "Data de fim do produto sazonal."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto sazonal sem fim",
+  "descricaoProduto": "Produto sazonal sem data de fim.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-06-01",
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//Produto sazonal com data final menor que a data de início
+//Esperado: 400 - "A data final do produto sazonal não pode ser menor que a data início."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto sazonal com datas invertidas",
+  "descricaoProduto": "Produto sazonal com data final antes da inicial.",
+  "precoUnitario": 10.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-07-31",
+  "dataFimSazonal": "2026-06-01",
+  "produtoAtivo": true,
+  "categoriaId": 7
+}
+
+###
+
+//------------ ACERTOS: ATUALIZAÇÃO DO PRODUTO ------------
+
+//Atualizar preço e descrição do Produto TESTE (ID 60)
+//Esperado: 200 - "Produto Atualizado!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Produto TESTE com preço e descrição atualizados.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Tornar o Produto TESTE (ID 60) sazonal, com período válido
+//Esperado: 200 - "Produto Atualizado!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Produto TESTE agora sazonal.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-12-01",
+  "dataFimSazonal": "2026-12-31",
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Desativar o Produto TESTE (ID 61) - produtoAtivo = false
+//Esperado: 200 - "Produto Atualizado!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Produto TESTE desativado.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": false,
+  "categoriaId": 1
+}
+
+###
+
+//------------ ERROS: ATUALIZAÇÃO DO PRODUTO ------------
+
+//ID inválido
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/-1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Atualização com ID inválido.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Produto não encontrado
+//Esperado: 404 - "Produto não encontrada."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Atualização de produto que não existe.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": false,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Atualizar para sazonal sem data de início
+//Esperado: 400 - "Data de início do produto sazonal."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Sazonal sem data de início.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": null,
+  "dataFimSazonal": "2026-12-31",
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Atualizar para sazonal sem data de fim
+//Esperado: 400 - "Data de fim do produto sazonal."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Sazonal sem data de fim.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-12-01",
+  "dataFimSazonal": null,
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//Atualizar para sazonal com data final menor que a data de início
+//Esperado: 400 - "A data final do produto sazonal não pode ser menor que a data início."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nomeProduto": "Produto TESTE",
+  "descricaoProduto": "Sazonal com datas invertidas.",
+  "precoUnitario": 15.00,
+  "produtoSazonal": true,
+  "dataInicioSazonal": "2026-12-31",
+  "dataFimSazonal": "2026-12-01",
+  "produtoAtivo": true,
+  "categoriaId": 1
+}
+
+###
+
+//------------ ACERTO: DELETAR PRODUTO ------------
+
+//Deletar o Produto TESTE (ID 60)
+//Esperado: 200 - "Produto deletado com sucesso!"
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/61
+
+###
+
+
+//------------ ERROS: DELETAR PRODUTO ------------
+
+//Produto não encontrado
+//Esperado: 404 - "Produto não encontrado."
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/999
+
+###
+
+//ID inválido
+//Esperado: 400 - "ID fornecido é inválido."
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/produtos/0
+
+###

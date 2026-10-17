@@ -13,11 +13,12 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(p => p.Id == id);
         }
 
-        public Produto? BuscarProdutoPorNome(string nome)
+        public ICollection<Produto>? BuscarProdutoPorNome(string nome)
         {
             return _context.Produtos
                 .Include(c => c.Categoria)
-                .FirstOrDefault(p => p.NomeProduto.ToLower().Contains(nome.ToLower()));
+                .Where(p => p.NomeProduto.ToLower().Contains(nome.ToLower()))
+                .ToList();
         }
 
         public ICollection<Produto>? ListarProdutos()
@@ -43,6 +44,9 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             var produtoEncontrado = _context.Produtos.Find(id);
 
+            if (produtoEncontrado == null)
+                return null;
+
             produtoEncontrado.NomeProduto = produto.NomeProduto;
             produtoEncontrado.DescricaoProduto = produto.DescricaoProduto;
             produtoEncontrado.PrecoUnitario = produto.PrecoUnitario;
@@ -60,6 +64,10 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public bool DeletarProduto(int id)
         {
             var produto = _context.Produtos.Find(id);
+
+            if (produto == null)
+                return false;
+
             _context.Produtos.Remove(produto);
             var response = _context.SaveChanges();
 
