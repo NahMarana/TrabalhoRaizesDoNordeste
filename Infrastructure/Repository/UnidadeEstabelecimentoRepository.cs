@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
@@ -44,6 +45,14 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                           (
                             (!eu.Produtos.ProdutoSazonal || (eu.Produtos.DataInicioSazonal <= ProdutoSazonalEstaAtivo && eu.Produtos.DataFimSazonal >= ProdutoSazonalEstaAtivo)))
                           )
+                .ToList();
+        }
+
+        public ICollection<PromocoesCampanhas> BuscaPromocoesAtivasDaUnidade(int unidadeId)
+        {
+            return _context.PromocoesCampanha
+                .Where(pc => pc.EstabelecimentoId == unidadeId
+                          && pc.StatusPromoCampanha == StatusPromoCampanha.ATIVO)
                 .ToList();
         }
 

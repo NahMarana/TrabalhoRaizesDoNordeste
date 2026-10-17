@@ -10,5 +10,7 @@
         public string? DescricaoProduto { get; set; }
         public required decimal PrecoUnitario { get; set; }
         public required bool ProdutoSazonal { get; set; }
+        public decimal? ValorPromocional { get; set; }
+        public bool estaEmPromocao { get; set; }
     }
 }

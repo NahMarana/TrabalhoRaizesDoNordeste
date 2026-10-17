@@ -136,18 +136,31 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new InvalidOperationException("Esta unidade está desativada e não possui cardápio disponível.");
             }
 
+            var datePromo = DateOnly.FromDateTime(DateTime.Today);
+
+            var promocaoVigente = repository.BuscaPromocoesAtivasDaUnidade(unidadeId)
+                .Where(pc => pc.VerificaPromoEstaVigente(datePromo))
+                .ToList();
+
             var itens = repository.ConsultarCardapio(unidadeId) ?? new List<EstoqueUnidade>();
 
-            return itens.Select(eu => new EstoqueUnidadeDTO
+            return itens.Select(eu =>
             {
-                Id = eu.Id,
-                QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
-                ProdutoId = eu.ProdutoId,
-                NomeProduto = eu.Produtos!.NomeProduto,
-                DescricaoProduto = eu.Produtos.DescricaoProduto,
-                PrecoUnitario = eu.Produtos.PrecoUnitario,
-                ProdutoSazonal = eu.Produtos.ProdutoSazonal,
-                NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? ""
+                var promocao = promocaoVigente.FirstOrDefault(pc => pc.ProdutoId == eu.ProdutoId);
+
+                return new EstoqueUnidadeDTO
+                {
+                    Id = eu.Id,
+                    QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
+                    ProdutoId = eu.ProdutoId,
+                    NomeProduto = eu.Produtos!.NomeProduto,
+                    DescricaoProduto = eu.Produtos.DescricaoProduto,
+                    PrecoUnitario = eu.Produtos.PrecoUnitario,
+                    ProdutoSazonal = eu.Produtos.ProdutoSazonal,
+                    NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? "",
+                    estaEmPromocao = promocao != null,
+                    ValorPromocional = promocao?.ValorPromocional
+                };
             }).ToList();
         }
 
@@ -219,7 +232,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                         NomeProduto = eu.Produtos!.NomeProduto,
                         DescricaoProduto = eu.Produtos.DescricaoProduto,
                         PrecoUnitario = eu.Produtos.PrecoUnitario,
-                        ProdutoSazonal = eu.Produtos.ProdutoSazonal
+                        ProdutoSazonal = eu.Produtos.ProdutoSazonal,
 
                     }).ToList(),
                     Usuarios = item.Usuarios.Select(u => new UsuarioDTO
