@@ -133,8 +133,6 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             return novosItens;
         }
-        //metodo e pagamento
-        //deu certo? AtualizarStatusPedido(idPedido, StatusPedido.EMPREPARO);
 
         public Pedido AtualizarStatusPedido(int id, StatusPedido statusPedido)
         {

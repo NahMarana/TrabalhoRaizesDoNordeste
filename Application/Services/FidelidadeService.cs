@@ -61,6 +61,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return repository.CriarFidelidade(fidelidade);
         }
 
+        public int BuscaFidelidadePorUsuario(int id)
+        {
+            return repository.BuscaFidelidadePorUsuario(id).Id;
+        }
+
         public FidDTO CriarObjeto(Fidelidade fidelidade)
         {
             var fidDTO = new FidDTO

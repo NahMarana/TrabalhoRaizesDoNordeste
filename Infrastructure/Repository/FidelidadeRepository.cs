@@ -23,9 +23,9 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .ToList();
         }
 
-        public Usuario? BuscaUsuarioPorId(int usuarioId)
+        public Fidelidade? BuscaFidelidadePorUsuario(int usuarioId)
         {
-            return _context.Usuarios.Find(usuarioId);
+            return _context.Fidelidades.Where(c => c.UsuarioId == usuarioId).FirstOrDefault();
         }
 
         public bool UsuarioPossuiFidelidade(int usuarioId)

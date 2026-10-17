@@ -65,21 +65,6 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Tipo de movimentação inválido.");
             }
 
-            var fidelidade = repository.BuscaFidelidadePorId(pontos.FidelizacaoId);
-
-            if (pontos.TipoMovimentacaoPontos == TipoMovimentoPontos.ACUMULO)
-            {
-                repository.PossuiPontuacao(pontos.PedidoId);
-            }
-
-            if (pontos.TipoMovimentacaoPontos == TipoMovimentoPontos.RESGATE)
-            {
-                if(fidelidade.QtdPontos < pontos.Pontos)
-                {
-                    throw new ArgumentException("Saldo de pontos foram resgatados.");
-                }
-            }
-
             repository.RegistarPontuacao(pontos);
         }
 

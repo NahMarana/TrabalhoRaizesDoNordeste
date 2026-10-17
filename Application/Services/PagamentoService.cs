@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TrabalhoRaizesDoNordeste.Application.DTOs;
+﻿using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 namespace TrabalhoRaizesDoNordeste.Application.Services
 {
-    public class PagamentoService(PagamentoRepository repository, PontosFidelidadeService PontosFidservice, PedidoService StatusService)
+    public class PagamentoService(PagamentoRepository repository, PontosFidelidadeService pontosFidelidadeService, PedidoService pedidoService, FidelidadeService fidelidadeService)
     {
         public PagamentoDTO? BuscaPorId(int id)
         {
@@ -34,9 +33,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             return pagamentoDTO;
 
-        } 
+        }
 
-        public PagamentoDTO CriarPagamento(Pagamento pagamento, bool usarPontos)
+        public PagamentoPayloadDTO CriarPagamento(Pagamento pagamento, bool usarPontos)
         {
             if (pagamento == null)
             {
@@ -54,44 +53,59 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             {
                 throw new InvalidOperationException("Este pedido já possui um pagamento.");
             }
-                
+
             if (pedido.StatusPedido != StatusPedido.PENDENTE)
             {
                 throw new InvalidOperationException("Só é possível pagar seu pedido se o status estiver PENDENTE.");
             }
 
-            var novoPagamento = new Pagamento
-            {
-                PedidoId = pedido.Id,
-                TipoPagamento = pagamento.TipoPagamento,
-                StatusPagamento = StatusPagamento.PENDENTE,
-                ValorPagamento = pedido.ValorTotalPedido,
-            };
+            //var novoPagamento = new Pagamento
+            //{
+            //    PedidoId = pedido.Id,
+            //    TipoPagamento = pagamento.TipoPagamento,
+            //    StatusPagamento = StatusPagamento.PENDENTE,
+            //    ValorPagamento = pedido.ValorTotalPedido,
+            //};
 
-            if (usarPontos)
+            var mensagemPagamento = "";
+            var tentativaPagamento = TentativaDePagamento();
+            if (tentativaPagamento > 5)
             {
                 var saldo = ValidarResgate(pedido);
+                if (usarPontos)
+                {
+                    pagamento.AplicarResgate(pedido.ValorTotalPedido, saldo);
+                }
+                else
+                {
+                    saldo += pagamento.CalculaPontosGanhos();
+                }
 
-               
-                novoPagamento.AplicarResgate(pedido.ValorTotalPedido, saldo);
+                pagamento.StatusPagamento = StatusPagamento.PENDENTE;
+                var pagamentoCriado = repository.CriarPagamento(pagamento);
+                mensagemPagamento = "Pagamento realizado com sucesso.";
+
+                pedidoService.AtualizarStatusPedido(pagamentoCriado.Id, StatusPedido.EMPREPARO);
+
+                var fidelidadeId = fidelidadeService.BuscaFidelidadePorUsuario(pagamento.Pedidos.UsuarioId);
+
+                pontosFidelidadeService.RegistrarPontuacao(new PontosFidelidade
+                {
+                    FidelizacaoId = fidelidadeId,
+                    PedidoId = pagamento.PedidoId,
+                    TipoMovimentacaoPontos = usarPontos ? TipoMovimentoPontos.RESGATE : TipoMovimentoPontos.ACUMULO,
+                    Pontos = saldo
+                });
             }
+            else
+            {
+                pagamento.StatusPagamento = StatusPagamento.RECUSADO;
+                mensagemPagamento = "Pagamento recusado.";
+                pedidoService.AtualizarStatusPedido(pagamento.Pedidos.Id, StatusPedido.CANCELADO);
+            }            
 
-            var pagamentoCriado = repository.CriarPagamento(novoPagamento);
-
-            return CriarObjeto(repository.BuscaPagamentoPorId(pagamentoCriado.Id)!);
+            return CriarObjetoPayload(pagamento, mensagemPagamento);
         }
-
-        //Colocar no ConfirmarPagamento o -Retorno do StatusPedido, Retorno de Pontuação e Retorno do payload para o CanalPedido - CriarPayload e IdTransacaoExterna
-
-        //public PagamentoDTO ConfirmarPagamento(int id)
-        //{
-        //    var pagamento = repository.BuscaPagamentoPorId(id);
-
-        //    if (pagamento == null)
-        //    {
-        //        throw new KeyNotFoundException("Pagamento não encontrado.");
-        //    }
-        //}
 
         public Pagamento? AtualizarPagamento(int id, Pagamento pagamento)
         {
@@ -117,13 +131,33 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             {
                 throw new InvalidOperationException("Este usuário não participa do programa de fidelidade.");
             }
-                
+
             if (usuario.Fidelidade.QtdPontos <= 0)
             {
                 throw new InvalidOperationException("O cliente não possui pontos para resgatar.");
             }
 
             return usuario.Fidelidade.QtdPontos;
+        }
+
+        public int TentativaDePagamento()
+        {
+            return new Random().Next(1, 10);
+        }
+
+        public PagamentoPayloadDTO CriarObjetoPayload(Pagamento pagamento, string mensagem)
+        {
+            return new PagamentoPayloadDTO
+            {
+                IdTransacaoExterna = pagamento.IdTransacaoExterna,
+                CanalDoPedido = pagamento.Pedidos.CanalPedido,
+                TipoPagamento = pagamento.TipoPagamento,
+                ValorPagamento = pagamento.ValorPagamento,
+                StatusPagamento = pagamento.StatusPagamento,
+                Codigo = "",
+                Mensagem = mensagem,
+                DataConfirmaPg = pagamento.DataConfirmaPg
+            };
         }
 
         public PagamentoDTO CriarObjeto(Pagamento pagamento)

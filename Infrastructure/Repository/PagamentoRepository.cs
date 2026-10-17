@@ -35,6 +35,8 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
 
         public Pagamento? CriarPagamento(Pagamento pagamento)
         {
+            pagamento.IdTransacaoExterna = Guid.NewGuid().ToString("N");
+            pagamento.StatusPagamento = StatusPagamento.ACEITO;
             _context.Pagamentos.Add(pagamento);
             _context.SaveChanges();
 
