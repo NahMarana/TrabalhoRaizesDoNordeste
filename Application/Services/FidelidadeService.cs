@@ -10,7 +10,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
     {
         public FidDTO? BuscaPorId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
@@ -37,9 +37,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         public Fidelidade CriarFidelidade(UsuarioFidelidadeDTO usuario)
         {
-            if (usuario.Perfil != TipoPerfil.CLIENTE && usuario.Perfil != TipoPerfil.ATENDENTE && usuario.Perfil != TipoPerfil.GERENTE)
+            if (usuario.Perfil != TipoPerfil.CLIENTE)
             {
-                throw new ArgumentException("Este Perfil não pode ser participar da fidelidade.");
+                throw new ArgumentException("Somente clientes podem participar do programa de fidelidade.");
             }
 
             if (!usuario.ParticipaFidelidade)
@@ -64,6 +64,23 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
         public int BuscaFidelidadePorUsuario(int id)
         {
             return repository.BuscaFidelidadePorUsuario(id).Id;
+        }
+
+        public decimal? ConsultarSaldo(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("ID fornecido é inválido.");
+            }
+
+            var fidelidade = repository.BuscaFidelidadePorId(id);
+
+            if (fidelidade == null)
+            {
+                return null;
+            }
+
+            return fidelidade.ConsultarSaldoPontos();
         }
 
         public FidDTO CriarObjeto(Fidelidade fidelidade)

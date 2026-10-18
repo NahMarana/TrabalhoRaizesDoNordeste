@@ -71,6 +71,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Para participar do programa de fidelidade é necessário aceitar os termos da LGPD.");
             }
 
+            if (usuario.ParticipaFidelidade && usuario.Perfil != TipoPerfil.CLIENTE)
+            {
+                throw new ArgumentException("Somente clientes podem participar do programa de fidelidade.");
+            }
+
             if (usuario.EstabelecimentoId <= 0)
             {
                 throw new ArgumentException("Unidade de Estabelecimento é obrigatória.");
@@ -160,6 +165,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (usuario.ParticipaFidelidade && !usuario.ConsentimentoLGPD)
             {
                 throw new ArgumentException("Para participar do programa de fidelidade é necessário aceitar os termos da LGPD.");
+            }
+
+            if (usuario.ParticipaFidelidade && usuario.Perfil != TipoPerfil.CLIENTE)
+            {
+                throw new ArgumentException("Somente clientes podem participar do programa de fidelidade.");
             }
 
             var usuarioEncontrado = repository.BuscaUsuarioPorId(id);

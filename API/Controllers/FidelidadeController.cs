@@ -53,31 +53,22 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult CriarFidelizacao(UsuarioFidelidadeDTO usuario)
+        [HttpGet("{id:int}/saldo")]
+        public IActionResult ConsultarSaldo(int id)
         {
             try
             {
-                var fidelidadeCriada = _service.CriarFidelidade(usuario);
+                var saldo = _service.ConsultarSaldo(id);
 
-                return Created();
+                if (saldo == null)
+                    return NotFound("Fidelidade não encontrada.");
+
+                return Ok(new { fidelidadeId = id, saldoPontos = saldo });
             }
-            catch (Exception ex) 
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        [HttpPatch("{id}")]
-        public IActionResult FidelizacaoUpdate(int id, Fidelidade fidelidade)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeletarFidelidade(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -42,12 +42,12 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return fidelidade;
         }
 
-        public decimal? ConsultarSaldoPontos(int id)
-        {
-            return _context.Fidelidades
-                .Where(f => f.Id == id)
-                .Select(f => (decimal?)f.QtdPontos)
-                .FirstOrDefault();
-        }
+        //public decimal? ConsultarSaldoPontos(int id)
+        //{
+        //    return _context.Fidelidades
+        //        .Where(f => f.Id == id)
+        //        .Select(f => (decimal?)f.QtdPontos)
+        //        .FirstOrDefault();
+        //}
     }
 }

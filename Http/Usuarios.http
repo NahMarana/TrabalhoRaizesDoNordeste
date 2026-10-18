@@ -9,7 +9,7 @@ Accept: application/json
 ###
 
 //Esperado: 200 - Buscar usuário por ID
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/12
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/10
 Accept: application/json
 
 ###
@@ -479,6 +479,32 @@ Accept: application/json
 
 ###
 
+//Esperado: 400 - "Somente clientes podem participar do programa de fidelidade."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 1,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 4
+}
+
+###
+
 //------------ USUÁRIO TESTE (usado nas atualizações e na desativação) ------------
 
 //Esperado: 200 - usuário criado - Usuário TESTE
@@ -740,6 +766,32 @@ Accept: application/json
   "senha": "Teste@123456",
   "consentimentoLGPD": true,
   "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 400 - "Somente clientes podem participar do programa de fidelidade."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 1,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
   "estabelecimentoId": 4
 }
 
