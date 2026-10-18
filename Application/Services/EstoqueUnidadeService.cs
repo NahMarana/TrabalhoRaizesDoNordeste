@@ -40,17 +40,13 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
         {
             if (estoque == null)
             {
-                throw new ArgumentNullException("Estoque Inexistente");
+                throw new ArgumentException("Estoque inexistente.");
             }
-
-            var unidade = repository.BuscaUnidadePorId(estoque.EstabelecimentoId);
 
             if (estoque.EstabelecimentoId <= 0)
             {
-                throw new ArgumentNullException("É obrigatório estoque possuir Estabelecimento");
+                throw new ArgumentException("É obrigatório estoque possuir Estabelecimento.");
             }
-
-            var produto = repository.BuscaProdutoPorId(estoque.ProdutoId);
 
             if (estoque.ProdutoId <= 0)
             {
@@ -59,7 +55,21 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             if (estoque.QtdEstoqueDisponivel < 0)
             {
-                throw new ArgumentException("A quantidade em estoque não pode ser zerado.");
+                throw new ArgumentException("A quantidade em estoque não pode ser negativa.");
+            }
+
+            var unidade = repository.BuscaUnidadePorId(estoque.EstabelecimentoId);
+
+            if (unidade == null)
+            {
+                throw new KeyNotFoundException("Unidade não encontrada.");
+            }
+
+            var produto = repository.BuscaProdutoPorId(estoque.ProdutoId);
+
+            if (produto == null)
+            {
+                throw new KeyNotFoundException("Produto não encontrado.");
             }
 
             var existeEstoque = repository.BuscaEstoquePorUnidadeEProduto(estoque.EstabelecimentoId, estoque.ProdutoId);
@@ -84,7 +94,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         public EstoqueDaUnidadeDTO? AtualizarEstoque(int id, EstoqueUnidade estoque)
         {
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
@@ -93,10 +103,10 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             if (estoqueAtualizado == null)
             {
-                return null;
+                throw new KeyNotFoundException("Estoque não encontrado!");
             }
 
-            return CriarObjeto(repository.BuscaEstoqueUnidadePorId(id)!);
+            return CriarObjeto(repository.BuscaEstoqueUnidadePorId(estoqueAtualizado.Id)!);
         }
 
         // Acha o estoque do produto na unidade; se não existir, dá erro

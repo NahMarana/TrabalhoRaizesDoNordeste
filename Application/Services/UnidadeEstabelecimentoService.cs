@@ -115,7 +115,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return repository.DesativarUnidade(id);
         }
 
-        public ICollection<EstoqueUnidadeDTO> ConsultarCardapio(int unidadeId)
+        public ICollection<CardapioDTO> ConsultarCardapio(int unidadeId)
         {
             if (unidadeId <= 0)
             {
@@ -146,17 +146,13 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             {
                 var promocao = promocaoVigente.FirstOrDefault(pc => pc.ProdutoId == eu.ProdutoId);
 
-                return new EstoqueUnidadeDTO
+                return new CardapioDTO
                 {
-                    Id = eu.Id,
-                    QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
-                    ProdutoId = eu.ProdutoId,
-                    NomeProduto = eu.Produtos!.NomeProduto,
+                    NomeCategoria = eu.Produtos!.Categoria?.NomeCategoria ?? "",
+                    NomeProduto = eu.Produtos.NomeProduto,
                     DescricaoProduto = eu.Produtos.DescricaoProduto,
                     PrecoUnitario = eu.Produtos.PrecoUnitario,
-                    ProdutoSazonal = eu.Produtos.ProdutoSazonal,
-                    NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? "",
-                    estaEmPromocao = promocao != null,
+                    ProdutoSazonal = eu.Produtos.ProdutoSazonal ? true : null,
                     ValorPromocional = promocao?.ValorPromocional
                 };
             }).ToList();

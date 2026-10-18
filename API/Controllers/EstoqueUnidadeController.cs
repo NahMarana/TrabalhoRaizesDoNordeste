@@ -26,7 +26,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var estoque = _service.BuscaPorId(id);
 
                 if (estoque == null)
-                    return NoContent();
+                    return NotFound("Estoque da Unidade por ID não encontrado.");
 
                 return Ok(estoque);
             }
@@ -51,21 +51,36 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [HttpGet("verificar")]
+        public IActionResult VerificaSePossuiEstoque([FromQuery] int estabelecimentoId, [FromQuery] int produtoId, [FromQuery] int quantidade)
+        {
+            try
+            {
+                var possuiEstoque = _service.VerificaSePossuiEstoque(estabelecimentoId, produtoId, quantidade);
+
+                return Ok(new
+                {
+                    estabelecimentoId,
+                    produtoId,
+                    quantidade,
+                    possuiEstoque
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [HttpPost]
         public IActionResult CriarEstoqueDeUnidade(EstoqueUnidade estoque)
         {
             try
             {
-                if (estoque.ProdutoId == 0)
-                {
-                    return BadRequest("Pedido não identificado!");
-                }
-
-                if (estoque.EstabelecimentoId == 0)
-                {
-                    return BadRequest("Produto não identificado!");
-                }
-
                 var estoqueCriado = _service.CriarEstoque(estoque);
 
                 return Created();
@@ -81,9 +96,9 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var estoqueAtualizad = _service.AtualizarEstoque(id, estoque);
+                var estoqueAtualizado = _service.AtualizarEstoque(id, estoque);
 
-                if (estoque == null)
+                if (estoqueAtualizado == null)
                     return NotFound("Estoque não encontrado!");
 
                 return Ok("Os dados do estoque foram atualizados.");

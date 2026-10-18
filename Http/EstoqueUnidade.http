@@ -1,33 +1,1774 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/
-Content-Type: application/json
+//------------ ACERTOS: GET ------------
+
+//Esperado: 200 - lista com todos os produtos e estabelecimento por estoques criados
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/
+//Esperado: 200 - Verificar estoque suficiente - "possuiEstoque": true
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=37&quantidade=10
+Accept: application/json
+
+###
+
+//Esperado: 200 - Verificar estoque insuficiente - "possuiEstoque": false
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=37&quantidade=1000
+Accept: application/json
+
+###
+
+//------------ CARDÁPIO DAS UNIDADES (depois do estoque) ------------
+
+//Esperado: 200 - Cardápio da unidade COMPLETA de Recife Sem Pratos Sazonais(fora de epoca)
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/4/cardapio
+Accept: application/json
+
+###
+
+//Esperado: 200 - Cardápio da unidade REDUZIDA de Maceió - Sem Pratos Sazonais(fora de epoca)
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/9/cardapio
+Accept: application/json
+
+###
+
+//------------ ERROS: GET ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/0
+Accept: application/json
+
+###
+
+
+//Esperado: 404 - "Estoque por ID não encontrado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/9999
+Accept: application/json
+
+###
+
+//Esperado: 400 - "Unidade e produto são obrigatórios."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=0&produtoId=37&quantidade=10
+Accept: application/json
+
+###
+
+//Verificar produto que a unidade não tem em estoque (Baião de dois na unidade Maceió, que é REDUZIDA e não recebe PF)
+//Esperado: 404 - "Não existe estoque deste produto nesta unidade."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=9&produtoId=48&quantidade=1
+Accept: application/json
+
+###
+
+//------------ ACERTOS: CRIAÇÃO DOS ESTOQUES ------------
+
+// =========== Unidade Recife Boa Viagem (COMPLETA) ===========
+
+// ---------- Bebidas ----------
+
+//Recife Boa Viagem: Água sem gás (produto 3)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "ProdutoId": 5,
-  "EstabelecimentoId": 1,
-  "QtdEstoqueDisponivel": 35,
-  "VendaDisponivel": false
+  "produtoId": 3,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 100,
+  "vendaDisponivel": true
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/1
+//Recife Boa Viagem: Água com gás (produto 4)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
 Content-Type: application/json
 Accept: application/json
+
+{
+  "produtoId": 4,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 100,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Refrigerante (produto 5)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
 {
   "produtoId": 5,
-  "estabelecimentoId": 1,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 100,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Água de coco (produto 6)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 6,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 100,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Petiscos ----------
+
+//Recife Boa Viagem: Dadinho de tapioca (produto 7)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 7,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Bolinho de mandioca com carne seca (produto 8)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 8,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Queijo coalho grelhado (produto 9)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 9,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Macaxeira frita (produto 10)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 10,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Pastelzinho de carne seca (produto 11)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 11,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Tapiocas ----------
+
+//Recife Boa Viagem: Tapioca de carne seca (produto 13)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 13,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Tapioca de queijo coalho (produto 14)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 14,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Tapioca de frango com requeijão (produto 15)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 15,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Tapioca de doce de leite (produto 16)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 16,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Tapioca de doce de leite com coco (produto 17)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 17,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Tapioca com goiabada (produto 18)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 18,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Doces ----------
+
+//Recife Boa Viagem: Bolo de macaxeira (produto 19)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 19,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Cartola (produto 20)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 20,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Pudim de tapioca (produto 21)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 21,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Bolo de rolo (produto 22)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 22,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Bolo de aipim (produto 23)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 23,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Doce de leite com queijo coalho (produto 24)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 24,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Sucos Naturais ----------
+
+//Recife Boa Viagem: Suco de Cajá (sazonal) (produto 25)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 25,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Caju (produto 26)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 26,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Umbu (produto 27)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 27,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Graviola (produto 28)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 28,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Maracujá (produto 29)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 29,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Laranja (produto 30)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 30,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Morango (produto 31)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 31,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Suco de Manga (produto 32)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 32,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Cafés ----------
+
+//Recife Boa Viagem: Café coado (produto 33)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 33,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 80,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Café com leite (produto 34)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 34,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 80,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Café Nordestino (produto 35)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 35,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 80,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Café com rapadura (produto 36)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 36,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 80,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Cappuccino (produto 37)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 37,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 80,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Mocaccino (produto 38)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 38,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 80,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Pratos Sazonais ----------
+
+//Recife Boa Viagem: Canjica (sazonal) (produto 39)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 39,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Pamonha (sazonal) (produto 40)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 40,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Milho cozido (sazonal) (produto 41)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 41,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Bolo de milho (sazonal) (produto 42)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 42,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Curau (sazonal) (produto 43)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 43,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Café da manhã ----------
+
+//Recife Boa Viagem: Cuscuz recheado (produto 44)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 44,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Pão com ovos mexidos (produto 45)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 45,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Macaxeira com carne de sol (produto 46)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 46,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Munguzá (produto 47)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 47,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Pratos Principais/PF ----------
+
+//Recife Boa Viagem: Baião de dois (produto 48)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 48,
+  "estabelecimentoId": 4,
   "qtdEstoqueDisponivel": 20,
   "vendaDisponivel": true
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueUnidade/2
+//Recife Boa Viagem: Buchada (produto 49)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 49,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Carne de bode (produto 50)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 50,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Carne de sol frita (produto 51)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 51,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Galinhada (produto 52)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 52,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Peixada (produto 53)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 53,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Bebidas Alcoólicas ----------
+
+//Recife Boa Viagem: Licor de Jenipapo (produto 54)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 54,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Cangaceira (produto 55)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 55,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Axé da Caatinga (produto 56)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 56,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Nordestino Sour (produto 57)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 57,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Cachaça artesanal (produto 58)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 58,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Batida de coco (produto 59)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 59,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+//Recife Boa Viagem: Cerveja (produto 60)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 60,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 60,
+  "vendaDisponivel": true
+}
+
+###
+
+// =========== Unidade Maceió Shopping (REDUZIDA) ===========
+
+// ---------- Bebidas ----------
+
+//Maceió Shopping: Água sem gás (produto 3)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Água com gás (produto 4)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 4,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Refrigerante (produto 5)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 5,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Água de coco (produto 6)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 6,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 50,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Petiscos ----------
+
+//Maceió Shopping: Dadinho de tapioca (produto 7)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 7,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Bolinho de mandioca com carne seca (produto 8)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 8,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Queijo coalho grelhado (produto 9)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 9,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Macaxeira frita (produto 10)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 10,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Pastelzinho de carne seca (produto 11)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 11,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Tapiocas ----------
+
+//Maceió Shopping: Tapioca de carne seca (produto 13)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 13,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Tapioca de queijo coalho (produto 14)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 14,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Tapioca de frango com requeijão (produto 15)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 15,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Tapioca de doce de leite (produto 16)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 16,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Tapioca de doce de leite com coco (produto 17)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 17,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Tapioca com goiabada (produto 18)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 18,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 20,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Doces ----------
+
+//Maceió Shopping: Bolo de macaxeira (produto 19)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 19,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Cartola (produto 20)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 20,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Pudim de tapioca (produto 21)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 21,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Bolo de rolo (produto 22)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 22,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Bolo de aipim (produto 23)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 23,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Doce de leite com queijo coalho (produto 24)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 24,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Sucos Naturais ----------
+
+//Maceió Shopping: Suco de Cajá (sazonal) (produto 25)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 25,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Caju (produto 26)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 26,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Umbu (produto 27)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 27,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Graviola (produto 28)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 28,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Maracujá (produto 29)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 29,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Laranja (produto 30)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 30,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Morango (produto 31)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 31,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Suco de Manga (produto 32)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 32,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 25,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Cafés ----------
+
+//Maceió Shopping: Café coado (produto 33)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 33,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Café com leite (produto 34)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 34,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Café Nordestino (produto 35)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 35,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Café com rapadura (produto 36)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 36,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Cappuccino (produto 37)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 37,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Mocaccino (produto 38)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 38,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 40,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Pratos Sazonais ----------
+
+//Maceió Shopping: Canjica (sazonal) (produto 39)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 39,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Pamonha (sazonal) (produto 40)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 40,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Milho cozido (sazonal) (produto 41)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 41,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Bolo de milho (sazonal) (produto 42)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 42,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Curau (sazonal) (produto 43)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 43,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Café da manhã ----------
+
+//Maceió Shopping: Cuscuz recheado (produto 44)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 44,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Pão com ovos mexidos (produto 45)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 45,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Macaxeira com carne de sol (produto 46)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 46,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Munguzá (produto 47)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 47,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 15,
+  "vendaDisponivel": true
+}
+
+###
+
+// ---------- Bebidas Alcoólicas ----------
+
+//Maceió Shopping: Licor de Jenipapo (produto 54)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 54,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Cangaceira (produto 55)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 55,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Axé da Caatinga (produto 56)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 56,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Nordestino Sour (produto 57)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 57,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Cachaça artesanal (produto 58)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 58,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Batida de coco (produto 59)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 59,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+//Maceió Shopping: Cerveja (produto 60)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 60,
+  "estabelecimentoId": 9,
+  "qtdEstoqueDisponivel": 30,
+  "vendaDisponivel": true
+}
+
+###
+
+// Pratos Principais/PF não entram: unidade REDUZIDA.
+
+###
+
+
+//Estoque ID 3 = Estoque TESTE (Água sem gás na Unidade TESTE)
+//Esperado: 200 - estoque criado
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 10,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": true
+}
+
+###
+
+
+//------------ ERROS: CRIAÇÃO DO ESTOQUE ------------
+
+//Esperado: 400 - "É obrigatório estoque possuir Estabelecimento."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 0,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": true
+}
+
+###
+
+//Esperado: 400 - "Id do produto é obrigatória."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 0,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": true
+}
+
+###
+
+//Esperado: 400 - "A quantidade em estoque não pode ser negativa."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": -5,
+  "vendaDisponivel": true
+}
+
+###
+
+//Esperado: 404 - "Unidade não encontrada."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 999,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": true
+}
+
+###
+
+//Esperado: 404 - "Produto não encontrado."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 999,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": true
+}
+
+###
+
+//Esperado: 409 - "Já possui estoque deste produto nesta unidade."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 4,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": true
+}
+
+###
+
+//------------ ACERTOS: ATUALIZAÇÃO (VENDA DISPONÍVEL) ------------
+
+//Retirar a venda do Estoque TESTE (ID 3)
+//Esperado: 200 - estoque com "vendaDisponivel": false
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/3
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 109,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": false
+}
+
+###
+
+
+//------------ ERROS: ATUALIZAÇÃO ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/0
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 109,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": false
+}
+
+###
+
+//Esperado: 404 - "Estoque não encontrado!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/9999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "produtoId": 3,
+  "estabelecimentoId": 109,
+  "qtdEstoqueDisponivel": 10,
+  "vendaDisponivel": false
+}
+
+###

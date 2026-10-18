@@ -9,7 +9,7 @@ Accept: application/json
 ###
 
 //Esperado: 200 - Buscar unidade por ID
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/7
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/9
 Accept: application/json
 
 ###
@@ -51,16 +51,15 @@ Accept: application/json
 // com venda liberada, quantidade maior que zero, produto ativo e,
 // se for sazonal, dentro do período.
 
-//Cardápio de unidade COMPLETA
-//Esperado: 200 - produtos em estoque da unidade 3, incluindo Pratos Principais/PF
+
+//Esperado: 200 - Cardápio de unidade COMPLETA - incluindo Pratos Principais/PF
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/4/cardapio
 Accept: application/json
 
 ###
 
-//Cardápio de unidade REDUZIDA
-//Esperado: 200 - produtos em estoque da unidade 7, SEM os Pratos Principais/PF
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/7/cardapio
+//Esperado: 200 - Cardápio de unidade REDUZIDA - SEM os Pratos Principais/PF
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/9/cardapio
 Accept: application/json
 
 ###
@@ -110,27 +109,6 @@ Accept: application/json
 
 ###
 
-//Unidade ID 5 = Salvador - Rio Vermelho (COMPLETA)
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
-Content-Type: application/json
-Accept: application/json
-
-{
-  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Salvador Rio Vermelho",
-  "CNPJ": "45.218.330/0002-01",
-  "UnidadeAtiva": true,
-  "TipoUnidade": 0,
-  "Rua": "Rua da Paciência",
-  "Numero": "210",
-  "Bairro": "Rio Vermelho",
-  "Cidade": "Salvador",
-  "Estado": "BA",
-  "CEP": "41950-000",
-  "TelefoneUnidade": "(71) 3334-7720"
-}
-
-###
-
 //Unidade ID 6 = Fortaleza - Aldeota (COMPLETA)
 POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
 Content-Type: application/json
@@ -152,49 +130,7 @@ Accept: application/json
 
 ###
 
-//Unidade ID 7 = Natal - Ponta Negra (COMPLETA)
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
-Content-Type: application/json
-Accept: application/json
-
-{
-  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Natal Ponta Negra",
-  "CNPJ": "45.218.330/0004-65",
-  "UnidadeAtiva": true,
-  "TipoUnidade": 0,
-  "Rua": "Avenida Engenheiro Roberto Freire",
-  "Numero": "3200",
-  "Bairro": "Ponta Negra",
-  "Cidade": "Natal",
-  "Estado": "RN",
-  "CEP": "59090-000",
-  "TelefoneUnidade": "(84) 3219-6630"
-}
-
-###
-
 // ---------- Unidades REDUZIDAS ----------
-
-//Unidade ID 8 = João Pessoa - Shopping (REDUZIDA)
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
-Content-Type: application/json
-Accept: application/json
-
-{
-  "NomeEstabelecimento": "Raízes do Nordeste - Unidade João Pessoa Shopping",
-  "CNPJ": "45.218.330/0005-46",
-  "UnidadeAtiva": true,
-  "TipoUnidade": 1,
-  "Rua": "Avenida Governador Flávio Ribeiro Coutinho",
-  "Numero": "220",
-  "Bairro": "Manaíra",
-  "Cidade": "João Pessoa",
-  "Estado": "PB",
-  "CEP": "58037-000",
-  "TelefoneUnidade": "(83) 3246-1180"
-}
-
-###
 
 //Unidade ID 9 = Maceió - Shopping (REDUZIDA)
 POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
@@ -457,4 +393,4 @@ Accept: application/json
 
 
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/2
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/6

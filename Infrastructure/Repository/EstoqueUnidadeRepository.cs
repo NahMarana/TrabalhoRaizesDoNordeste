@@ -56,6 +56,9 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             var estoqueEncontrado = _context.EstoquesUnidade.Find(id);
 
+            if (estoqueEncontrado == null)
+                return null;
+
             estoqueEncontrado.VendaDisponivel = estoque.VendaDisponivel;
 
             _context.EstoquesUnidade.Update(estoqueEncontrado);

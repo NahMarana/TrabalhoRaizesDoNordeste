@@ -27,7 +27,7 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public ICollection<UnidadesEstabelecimento>? ListarUnidades()
         {
             return _context.UnidadesEstabelecimento
-                .Include(eu => eu.EstoqueUnidades)
+                .Include(eu => eu.EstoqueUnidades!).ThenInclude(e => e.Produtos).ThenInclude(p => p.Categoria)
                 .Include(u => u.Usuarios)
                 .ToList();
         }
