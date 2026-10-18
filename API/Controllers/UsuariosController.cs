@@ -21,14 +21,14 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("buscar")]
-        public IActionResult BuscarUsuarioPorNome(string nome)
+        public IActionResult BuscarUsuarioPorNome([FromQuery] string? nome)
         {
             //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
             try
             {
                 var usuario = _service.BuscarPorNome(nome);
 
-                if (usuario == null)
+                if (usuario.Count == 0)
                     return NotFound("Usuário não encontrado.");
 
                 return Ok(usuario);
@@ -131,9 +131,13 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
                 return Ok("Usuário desativado com sucesso!");
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
 

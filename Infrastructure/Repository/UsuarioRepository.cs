@@ -15,12 +15,18 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(u => u.Id == id);
         }
 
-        public Usuario? BuscarUsuarioPorNome(string nome)
+        public ICollection<Usuario>? BuscarUsuarioPorNome(string nome)
         {
             return _context.Usuarios
                 .Include(ue => ue.UnidadesEstabelecimento)
                 .Include(f => f.Fidelidade)
-                .FirstOrDefault(u => u.Nome.ToLower().Contains(nome.ToLower()));
+                .Where(u => u.Nome.ToLower().Contains(nome.ToLower()))
+                .ToList();
+        }
+
+        public UnidadesEstabelecimento? BuscaUnidadePorId(int id)
+        {
+            return _context.UnidadesEstabelecimento.Find(id);
         }
 
         public ICollection<Usuario>? ListarUsuarios()
@@ -48,24 +54,26 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return usuario;
         }
 
-        public bool BuscarPerfilGerente(int estabelecimentoId)
+        public bool BuscarPerfilGerente(int estabelecimentoId, int usuarioProprioId = 0)
         {
             return _context.Usuarios.Any(u => u.EstabelecimentoId == estabelecimentoId &&
                 u.Perfil == Domain.Enums.TipoPerfil.GERENTE &&
-                u.UsuarioAtivo);
+                u.UsuarioAtivo  && u.Id != usuarioProprioId);
         }
 
-        public bool BuscarPerfilAdmin(int estabelecimentoId)
+        public bool BuscarPerfilAdmin(int estabelecimentoId, int usuarioProprioId = 0)
         {
             return _context.Usuarios.Any(u => u.EstabelecimentoId == estabelecimentoId && 
                 u.Perfil == Domain.Enums.TipoPerfil.ADMIN && 
-                u.UsuarioAtivo);
+                u.UsuarioAtivo && u.Id != usuarioProprioId);
         }
 
         public Usuario? AtualizarUsuario(int id, Usuario usuario)
         {
             var usuarioEncontrado = _context.Usuarios.Find(id);
 
+            if (usuarioEncontrado == null)
+                return null;
 
             usuarioEncontrado.Nome = usuario.Nome;
             usuarioEncontrado.Email = usuario.Email;
@@ -79,7 +87,8 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             usuarioEncontrado.Estado = usuario.Estado;
             usuarioEncontrado.CEP = usuario.CEP;
             usuarioEncontrado.EstabelecimentoId = usuario.EstabelecimentoId;
-            //usuarioEncontrado.UnidadesEstabelecimento.Id = usuario.UnidadesEstabelecimento.Id;
+            usuarioEncontrado.ConsentimentoLGPD = usuario.ConsentimentoLGPD;
+            usuarioEncontrado.ParticipaFidelidade = usuario.ParticipaFidelidade;
 
             _context.Usuarios.Update(usuarioEncontrado);
             _context.SaveChanges();

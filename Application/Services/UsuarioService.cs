@@ -28,23 +28,16 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return usuarioServiceDTO;
         }
 
-        public UsuarioServiceDTO BuscarPorNome(string nome)
+        public ICollection<UsuarioServiceDTO>?BuscarPorNome(string nome)
         {
-            if (nome == null)
+            if (string.IsNullOrWhiteSpace(nome))
             {
                 throw new ArgumentException("Nome do usuário não informado.");
             }
 
-            var usuario = repository.BuscarUsuarioPorNome(nome);
+            var usuarios = repository.BuscarUsuarioPorNome(nome);
 
-            if (usuario == null)
-            {
-                return null;
-            }
-
-            var usuarioServiceDTO = CriarObjeto(usuario);
-
-            return usuarioServiceDTO;
+            return CriarObjetoCollection(usuarios);
         }
 
         public ICollection<UsuarioServiceDTO> ListarUsuarios()
@@ -65,12 +58,12 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
         {
             if (usuario == null)
             {
-                throw new ArgumentNullException("Usuário inexistente.");
+                throw new ArgumentException("Usuário inexistente.");
             }
 
             if (string.IsNullOrEmpty(usuario.Nome))
             {
-                throw new ArgumentNullException("Nome do usuário é obrigatório");
+                throw new ArgumentException("Nome do usuário é obrigatório");
             }
 
             if (usuario.ParticipaFidelidade && !usuario.ConsentimentoLGPD)
@@ -86,6 +79,13 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (!Enum.IsDefined(typeof(TipoPerfil), usuario.Perfil))
             {
                 throw new ArgumentException("Tipo de perfil inválido.");
+            }
+
+            var unidade = repository.BuscaUnidadePorId(usuario.EstabelecimentoId);
+
+            if (unidade == null)
+            {
+                throw new ArgumentException("Unidade não encontrada.");
             }
 
             if (usuario.Perfil == TipoPerfil.GERENTE)
@@ -135,26 +135,26 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return usuarioCriado;
         }
 
-        private  bool BuscarPerfilGerente(int estabelecimentoid)
+        private  bool BuscarPerfilGerente(int estabelecimentoid, int usuarioProprioId = 0)
         {
-            return repository.BuscarPerfilGerente(estabelecimentoid);
+            return repository.BuscarPerfilGerente(estabelecimentoid, usuarioProprioId);
         }
 
-        private bool BuscarPerfilAdmin(int estabelecimentoid)
+        private bool BuscarPerfilAdmin(int estabelecimentoid, int usuarioProprioId = 0)
         {
-            return repository.BuscarPerfilAdmin(estabelecimentoid);
+            return repository.BuscarPerfilAdmin(estabelecimentoid, usuarioProprioId);
         }
 
         public Usuario? AtualizarUsuario(int id, Usuario usuario)
         {
+            if (id <= 0)
+            {
+                throw new ArgumentException("ID fornecido é inválido.");
+            }
+
             if (!Enum.IsDefined(typeof(TipoPerfil), usuario.Perfil))
             {
                 throw new ArgumentException("Tipo de perfil usuário inválido.");
-            }
-
-            if (id < 0)
-            {
-                throw new ArgumentException("ID fornecido é inválido.");
             }
 
             if (usuario.ParticipaFidelidade && !usuario.ConsentimentoLGPD)
@@ -164,9 +164,14 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             var usuarioEncontrado = repository.BuscaUsuarioPorId(id);
 
+            if (usuarioEncontrado == null)
+            {
+                return null;
+            }
+
             if (usuario.Perfil == TipoPerfil.GERENTE)
             {
-                if (BuscarPerfilGerente(usuario.EstabelecimentoId))
+                if (BuscarPerfilGerente(usuario.EstabelecimentoId, id))
                 {
                     throw new ArgumentException(
                         "Não foi possível cadastrar o gerente, pois já existe um gerente ativo nesta unidade.");
@@ -175,7 +180,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             if (usuario.Perfil == TipoPerfil.ADMIN)
             {
-                if (BuscarPerfilAdmin(usuario.EstabelecimentoId))
+                if (BuscarPerfilAdmin(usuario.EstabelecimentoId, id))
                 {
                     throw new ArgumentException(
                         "Não foi possível cadastrar o administrador, pois já existe um administrador ativo nesta unidade.");
@@ -189,14 +194,17 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             var usuarioAtualizado = repository.AtualizarUsuario(id, usuario);
 
-            var usuarioDTO = new UsuarioFidelidadeDTO
+            if (usuario.ParticipaFidelidade && !possuiFidelidade)
             {
-                Id = usuario.Id,
-                Nome = usuario.Nome,
-                ParticipaFidelidade = usuario.ParticipaFidelidade,
-                Perfil = usuario.Perfil
-            };
-            fidelidadeService.CriarFidelidade(usuarioDTO);
+                var usuarioDTO = new UsuarioFidelidadeDTO
+                {
+                    Id = id,
+                    Nome = usuario.Nome,
+                    ParticipaFidelidade = usuario.ParticipaFidelidade,
+                    Perfil = usuario.Perfil
+                };
+                fidelidadeService.CriarFidelidade(usuarioDTO);
+            }
 
             auditoriaService.RegistrarLog(
                 id,

@@ -1,19 +1,441 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
+//------------ ACERTOS: GET ------------
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/
-Content-Type: application/json
+//Esperado: 200 - lista com todos os usuários ativos
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/
+//Esperado: 200 - Buscar usuário por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/12
+Accept: application/json
+
+###
+
+//Esperado: 200 - Buscar usuário por nome
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/buscar?nome=Neusa
+Accept: application/json
+
+###
+
+
+//Esperado: 200 - Listar funcionários inativos
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/funcionarios/inativos
+Accept: application/json
+
+###
+
+
+//------------ ERROS: GET ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Usuário não encontrado por ID."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/9999
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Usuário não encontrado por nome."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/buscar?nome=Rodrigo
+Accept: application/json
+
+###
+
+//Esperado: 400 - "Nome do usuário não informado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/buscar
+Accept: application/json
+
+###
+
+//------------ ACERTOS: CRIAÇÃO DOS USUÁRIOS ------------
+
+// =========== Unidade Recife Boa Viagem (4) ===========
+
+//Esperado: 200 - usuário criado - GERENTE:
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "nome": "Neusa Marana",
-  "email": "neusa.marana@example.com",
+  "nome": "Carlos Albuquerque",
+  "email": "carlos.albuquerque@example.com",
+  "cpf": "24681357928",
+  "telefone": "81988887777",
+  "perfil": 3,
+  "rua": "Avenida Boa Viagem",
+  "numero": "2200",
+  "complemento": "Apartamento 801",
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 200 - usuário criado - ADMIN
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Fernanda Cavalcanti",
+  "email": "fernanda.cavalcanti@example.com",
+  "cpf": "13579246828",
+  "telefone": "81987776666",
+  "perfil": 4,
+  "rua": "Rua da Aurora",
+  "numero": "520",
+  "complemento": null,
+  "bairro": "Santo Amaro",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 200 - usuário criado - ATENDENTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Juliana Barros",
+  "email": "juliana.barros@example.com",
+  "cpf": "97531864282",
+  "telefone": "81986665555",
+  "perfil": 1,
+  "rua": "Rua do Hospício",
+  "numero": "88",
+  "complemento": null,
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50060080",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 200 - usuário criado - COZINHA
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Severino Lima",
+  "email": "severino.lima@example.com",
+  "cpf": "86429753182",
+  "telefone": "81985554444",
+  "perfil": 2,
+  "rua": "Rua Real da Torre",
+  "numero": "315",
+  "complemento": null,
+  "bairro": "Madalena",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50610000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 200 - usuário criado - CLIENTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Neusa Bacci",
+  "email": "neusa.bacci@example.com",
   "cpf": "52998224725",
+  "telefone": "81999998888",
+  "perfil": 0,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 4
+}
+
+###
+
+
+// =========== Unidade Maceió Shopping (9) ===========
+
+//Esperado: 200 - usuário criado - GERENTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Roberto Tenório",
+  "email": "roberto.tenorio@example.com",
+  "cpf": "35715948606",
+  "telefone": "82988887777",
+  "perfil": 3,
+  "rua": "Avenida Álvaro Otacílio",
+  "numero": "3500",
+  "complemento": null,
+  "bairro": "Ponta Verde",
+  "cidade": "Maceió",
+  "estado": "AL",
+  "cep": "57035180",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 9
+}
+
+###
+
+//Esperado: 200 - usuário criado - ADMIN
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Patrícia Omena",
+  "email": "patricia.omena@example.com",
+  "cpf": "15935748606",
+  "telefone": "82987776666",
+  "perfil": 4,
+  "rua": "Rua Desportista Humberto Guimarães",
+  "numero": "1200",
+  "complemento": null,
+  "bairro": "Ponta Verde",
+  "cidade": "Maceió",
+  "estado": "AL",
+  "cep": "57035030",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 9
+}
+
+###
+
+//Esperado: 200 - usuário criado - ATENDENTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Lucas Vasconcelos",
+  "email": "lucas.vasconcelos@example.com",
+  "cpf": "75395185291",
+  "telefone": "82986665555",
+  "perfil": 1,
+  "rua": "Rua Epaminondas Gracindo",
+  "numero": "77",
+  "complemento": null,
+  "bairro": "Pajuçara",
+  "cidade": "Maceió",
+  "estado": "AL",
+  "cep": "57030101",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 9
+}
+
+###
+
+//Esperado: 200 - usuário criado - COZINHA
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Maria do Carmo Silva",
+  "email": "maria.carmo@example.com",
+  "cpf": "95175325809",
+  "telefone": "82985554444",
+  "perfil": 2,
+  "rua": "Rua Professor Lourenço Peixoto",
+  "numero": "140",
+  "complemento": null,
+  "bairro": "Jatiúca",
+  "cidade": "Maceió",
+  "estado": "AL",
+  "cep": "57035640",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 9
+}
+
+###
+
+//------------ ERROS: CRIAÇÃO DO USUÁRIO ------------
+
+//Esperado: 400 - "Nome do usuário é obrigatório."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 0,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 400 - "Para participar do programa de fidelidade é necessário aceitar os termos da LGPD."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 0,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": false,
+  "participaFidelidade": true,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 400 - "Unidade de Estabelecimento é obrigatória."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 0,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 0
+}
+
+###
+
+//Esperado: 400 - "Tipo de perfil inválido."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 99,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 404 - "Unidade não encontrada."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 0,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": true,
+  "estabelecimentoId": 999
+}
+
+###
+
+//Esperado: 409 - "Não foi possível cadastrar o gerente, pois já existe um gerente ativo nesta unidade."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
   "telefone": "81999998888",
   "perfil": 3,
   "rua": "Rua das Flores",
@@ -25,35 +447,347 @@ Accept: application/json
   "cep": "50050000",
   "senha": "Teste@123456",
   "consentimentoLGPD": true,
-  "participaFidelidade": true,
-  "estabelecimentoId": 1
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/3
+//Esperado: 409 - "Não foi possível cadastrar o administrador, pois já existe um administrador ativo nesta unidade."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "Nome": "Julia Moreno",
-  "Email": "ju.moreno@email.com",
-  "CPF": "256.899.100-00",
-  "Telefone": "(48) 99220-8795",
-  "Perfil": 0,
-  "Rua": "Rua Fugini",
-  "Numero": "789",
-  "Complemento": "Apto 201",
-  "Bairro": "Centro",
-  "Cidade": "Florianópolis",
-  "Estado": "SC",
-  "CEP": "88206-340",
-  "senha": "Senha@888",
-  "EstabelecimentoId": 2,
-  "ConsentimentoLGPD": true,
-  "ParticipaFidelidade": false,
-  "UsuarioAtivo": true
+  "nome": "Erro Teste",
+  "email": "erro.teste@example.com",
+  "cpf": "12345678909",
+  "telefone": "81999998888",
+  "perfil": 4,
+  "rua": "Rua das Flores",
+  "numero": "123",
+  "complemento": "Apartamento 202",
+  "bairro": "Boa Vista",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "50050000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/6
+//------------ USUÁRIO TESTE (usado nas atualizações e na desativação) ------------
+
+//Esperado: 200 - usuário criado - Usuário TESTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81900000000",
+  "perfil": 1,
+  "rua": "Rua do Teste",
+  "numero": "1",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": false,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//------------ ACERTOS: ATUALIZAÇÃO ------------
+
+//Esperado: 200 - "Usuário(a) Atualizado(a)!" (registra ATUALIZAR_USUARIO no log) - Usuario TESTE
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 1,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": false,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 200 - "Usuário(a) Atualizado(a)!" (registra ATUALIZAR_USUARIO e ACEITA_LGPD no log)
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 1,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 200 - "Usuário(a) Atualizado(a)!" (o próprio gerente não conta como "outro gerente")
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/7
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Carlos Albuquerque",
+  "email": "carlos.albuquerque@example.com",
+  "cpf": "24681357928",
+  "telefone": "81977776666",
+  "perfil": 3,
+  "rua": "Avenida Boa Viagem",
+  "numero": "2200",
+  "complemento": "Apartamento 801",
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//------------ ERROS: ATUALIZAÇÃO ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/0
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 1,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 404 - "Usuário não encontrado(a)."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/9999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 1,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 400 - "Tipo de perfil usuário inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/8
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 99,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 400 - "Para participar do programa de fidelidade é necessário aceitar os termos da LGPD."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 1,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": false,
+  "participaFidelidade": true,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 409 - "Não foi possível cadastrar o gerente, pois já existe um gerente ativo nesta unidade."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 3,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//Esperado: 409 - "Não foi possível cadastrar o administrador, pois já existe um administrador ativo nesta unidade."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nome": "Usuário TESTE",
+  "email": "usuario.teste@example.com",
+  "cpf": "11144477735",
+  "telefone": "81911112222",
+  "perfil": 4,
+  "rua": "Rua Nova do Teste",
+  "numero": "200",
+  "complemento": null,
+  "bairro": "Boa Viagem",
+  "cidade": "Recife",
+  "estado": "PE",
+  "cep": "51020000",
+  "senha": "Teste@123456",
+  "consentimentoLGPD": true,
+  "participaFidelidade": false,
+  "estabelecimentoId": 4
+}
+
+###
+
+//------------ ACERTOS: DESATIVAÇÃO e GETS (no lugar do DELETE) ------------
+
+//Esperado: 200 - "Usuário desativado com sucesso!" (registra DESATIVAR_USUARIO no log)
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15/desativar
+Accept: application/json
+
+###
+
+//Esperado: 200 - lista com usuários inativos
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/funcionarios/inativos
+Accept: application/json
+
+###
+
+//Esperado: 200 - lista com usuários ativos
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
+Accept: application/json
+
+###
+
+//------------ ERROS: DESATIVAÇÃO ------------
+
+//Esperado: 409 - "Este usuário está inativo."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/15/desativar
+Accept: application/json
+
+
+###
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/0/desativar
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Usuário não encontrado."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/9999/desativar
+Accept: application/json
+
+###
+
+//Esperado: 405 - Method Not Allowed
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/1
+Accept: application/json
+
+###
