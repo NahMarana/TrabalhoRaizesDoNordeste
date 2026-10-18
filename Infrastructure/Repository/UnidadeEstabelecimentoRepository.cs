@@ -15,12 +15,13 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(c => c.Id == id);
         }
 
-        public UnidadesEstabelecimento? BuscarUnidadePorNome(string nome)
+        public ICollection<UnidadesEstabelecimento>? BuscarUnidadePorNome(string nome)
         {
             return _context.UnidadesEstabelecimento
                 .Include(eu => eu.EstoqueUnidades!).ThenInclude(e => e.Produtos).ThenInclude(p => p.Categoria)
                 .Include(u => u.Usuarios)
-                .FirstOrDefault(ue => ue.NomeEstabelecimento.ToLower().Contains(nome.ToLower()));
+                .Where(ue => ue.NomeEstabelecimento.ToLower().Contains(nome.ToLower()))
+                .ToList();
         }
 
         public ICollection<UnidadesEstabelecimento>? ListarUnidades()
@@ -41,10 +42,10 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                           && eu.VendaDisponivel
                           && eu.QtdEstoqueDisponivel > 0
                           && eu.Produtos!.ProdutoAtivo
-                          &&
-                          (
-                            (!eu.Produtos.ProdutoSazonal || (eu.Produtos.DataInicioSazonal <= ProdutoSazonalEstaAtivo && eu.Produtos.DataFimSazonal >= ProdutoSazonalEstaAtivo)))
-                          )
+                          && (!eu.Produtos.ProdutoSazonal
+                              || (eu.Produtos.DataInicioSazonal <= ProdutoSazonalEstaAtivo && eu.Produtos.DataFimSazonal >= ProdutoSazonalEstaAtivo))
+                          && (eu.UnidadesEstabelecimento!.TipoUnidade == TipoUnidade.COMPLETA
+                              || eu.Produtos.Categoria!.NomeCategoria != "Pratos Principais/PF"))
                 .ToList();
         }
 
@@ -68,6 +69,8 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             var unidadeEncontrada = _context.UnidadesEstabelecimento.Find(id);
 
+            if (unidadeEncontrada == null)
+                return null;
 
             unidadeEncontrada.NomeEstabelecimento = unidade.NomeEstabelecimento;
             unidadeEncontrada.CNPJ = unidade.CNPJ;
@@ -101,6 +104,19 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             _context.SaveChanges();
 
             return unidade;
+        }
+
+        public bool Deletar(int id)
+        {
+            var unidade = _context.UnidadesEstabelecimento.Find(id);
+
+            if (unidade == null)
+                return false;
+
+            _context.UnidadesEstabelecimento.Remove(unidade);
+            var response = _context.SaveChanges();
+
+            return response > 0;
         }
     }
 }

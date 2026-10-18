@@ -1,46 +1,460 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/
-Content-Type: application/json
+//------------ ACERTOS: GET ------------
+
+//Esperado: 200 - lista com todas as unidades criadas
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/
+//Esperado: 200 - Buscar unidade por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/7
+Accept: application/json
+
+###
+
+//Esperado: 200 - Buscar unidade por nome
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/buscar?nome=shopping
+Accept: application/json
+
+###
+
+//------------ ERROS: GET ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Unidade não encontrada."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/999
+Accept: application/json
+
+###
+
+//Esperado: 400 - "Nome da Unidade de Estabelecimento não informada."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/buscar?nome=
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Unidade não encontrada." - Unidade Inexistente
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/buscar?nome=curitiba
+Accept: application/json
+
+###
+
+//------------ ACERTOS: CONSULTAR CARDÁPIO ------------
+// O cardápio mostra apenas os produtos que a unidade tem em estoque,
+// com venda liberada, quantidade maior que zero, produto ativo e,
+// se for sazonal, dentro do período.
+
+//Cardápio de unidade COMPLETA
+//Esperado: 200 - produtos em estoque da unidade 3, incluindo Pratos Principais/PF
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/4/cardapio
+Accept: application/json
+
+###
+
+//Cardápio de unidade REDUZIDA
+//Esperado: 200 - produtos em estoque da unidade 7, SEM os Pratos Principais/PF
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/7/cardapio
+Accept: application/json
+
+###
+
+
+//------------ ERROS: CONSULTAR CARDÁPIO ------------
+
+//Cardápio com ID inválido
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/0/cardapio
+Accept: application/json
+
+###
+
+//Cardápio de unidade que não existe
+//Esperado: 404 - "Unidade não encontrada."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/999/cardapio
+Accept: application/json
+
+###
+
+
+//------------ ACERTOS: CRIAÇÃO DAS UNIDADES ------------
+// Esperado em todos: 201 Created
+
+
+// ---------- Unidades COMPLETAS ----------
+
+//Unidade ID 4 = Recife - Boa Viagem (COMPLETA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Londrina Shopping",
-  "CNPJ": "12.891.501/0001-40",
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Recife Boa Viagem",
+  "CNPJ": "45.218.330/0001-12",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Avenida Conselheiro Aguiar",
+  "Numero": "1450",
+  "Bairro": "Boa Viagem",
+  "Cidade": "Recife",
+  "Estado": "PE",
+  "CEP": "51111-010",
+  "TelefoneUnidade": "(81) 3325-4410"
+}
+
+###
+
+//Unidade ID 5 = Salvador - Rio Vermelho (COMPLETA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Salvador Rio Vermelho",
+  "CNPJ": "45.218.330/0002-01",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Rua da Paciência",
+  "Numero": "210",
+  "Bairro": "Rio Vermelho",
+  "Cidade": "Salvador",
+  "Estado": "BA",
+  "CEP": "41950-000",
+  "TelefoneUnidade": "(71) 3334-7720"
+}
+
+###
+
+//Unidade ID 6 = Fortaleza - Aldeota (COMPLETA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Fortaleza Aldeota",
+  "CNPJ": "45.218.330/0003-84",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Rua Silva Paulet",
+  "Numero": "890",
+  "Bairro": "Aldeota",
+  "Cidade": "Fortaleza",
+  "Estado": "CE",
+  "CEP": "60120-020",
+  "TelefoneUnidade": "(85) 3244-5190"
+}
+
+###
+
+//Unidade ID 7 = Natal - Ponta Negra (COMPLETA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Natal Ponta Negra",
+  "CNPJ": "45.218.330/0004-65",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Avenida Engenheiro Roberto Freire",
+  "Numero": "3200",
+  "Bairro": "Ponta Negra",
+  "Cidade": "Natal",
+  "Estado": "RN",
+  "CEP": "59090-000",
+  "TelefoneUnidade": "(84) 3219-6630"
+}
+
+###
+
+// ---------- Unidades REDUZIDAS ----------
+
+//Unidade ID 8 = João Pessoa - Shopping (REDUZIDA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade João Pessoa Shopping",
+  "CNPJ": "45.218.330/0005-46",
   "UnidadeAtiva": true,
   "TipoUnidade": 1,
-  "Rua": "Rua Sergipe",
-  "Numero": "297",
-  "Bairro": "Centro",
-  "Cidade": "Londrina",
-  "Estado": "PR",
-  "CEP": "88117-403",
-  "TelefoneUnidade": "(43) 3304-2089"
+  "Rua": "Avenida Governador Flávio Ribeiro Coutinho",
+  "Numero": "220",
+  "Bairro": "Manaíra",
+  "Cidade": "João Pessoa",
+  "Estado": "PB",
+  "CEP": "58037-000",
+  "TelefoneUnidade": "(83) 3246-1180"
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/1
+//Unidade ID 9 = Maceió - Shopping (REDUZIDA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "nomeEstabelecimento": "Raízes do Nordeste - Unidade Centro",
-  "cnpj": "88.234.567/0001-40",
-  "unidadeAtiva": true,
-  "tipoUnidade": 0,
-  "rua": "Centro Universitário",
-  "numero": "456",
-  "bairro": "Jardim do Sol",
-  "cidade": "Florianópolis",
-  "estado": "SC",
-  "cep": "80801-123",
-  "telefoneUnidade": "(48) 99876-5432"
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade Maceió Shopping",
+  "CNPJ": "45.218.330/0006-27",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 1,
+  "Rua": "Avenida Comendador Gustavo Paiva",
+  "Numero": "5945",
+  "Bairro": "Cruz das Almas",
+  "Cidade": "Maceió",
+  "Estado": "AL",
+  "CEP": "57038-000",
+  "TelefoneUnidade": "(82) 3327-4450"
 }
 
 ###
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/3
+
+// ---------- Unidade TESTE (usada nos testes de atualização e desativação) ----------
+
+//Unidade ID 10 = Unidade TESTE (COMPLETA)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade TESTE",
+  "CNPJ": "45.218.330/0007-08",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Rua de Teste",
+  "Numero": "100",
+  "Bairro": "Centro",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49010-000",
+  "TelefoneUnidade": "(79) 3211-0000"
+}
+
+###
+
+//------------ ERROS: CRIAÇÃO DAS UNIDADES ------------
+
+//Esperado: 400 - "Nome do estabelecimento é obrigatório"
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "",
+  "CNPJ": "45.218.330/0008-99",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Rua de Teste",
+  "Numero": "100",
+  "Bairro": "Centro",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49010-000",
+  "TelefoneUnidade": "(79) 3211-0000"
+}
+
+
+###
+
+//Esperado: 400 - "CNPJ da Unidade é obrigatório."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade sem CNPJ",
+  "CNPJ": "",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Rua de Teste",
+  "Numero": "100",
+  "Bairro": "Centro",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49010-000",
+  "TelefoneUnidade": "(79) 3211-0000"
+}
+
+
+###
+
+//Esperado: 400 - "Tipo da unidade inválida."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade com tipo inválido",
+  "CNPJ": "45.218.330/0009-70",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 5,
+  "Rua": "Rua de Teste",
+  "Numero": "100",
+  "Bairro": "Centro",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49010-000",
+  "TelefoneUnidade": "(79) 3211-0000"
+}
+
+###
+
+//------------ ACERTOS: ATUALIZAÇÃO DA UNIDADE ------------
+
+//Atualizar telefone e endereço da Unidade TESTE (ID 10)
+//Esperado: 200 - "Unidade Atualizada!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade TESTE",
+  "CNPJ": "45.218.330/0007-08",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Avenida Ivo do Prado",
+  "Numero": "500",
+  "Bairro": "São José",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49015-070",
+  "TelefoneUnidade": "(79) 3211-9999"
+}
+
+###
+
+//Alterar o tipo da Unidade TESTE (ID 10) para REDUZIDA
+//Esperado: 200 - "Unidade Atualizada!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade TESTE",
+  "CNPJ": "45.218.330/0007-08",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 1,
+  "Rua": "Avenida Ivo do Prado",
+  "Numero": "500",
+  "Bairro": "São José",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49015-070",
+  "TelefoneUnidade": "(79) 3211-9999"
+}
+
+###
+
+
+//------------ ERROS: ATUALIZAÇÃO DA UNIDADE ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/0
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade TESTE",
+  "CNPJ": "45.218.330/0007-08",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Avenida Ivo do Prado",
+  "Numero": "500",
+  "Bairro": "São José",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49015-070",
+  "TelefoneUnidade": "(79) 3211-9999"
+}
+
+###
+
+//Esperado: 404 - "Unidade Estabelecimento não encontrada."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade TESTE",
+  "CNPJ": "45.218.330/0007-08",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 0,
+  "Rua": "Avenida Ivo do Prado",
+  "Numero": "500",
+  "Bairro": "São José",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49015-070",
+  "TelefoneUnidade": "(79) 3211-9999"
+}
+
+###
+
+//Tipo de unidade inválido
+//Esperado: 400 - "Tipo da unidade inválida."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10
+Content-Type: application/json
+Accept: application/json
+
+{
+  "NomeEstabelecimento": "Raízes do Nordeste - Unidade TESTE",
+  "CNPJ": "45.218.330/0007-08",
+  "UnidadeAtiva": true,
+  "TipoUnidade": 5,
+  "Rua": "Avenida Ivo do Prado",
+  "Numero": "500",
+  "Bairro": "São José",
+  "Cidade": "Aracaju",
+  "Estado": "SE",
+  "CEP": "49015-070",
+  "TelefoneUnidade": "(79) 3211-9999"
+}
+
+###
+
+//------------ ACERTO: DESATIVAR UNIDADE ------------
+
+//Desativar a Unidade TESTE (ID 10)
+//Esperado: 200 - "Unidade desativada com sucesso!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10/desativar
+
+###
+
+
+//------------ ERROS: DESATIVAR UNIDADE ------------
+
+//Desativar uma unidade que já está inativa.
+//Esperado: 409 - "Esta unidade está inativa."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10/desativar
+
+###
+
+//Esperado: 404 - "Unidade não encontrada."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/999/desativar
+
+###
+
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/0/desativar
+
+###
+
+//Consultar o cardápio de uma unidade inativa
+//Esperado: 409 - "Esta unidade está desativada e não possui cardápio disponível."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10/cardapio
+Accept: application/json
+
+###
+
+
+
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/2

@@ -56,4 +56,4 @@ Accept: application/json
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/4
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/usuarios/6

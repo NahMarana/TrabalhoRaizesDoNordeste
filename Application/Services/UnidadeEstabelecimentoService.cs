@@ -10,7 +10,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
     {
         public UnidadeDTO BuscaPorId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
@@ -27,7 +27,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return unidadeDTO;
         }
 
-        public UnidadeDTO BuscarPorNome(string nome)
+        public ICollection<UnidadeDTO> BuscarPorNome(string nome)
         {
             if (nome == null)
             {
@@ -41,9 +41,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 return null;
             }
 
-            var unidadeDTO = CriarObjeto(unidade);
-
-            return unidadeDTO;
+            return CriarObjetoCollection(unidade);
         }
         public ICollection<UnidadeDTO> ListarUnidades()
         {
@@ -62,7 +60,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             if (string.IsNullOrEmpty(unidade.NomeEstabelecimento))
             {
-                throw new ArgumentNullException("Nome do estabelecimento é obrigatório");
+                throw new ArgumentException("Nome do estabelecimento é obrigatório");
             }
 
             if (string.IsNullOrEmpty(unidade.CNPJ))
@@ -86,7 +84,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Tipo da unidade inválida.");
             }
 
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
@@ -162,6 +160,17 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                     ValorPromocional = promocao?.ValorPromocional
                 };
             }).ToList();
+        }
+
+        public bool Deletar(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("ID fornecido é inválido.");
+            }
+
+            var unidadeDeletada = repository.Deletar(id);
+            return unidadeDeletada;
         }
 
         public UnidadeDTO CriarObjeto(UnidadesEstabelecimento unidade)

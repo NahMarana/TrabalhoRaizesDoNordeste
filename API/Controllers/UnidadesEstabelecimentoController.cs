@@ -20,15 +20,15 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
 
         [HttpGet("buscar")]
-        public IActionResult BuscarEstabelecimentoPorNome(string nome)
+        public IActionResult BuscarEstabelecimentoPorNome([FromQuery] string? nome)
         {
             try
             {
                 //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
                 var unidade = _service.BuscarPorNome(nome);
 
-                if (unidade == null)
-                    return NotFound("Categoria não encontrada.");
+                if (unidade.Count == 0)
+                    return NotFound("Unidade não encontrada.");
 
                 return Ok(unidade);
             }
@@ -47,7 +47,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var unidade = _service.BuscaPorId(id);
 
                 if (unidade == null)
-                    return NotFound("Categoria não encontrada.");
+                    return NotFound("Unidade não encontrada.");
 
                 return Ok(unidade);
             }
@@ -130,6 +130,24 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                     return NotFound("Unidade não encontrada.");
 
                 return Ok("Unidade desativada com sucesso!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                var unidadeDeletada = _service.Deletar(id);
+
+                if (!unidadeDeletada)
+                    return NotFound("Categoria ID não encontrada");
+
+                return Ok("Unidade deletada com sucesso!");
             }
             catch (Exception ex)
             {
