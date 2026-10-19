@@ -38,11 +38,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListarPromocoesECampanhas()
+        public IActionResult ListarPromocoesECampanhasAtivas()
         {
             try
             {
-                var promo = _service.ListarPromocoesCampanhas();
+                var promo = _service.ListarPromocoesCampanhasAtivas();
 
                 return Ok(promo);
             }
@@ -74,9 +74,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
                 return Created();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex) { return BadRequest(ex.Message); }
+            catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+            catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return Conflict(ex.Message);
             }
         }
 

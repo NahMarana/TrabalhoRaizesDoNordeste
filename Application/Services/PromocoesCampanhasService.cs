@@ -25,9 +25,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return promoCampanhaDTO;
         }
 
-        public ICollection<PromoCampanhaDTO> ListarPromocoesCampanhas()
+        public ICollection<PromoCampanhaDTO> ListarPromocoesCampanhasAtivas()
         {
-            var promo = repository.ListarPromocoesCampanhas();
+            var promo = repository.ListarPromocoesCampanhasAtivas();
             var promoCampanhaDTO = CriarObjetoCollection(promo);
 
             return promoCampanhaDTO;
@@ -104,7 +104,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 Descricao = promo.Descricao,
                 ValorPromocional = promo.ValorPromocional,
                 StatusPromoCampanha = StatusPromoCampanha.ATIVO,
-                DataInicio = promo.DataInicio = DateOnly.FromDateTime(DateTime.Now),
+                DataInicio = promo.DataInicio,
                 DataFim = promo.DataFim
             };
 

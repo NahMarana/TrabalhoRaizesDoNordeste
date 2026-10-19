@@ -15,7 +15,7 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(pc => pc.Id == id);
         }
 
-        public ICollection<PromocoesCampanhas>? ListarPromocoesCampanhas()
+        public ICollection<PromocoesCampanhas>? ListarPromocoesCampanhasAtivas()
         {
             return _context.PromocoesCampanha
                 .Include(pc => pc.UnidadesEstabelecimento)
@@ -54,6 +54,9 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public PromocoesCampanhas? AtualizarPromoCampanha(int id, PromocoesCampanhas promo)
         {
             var promoEncontrada = _context.PromocoesCampanha.Find(id);
+
+            if (promoEncontrada == null)
+                return null;
 
             promoEncontrada.ValorPromocional = promo.ValorPromocional;
             promoEncontrada.Descricao = promo.Descricao;

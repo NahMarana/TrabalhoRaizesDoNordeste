@@ -47,9 +47,6 @@ Accept: application/json
 ###
 
 //------------ ACERTOS: CONSULTAR CARDÁPIO ------------
-// O cardápio mostra apenas os produtos que a unidade tem em estoque,
-// com venda liberada, quantidade maior que zero, produto ativo e,
-// se for sazonal, dentro do período.
 
 
 //Esperado: 200 - Cardápio de unidade COMPLETA - incluindo Pratos Principais/PF

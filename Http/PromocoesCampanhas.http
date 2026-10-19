@@ -1,37 +1,343 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/1
-Content-Type: application/json
+//------------ ACERTOS: GET ------------
+
+//Esperado: 200 - lista todas as promoções Ativas
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/
+//Esperado: 200 - Listar promoção por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/1
+Accept: application/json
+
+###
+
+//Esperado: 200 - Listar promoções invativas
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/promocoesCampanhas/inativos
+Accept: application/json
+
+###
+
+
+//Esperado: 200 - Cardápio com as promoções
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/4/cardapio
+Accept: application/json
+
+###
+
+//------------ ERROS: GET ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Promoção não encontrada."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/9999
+Accept: application/json
+
+###
+
+//------------ ACERTO: CRIAÇÃO DA PROMOÇÃO ------------
+
+// =========== Unidade Recife (4) ===========
+
+//Esperado: 200 - promoção criada
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "EstabelecimentoId": 1,
-  "ProdutoId": 5,
-  "Descricao": "Semana do Café - desconto especial",
-  "ValorPromocional": 29.90,
-  "StatusPromoCampanha": 0,
-  "DataFim": "2026-10-15"
+  "estabelecimentoId": 4,
+  "produtoId": 7,
+  "descricao": "Happy hour do dadinho",
+  "valorPromocional": 18.9,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-11-30"
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/1
+//------------ PROMOÇÃO TESTE (usada nas atualizações e na desativação) ------------
+
+//Esperado: 200 - promoção TESTE
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "EstabelecimentoId": 1,
-  "ProdutoId": 5,
-  "Descricao": "Semana do Café - desconto especial",
-  "ValorPromocional": 29.90,
-  "StatusPromoCampanha": 1,
-  "DataFim": "2026-10-15"
+  "estabelecimentoId": 4,
+  "produtoId": 6,
+  "descricao": "Promoção TESTE - Água de coco",
+  "valorPromocional": 6.5,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/promocoesCampanhas/1
+//------------ ERROS: CRIAÇÃO DA PROMOÇÃO ------------
+
+//Esperado: 400 - "Produto é obrigatório."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 0,
+  "descricao": "Erro",
+  "valorPromocional": 10.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//Esperado: 400 - "Unidade de Estabelecimento é obrigatória."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 0,
+  "produtoId": 7,
+  "descricao": "Erro",
+  "valorPromocional": 10.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//Esperado: 400 - "O valor promocional não pode ser zerada."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 7,
+  "descricao": "Erro",
+  "valorPromocional": 0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//Esperado: 400 - "A data final da promoção não pode ser menor que a data início."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 7,
+  "descricao": "Erro",
+  "valorPromocional": 10.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-09-30"
+}
+
+###
+
+//Esperado: 404 - "Produto não encontrado."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 999,
+  "descricao": "Erro",
+  "valorPromocional": 10.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//Esperado: 404 - "Unidade não encontrada."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 999,
+  "produtoId": 7,
+  "descricao": "Erro",
+  "valorPromocional": 10.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//Esperado: 409 - "Unidade inativada! Promoção não pode ser aplicada."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 10,
+  "produtoId": 7,
+  "descricao": "Erro",
+  "valorPromocional": 10.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//Esperado: 409 - "O valor promocional deve ser menor que o preço do produto."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 7,
+  "descricao": "Erro",
+  "valorPromocional": 25.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-31"
+}
+
+###
+
+//------------ ACERTOS: ATUALIZAÇÃO ------------
+
+//Esperado: 200 - "Promoção Atualizada!" - Promoção Teste
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 6,
+  "descricao": "Promoção TESTE - Água de coco (atualizada)",
+  "valorPromocional": 6.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-20"
+}
+
+###
+
+//------------ ERROS: ATUALIZAÇÃO ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/0
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 6,
+  "descricao": "Promoção TESTE - Água de coco (atualizada)",
+  "valorPromocional": 6.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-20"
+}
+
+###
+
+//Esperado: 404 - "Promoção não encontrada."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/9999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 6,
+  "descricao": "Promoção TESTE - Água de coco (atualizada)",
+  "valorPromocional": 6.0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-20"
+}
+
+###
+
+//Esperado: 400 - "Tipo de Status da Promoção inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 6,
+  "descricao": "Promoção TESTE - Água de coco (atualizada)",
+  "valorPromocional": 6.0,
+  "statusPromoCampanha": 99,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-20"
+}
+
+###
+
+//Esperado: 400 - "O valor promocional não pode ser negativa."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2
+Content-Type: application/json
+Accept: application/json
+
+{
+  "estabelecimentoId": 4,
+  "produtoId": 6,
+  "descricao": "Promoção TESTE - Água de coco (atualizada)",
+  "valorPromocional": 0,
+  "statusPromoCampanha": 0,
+  "dataInicio": "2026-10-18",
+  "dataFim": "2026-12-20"
+}
+
+###
+
+//------------ ACERTOS: DESATIVAÇÃO (no lugar do DELETE) ------------
+
+//Esperado: 200 - "Promoção desativada com sucesso!" - Promoção Teste
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2/desativar
+Accept: application/json
+
+###
+
+//------------ ERROS: DESATIVAÇÃO ------------
+
+//Esperado: 409 - "Esta promoção já está inativa."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2/desativar
+Accept: application/json
+
+###
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/0/desativar
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Promoção não encontrada."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/9999/desativar
+Accept: application/json
+
+###
+
+//Esperado: 405 - Method Not Allowed - Tentar Deletar
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2
+Accept: application/json
+
+###
