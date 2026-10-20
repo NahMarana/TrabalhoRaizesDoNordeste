@@ -17,13 +17,25 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(p => p.Id == id);
         }
 
-        public ICollection<Pedido>? ListarPedidos()
+        public ICollection<Pedido>? ListarPedidosAtivos()
         {
             return _context.Pedidos
                 .Include(p => p.Usuarios).ThenInclude(u => u!.Fidelidade)
                 .Include(p => p.UnidadesEstabelecimento)
                 .Include(p => p.ItensPedidos!).ThenInclude(i => i.Produtos)
                 .Include(p => p.Pagamentos)
+                .Where(p => p.StatusPedido != StatusPedido.CANCELADO)
+                .ToList();
+        }
+
+        public ICollection<Pedido>? ListarPedidosCancelados()
+        {
+             return _context.Pedidos
+                .Include(p => p.Usuarios).ThenInclude(u => u!.Fidelidade)
+                .Include(p => p.UnidadesEstabelecimento)
+                .Include(p => p.ItensPedidos!).ThenInclude(i => i.Produtos)
+                .Include(p => p.Pagamentos)
+                .Where(p => p.StatusPedido == StatusPedido.CANCELADO)
                 .ToList();
         }
 
@@ -38,15 +50,25 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .ToList();
         }
 
-        public bool UsuarioPossuiFidelidade(int usuarioId)
+        public ICollection<Pedido>? BuscaPedidosDoCliente(int usuarioId)
         {
-            return _context.Fidelidades
-                .Any(f => f.UsuarioId == usuarioId);
+            return _context.Pedidos
+                .Include(p => p.Usuarios)
+                .Include(p => p.ItensPedidos!).ThenInclude(i => i.Produtos)
+                .Include(p => p.Pagamentos)
+                .Where(p => p.UsuarioId == usuarioId)
+                .OrderByDescending(p => p.DataHoraPedido)
+                .ToList();
         }
 
-        public Produto? BuscaProdutoPorId(int produtoId)
+        public Usuario? BuscaUsuarioPorId(int usuarioId)
         {
-            return _context.Produtos.Find(produtoId);
+            return _context.Usuarios.Find(usuarioId);
+        }
+
+        public UnidadesEstabelecimento? BuscaUnidadePorId(int estabelecimentoId)
+        {
+            return _context.UnidadesEstabelecimento.Find(estabelecimentoId);
         }
 
         public Pedido? CriarPedido(Pedido pedido)
@@ -61,6 +83,11 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             var pedidoEncontrado = _context.Pedidos.Find(id);
 
+            if (pedidoEncontrado == null)
+            {
+                return null;
+            }
+
             pedidoEncontrado.CanalPedido = pedido.CanalPedido;
             pedidoEncontrado.ModoReceber = pedido.ModoReceber;
             pedidoEncontrado.Descricao = pedido.Descricao;
@@ -71,9 +98,21 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             return pedidoEncontrado;
         }
 
+        public void SalvarPedido(Pedido pedido)
+        {
+            _context.Pedidos.Update(pedido);
+            _context.SaveChanges();
+        }
+
         public Pedido? AtualizarStatusPedido(int id, StatusPedido statusPedido)
         {
             var pedido = _context.Pedidos.Find(id);
+
+            if (pedido == null)
+            {
+                return null;
+            }
+
             pedido.StatusPedido = statusPedido;
 
             _context.Pedidos.Update(pedido);
@@ -85,6 +124,11 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public Pedido CancelarPedido(int id)
         {
             var pedido = _context.Pedidos.Find(id);
+
+            if (pedido == null)
+            {
+                return null;
+            }
 
             pedido.StatusPedido = StatusPedido.CANCELADO;
 

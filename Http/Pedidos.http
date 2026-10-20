@@ -1,39 +1,577 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/
-Content-Type: application/json
+//------------ ACERTOS: GET ------------
+
+//Esperado: 200 - Listar todos os pedidos que não foram cancelados
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/ativos
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/
+//Esperado: 200 - Listar pedidos cancelados
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/cancelados
+Accept: application/json
+
+###
+
+//Esperado: 200 - Buscar pedidos por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/5
+Accept: application/json
+
+###
+
+//Esperado: 200 - Visualização do retorno do pedido do cliente
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/cliente/10
+Accept: application/json
+
+###
+
+//Esperado: 200 - Listar pedidos por canal
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/canal?canalPedido=0
+Accept: application/json
+
+###
+
+//------------ ERROS: GET ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Pedido não encontrado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/9999
+Accept: application/json
+
+###
+
+//Esperado: 400 - "Canal do pedido inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/canal?canalPedido=99
+Accept: application/json
+
+###
+
+//Esperado: 400 - Retorno Cliente: "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/cliente/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - Retorno Cliente: "Nenhum pedido encontrado para este cliente."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/cliente/999
+Accept: application/json
+
+###
+
+
+//------------ ACERTOS: CRIAÇÃO DOS PEDIDOS ------------
+
+//Esperado: 200 - retorno da cliente: "statusPedido": "PENDENTE", Acumula Pontos (vai gerar 4 pontos)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "UsuarioId": 1,
-  "EstabelecimentoId": 1,
-  "CanalPedido": 2,
-  "ModoReceber": 1,
-  "StatusPedido": 0,
-  "ValorTotalPedido": 14.95,
-  "Descricao": "Sem cebola"
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido 1 - com promoção",
+  "itensPedidos": [
+    {
+      "produtoId": 7,
+      "qtdItens": 2
+    },
+    {
+      "produtoId": 4,
+      "qtdItens": 1
+    }
+  ]
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/2
+//Esperado: 200 - retorno da cliente: "statusPedido": "PENDENTE", Resgata pontos
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
 Content-Type: application/json
 Accept: application/json
+
 {
-  "UsuarioId": 1,
-  "EstabelecimentoId": 1,
-  "CanalPedido": 1,
-  "ModoReceber": 1,
-  "StatusPedido": 1,
-  "ValorTotalPedido": 14.95,
-  "Descricao": "Sem açúcar"
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 1,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido 2 - resgate de pontos",
+  "itensPedidos": [
+    {
+      "produtoId": 13,
+      "qtdItens": 1
+    },
+    {
+      "produtoId": 30,
+      "qtdItens": 1
+    }
+  ]
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pedidos/1
+//Esperado: 200 - Pagamento Recusado
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 4,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido 3 - pagamento recusado",
+  "itensPedidos": [
+    {
+      "produtoId": 37,
+      "qtdItens": 2
+    }
+  ]
+}
+
+###
+
+
+//------------ PEDIDO TESTE (usado na atualização e no cancelamento) ------------
+
+//Esperado: 200 - retorno da cliente: "statusPedido": "PENDENTE",
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 2,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido TESTE",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//------------ ERROS: CRIAÇÃO (validação, o pedido NÃO é salvo) ------------
+
+//Esperado: 400 - "Usuário é obrigatório."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 0,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 400 - "Unidade de Estabelecimento é obrigatória."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 0,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 400 - "Modo de recebimento inválido."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 99,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 400 - "O pedido precisa possuir algum item."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": []
+}
+
+###
+
+//Esperado: 409 - "Usuário inativo! Não pode fazer pedido."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 15,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 409 - "Unidade inativada! Não é possível fazer pedido."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 10,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+
+//------------ ERROS: CRIAÇÃO (com problemas que vem do ItensPedido) ------------
+
+//Esperado: 404 - "Produto não encontrado."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 999,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 400 - "É obrigatório pelo menos ter um produto."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 0
+    }
+  ]
+}
+
+###
+
+//Esperado: 409 - "Estoque insuficiente. Disponível: ..." 
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 37,
+      "qtdItens": 1000
+    }
+  ]
+}
+
+###
+
+//Esperado: 404 - "Não existe estoque deste produto nesta unidade."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 9,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Erro",
+  "itensPedidos": [
+    {
+      "produtoId": 48,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+
+//------------ ACERTOS: ATUALIZAÇÃO ------------
+
+//Esperado: 200 - "Pedido atualizado!"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/2
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 3,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido TESTE - vou buscar no balcão",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//------------ ERROS: ATUALIZAÇÃO ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/0
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 3,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido TESTE - vou buscar no balcão",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 404 - "Pedido não encontrado."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/9999
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 3,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido TESTE - vou buscar no balcão",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 400 - "Modo de recebimento inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/2
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 3,
+  "modoReceber": 99,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido TESTE - vou buscar no balcão",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//------------ ERROS: STATUS DO PEDIDO ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/0/statusPedido?statusPedido=1
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Pedido não encontrado."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/9999/statusPedido?statusPedido=1
+Accept: application/json
+
+###
+
+//Esperado: 400 - "Status do pedido inválido."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/2/statusPedido?statusPedido=99
+Accept: application/json
+
+###
+
+
+//------------ ACERTO: CANCELAMENTO ------------
+
+//Esperado: 200 - "Pedido cancelado com sucesso!" (Produto volta para o estoque e registra CANCELAR_PEDIDO no log)
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/6
+Accept: application/json
+
+###
+
+//------------ ERROS: CANCELAMENTO E PEDIDO CANCELADO ------------
+
+//Esperado: 409 - "Este pedido já está cancelado."
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/1
+Accept: application/json
+
+###
+
+//Esperado: 400 - "ID fornecido é inválido."
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Pedido não encontrado."
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/9999
+Accept: application/json
+
+###
+
+//Alterar um pedido cancelado
+//Esperado: 409 - "A alteração do pedido só é possível enquanto constar status do Pedido for PENDENTE"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 3,
+  "modoReceber": 1,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido TESTE - vou buscar no balcão",
+  "itensPedidos": [
+    {
+      "produtoId": 3,
+      "qtdItens": 1
+    }
+  ]
+}
+
+###
+
+//Esperado: 409 - "Pedido cancelado não pode mudar de status."
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/1/statusPedido?statusPedido=1
+Accept: application/json
+
+###

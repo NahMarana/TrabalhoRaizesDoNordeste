@@ -27,7 +27,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var pedido = _service.BuscaPorId(id);
 
                 if (pedido == null)
-                    return NotFound("Produto não encontrado.");
+                    return NotFound("Pedido não encontrado.");
 
                 return Ok(pedido);
             }
@@ -37,12 +37,27 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("ativos")]
         public IActionResult ListarPedidos()
         {
             try
             {
-                var pedido = _service.ListarPedidos();
+                var pedido = _service.ListarPedidosAtivos();
+
+                return Ok(pedido);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("cancelados")]
+        public IActionResult ListarPedidosCancelados()
+        {
+            try
+            {
+                var pedido = _service.ListarPedidosCancelados();
 
                 return Ok(pedido);
             }
@@ -53,14 +68,35 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("canal")]
-        public IActionResult ListarPedidosPorCanal(CanalPedido canalPedido)
+        public IActionResult ListarPedidosPorCanal(int canalPedido)
         {
             try
             {
-                return Ok(_service.ListarPedidosPorCanal(canalPedido));
+                return Ok(_service.ListarPedidosPorCanal((CanalPedido)canalPedido));
             }
-            catch (ArgumentException ex) { return BadRequest(ex.Message); }
+            catch (ArgumentException ex) 
+            { 
+                return BadRequest(ex.Message); 
+            }
         }
+
+        [HttpGet("cliente/{usuarioId:int}")]
+        public IActionResult BuscarPedidosDoCliente(int usuarioId)
+        {
+            try
+            {
+                return Ok(_service.BuscarPedidosDoCliente(usuarioId));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
 
         [HttpPost]
         public IActionResult CriarPedido(Pedido pedido)
@@ -69,11 +105,19 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             {
                 var pedidoCriado = _service.CriarPedido(pedido);
 
-                return Created();
+                return Ok(_service.CriarRetornoCliente(pedidoCriado));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
 
@@ -96,16 +140,24 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPatch("{id:int}/statusPedido")]
-        public IActionResult AtualizarStatusPedido(int id, StatusPedido statusPedido)
+        public IActionResult AtualizarStatusPedido(int id, int statusPedido)
         {
             try
             {
-                var pedido = _service.AtualizarStatusPedido(id, statusPedido);
+                var pedido = _service.AtualizarStatusPedido(id, (StatusPedido)statusPedido);
+
+                if (pedido == null)
+                    return NotFound("Pedido não encontrado.");
+
                 return Ok(_service.CriarObjeto(pedido));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
 
@@ -115,6 +167,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             try
             {
                 var pedido = _service.CancelarPedido(id);
+
+                if (pedido == null)
+                    return NotFound("Pedido não encontrado.");
+
                 return Ok("Pedido cancelado com sucesso!");
             }
             catch (KeyNotFoundException ex)

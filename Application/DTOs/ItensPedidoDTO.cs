@@ -1,4 +1,6 @@
-﻿namespace TrabalhoRaizesDoNordeste.Application.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace TrabalhoRaizesDoNordeste.Application.DTOs
 {
     public class ItensPedidoDTO
     {
@@ -7,5 +9,7 @@
         public required string NomeProduto { get; set; }
         public required int QtdItens { get; set; }
         public required decimal PrecoUnitario { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public decimal? ValorPromocional { get; set; }
     }
 }

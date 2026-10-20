@@ -56,16 +56,6 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                if (itens.PedidoId == 0)
-                {
-                    return BadRequest("Pedido não identificado!");
-                }
-
-                if (itens.ProdutoId == 0)
-                {
-                    return BadRequest("Produto não identificado!");
-                }
-
                 var ItemPedidoCriado = _service.CriarItemPedido(itens);
                 return Created();
             }
@@ -87,9 +77,13 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
                 return Ok("Os itens desse pedido foram atualizados!");
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
     }

@@ -47,11 +47,6 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("É obrigatório pelo menos ter um produto.");
             }
 
-            if (item.PrecoUnitario <= 0)
-            {
-                throw new ArgumentException("É obrigatório produto possuir valor.");
-            }
-
             var pedido = repository.BuscaPedidoPorId(item.PedidoId);
 
             if (item.PedidoId <= 0)
@@ -66,6 +61,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (item.ProdutoId <= 0)
             {
                 throw new ArgumentException("Id do produto é obrigatória.");
+            }
+
+            if (produto == null)
+            {
+                throw new KeyNotFoundException("Produto não encontrado");
             }
 
             if (produto.PrecoUnitario <= 0)
@@ -96,7 +96,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 PedidoId = pedido.Id,
                 ProdutoId = produto.Id,
                 QtdItens = item.QtdItens,
-                PrecoUnitario = produto.PrecoUnitario
+                PrecoUnitario = precoUnitario
             };
 
             novoItem.CalcularPrecoTotal();
@@ -158,6 +158,20 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return CriarObjeto(itemAtualizado!);
         }
 
+        public void DevolverItensAoEstoque(int pedidoId)
+        {
+            var pedido = repository.BuscaPedidoPorId(pedidoId);
+
+            if (pedido == null)
+            {
+                return;
+            }
+
+            foreach (var item in pedido.ItensPedidos)
+            {
+                estoqueUnidadeService.ReporNoEstoque(pedido.EstabelecimentoId, item.ProdutoId, item.QtdItens, pedido.Id, pedido.UsuarioId);
+            }
+        }
 
         public ItensDoPedidoDTO CriarObjeto(ItensPedido itens)
         {

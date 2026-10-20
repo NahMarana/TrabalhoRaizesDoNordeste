@@ -222,18 +222,18 @@ Accept: application/json
 //------------ ACERTOS: ATUALIZAÇÃO ------------
 
 //Esperado: 200 - "Promoção Atualizada!" - Promoção Teste
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/1
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2
 Content-Type: application/json
 Accept: application/json
 
 {
   "estabelecimentoId": 4,
   "produtoId": 6,
-  "descricao": "Promoção TESTE - Água de coco (atualizada)",
+  "descricao": "Promoção TESTE - Água de coco",
   "valorPromocional": 6.0,
   "statusPromoCampanha": 0,
   "dataInicio": "2026-10-18",
-  "dataFim": "2026-12-20"
+  "dataFim": "2026-12-31"
 }
 
 ###

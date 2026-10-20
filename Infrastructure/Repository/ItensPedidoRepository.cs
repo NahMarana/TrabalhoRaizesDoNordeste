@@ -53,7 +53,6 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public ItensPedido CriarItensPedido(ItensPedido item)
         {
             _context.ItensPedido.Add(item);
-            //_context.EstoquesMovimentacao.Add(movimentacao);
             _context.SaveChanges();
 
             AtualizarValorTotalPedido(item.PedidoId);
@@ -65,11 +64,15 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             var itemEncontrado = _context.ItensPedido.Find(id);
 
+            if (itemEncontrado == null)
+            {
+                return null;
+            }
+
             itemEncontrado.QtdItens = item.QtdItens;
             itemEncontrado.CalcularPrecoTotal();
 
             _context.ItensPedido.Update(itemEncontrado);
-           // _context.EstoquesMovimentacao.Add(movimentacao);
             _context.SaveChanges();
 
             AtualizarValorTotalPedido(itemEncontrado.PedidoId);
@@ -82,7 +85,6 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             var pedidoId = item.PedidoId;
 
             _context.ItensPedido.Remove(item);
-            //_context.EstoquesMovimentacao.Add(movimentacao);
 
             _context.SaveChanges();
 
