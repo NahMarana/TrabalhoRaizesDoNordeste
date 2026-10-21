@@ -9,13 +9,13 @@ Accept: application/json
 ###
 
 //Esperado: 200 - Verificar estoque suficiente - "possuiEstoque": true
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=37&quantidade=10
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=28
 Accept: application/json
 
 ###
 
 //Esperado: 200 - Verificar estoque insuficiente - "possuiEstoque": false
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=37&quantidade=1000
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=3
 Accept: application/json
 
 ###

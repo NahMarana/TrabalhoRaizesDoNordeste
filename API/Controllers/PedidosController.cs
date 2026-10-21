@@ -126,12 +126,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var pedidos = _service.AtualizarPedido(id, pedido);
+                var pedidoAtualizado = _service.AtualizarPedido(id, pedido);
 
-                if (pedidos == null)
+                if (pedidoAtualizado == null)
                     return NotFound("Pedido não encontrado.");
 
-                return Ok("Pedido atualizado!");
+                return Ok(_service.CriarRetornoCliente(pedidoAtualizado));
             }
             catch (Exception ex)
             {

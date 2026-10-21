@@ -9,7 +9,7 @@ Accept: application/json
 ###
 
 //Esperado: 200 - Buscar unidade por ID
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/9
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/4
 Accept: application/json
 
 ###

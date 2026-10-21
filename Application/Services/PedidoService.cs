@@ -141,7 +141,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             }
             catch
             {
-                repository.CancelarPedido(pedidoCriado.Id);
+                CancelarPedido(pedidoCriado.Id);
                 throw;
             }
 
@@ -185,16 +185,40 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             repository.AtualizarPedido(id, pedido);
 
+            foreach (var item in pedido.ItensPedidos ?? new List<ItensPedido>())
+            {
+                if (item.QtdItens < 0)
+                {
+                    throw new ArgumentException("Não é permitida quantidade de produto negativa.");
+                }
+
+                var itemExistente = pedidoEncontrado.ItensPedidos?
+                    .FirstOrDefault(i => i.ProdutoId == item.ProdutoId);
+
+                if (itemExistente != null)
+                {
+                    itensPedidoService.AtualizarItemPedido(itemExistente.Id, item);
+                }
+                else if (item.QtdItens > 0)
+                {
+                    var novoItem = new ItensPedido
+                    {
+                        PedidoId = id,
+                        ProdutoId = item.ProdutoId,
+                        QtdItens = item.QtdItens
+                    };
+
+                    itensPedidoService.CriarItemPedido(novoItem);
+                }
+            }
             var pedidoAtualizado = repository.BuscaPedidoPorId(id)!;
-
             pedidoAtualizado.CalcularValorTotalPedido();
-
             repository.SalvarPedido(pedidoAtualizado);
 
             return pedidoAtualizado;
         }
 
-        public Pedido AtualizarStatusPedido(int id, StatusPedido statusPedido)
+        public Pedido? AtualizarStatusPedido(int id, StatusPedido statusPedido)
         {
             if (id <= 0)
             {
@@ -208,9 +232,19 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             var pedido = repository.BuscaPedidoPorId(id);
 
+            if (pedido == null)
+            {
+                return null;
+            }
+
             if (pedido.StatusPedido == StatusPedido.CANCELADO)
             {
                 throw new InvalidOperationException("Pedido cancelado não pode mudar de status.");
+            }
+
+            if (pedido.Pagamentos == null && statusPedido != StatusPedido.PENDENTE)
+            {
+                throw new InvalidOperationException("O pedido só pode mudar de status depois do pagamento ser aceito.");
             }
 
             var statusPedidoAnterior = pedido.StatusPedido;

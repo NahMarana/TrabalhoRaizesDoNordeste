@@ -34,6 +34,14 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(eu => eu.EstabelecimentoId == estabelecimentoId && eu.ProdutoId == produtoId);
         }
 
+        public EstoqueMovimentacao? BuscaUltimaMovimentacao(int estoqueId)
+        {
+            return _context.EstoquesMovimentacao
+                .Where(m => m.EstoqueId == estoqueId)
+                .OrderByDescending(m => m.Id)
+                .FirstOrDefault();
+        }
+
         public UnidadesEstabelecimento? BuscaUnidadePorId(int estabelecimentoId)
         {
             return _context.UnidadesEstabelecimento.Find(estabelecimentoId);

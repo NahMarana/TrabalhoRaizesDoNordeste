@@ -419,6 +419,10 @@ Accept: application/json
   "itensPedidos": [
     {
       "produtoId": 3,
+      "qtdItens": 0
+    },
+    {
+      "produtoId": 28,
       "qtdItens": 1
     }
   ]
@@ -521,7 +525,7 @@ Accept: application/json
 //------------ ACERTO: CANCELAMENTO ------------
 
 //Esperado: 200 - "Pedido cancelado com sucesso!" (Produto volta para o estoque e registra CANCELAR_PEDIDO no log)
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/6
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/2
 Accept: application/json
 
 ###

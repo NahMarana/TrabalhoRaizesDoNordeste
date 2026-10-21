@@ -15,6 +15,15 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .FirstOrDefault(p => p.Id == id);
         }
 
+        public ICollection<ItensPedido>? BuscaItensPorIdPedido(int pedidoId)
+        {
+            return _context.ItensPedido
+                .Include(i => i.Pedidos).ThenInclude(i => i!.Usuarios)
+                .Include(i => i.Produtos)
+                .Where(i => i.PedidoId == pedidoId)
+                .ToList();
+        }
+
         public ICollection<ItensPedido>? ListarItensPedidos()
         {
             return _context.ItensPedido
@@ -22,6 +31,7 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .Include(i => i.Produtos)
                 .ToList();
         }
+
         public Produto? BuscaProdutoPorId(int produtoId)
         {
             return _context.Produtos.Find(produtoId);

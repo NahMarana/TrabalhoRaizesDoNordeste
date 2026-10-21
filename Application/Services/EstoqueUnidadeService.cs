@@ -134,6 +134,33 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return estoque.PossuiEstoqueSuficiente(qtdEstoque);
         }
 
+        public object VerificaQtdEmEstoqueAposPedido(int estabelecimentoId, int produtoId, int qtd)
+        {
+            var estoque = BuscarEstoque(estabelecimentoId, produtoId);
+
+            if (estoque == null)
+                throw new KeyNotFoundException("Não existe estoque deste produto nesta unidade.");
+
+            int EstqAnterior = estoque.QtdEstoqueDisponivel;
+
+            var ultimoMov = repository.BuscaUltimaMovimentacao(estoque.Id);
+
+            if (ultimoMov != null && ultimoMov.TipoMovimento == TipoMovimento.SAIDA)
+                EstqAnterior = estoque.QtdEstoqueDisponivel + ultimoMov.QtdEmEstoque;
+
+            if (ultimoMov != null && ultimoMov.TipoMovimento == TipoMovimento.ENTRADA)
+                EstqAnterior = estoque.QtdEstoqueDisponivel - ultimoMov.QtdEmEstoque;
+
+            return new
+            {
+                EstabelecimentoId = estabelecimentoId,
+                ProdutoId = produtoId,
+                QtdEmEstoqueAnterior = EstqAnterior,
+                QtdEmEstoqueAtual = estoque.QtdEstoqueDisponivel,
+                PossuiEstoque = estoque.PossuiEstoqueSuficiente(qtd)
+            };
+        }
+
         //Saída de quantidade do estoque
         public void DarBaixaNoEstoque(int estabelecimentoId, int produtoId, int qtdEstoque, int pedidoId, int usuarioId)
         {

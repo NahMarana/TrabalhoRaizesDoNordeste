@@ -1,21 +1,38 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/itensPedido/
-Content-Type: application/json
+//------------ ACERTOS: ITENS DO PEDIDO 1 ------------
+
+//Esperado: 200 - 2 Listar itens por pedido Id
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/ItensPedido/pedido/5
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/itensPedido/
-Content-Type: application/json
+//Esperado: 200 - lista com todos os itens
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/ItensPedido/
 Accept: application/json
-{
-  "PedidoId": 2,
-  "ProdutoId": 5,
-  "QtdItens": 3,
-  "PrecoUnitario": 14.95,
-  "PrecoTotal": 44.85
-}
+
+###
+
+//------------ ALTERAÇÃO DE QUANTIDADE: ANTES E DEPOIS ------------
+
+//Esperado: 200 - Pedito TESTE sem alteração de quantidade
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/ItensPedido/pedido/2
+Accept: application/json
+
+###
+
+//------------ ERROS ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/ItensPedido/pedido/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Nenhum item encontrado para este pedido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/ItensPedido/pedido/9999
+Accept: application/json
 
 ###
 
@@ -29,7 +46,3 @@ Accept: application/json
   "PrecoUnitario": 14.95,
   "PrecoTotal": 44.85
 }
-
-###
-
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/itensPedido/2

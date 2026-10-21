@@ -18,21 +18,20 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             _service = service;
         }
 
-        [HttpGet("{id:int}")]
-        public IActionResult BuscarItemPedidoPorId(int id)
+        [HttpGet("pedido/{pedidoId:int}")]
+        public IActionResult BuscarItensPorIdPedido(int pedidoId)
         {
             try
             {
-                var item = _service.BuscaPorId(id);
-
-                if (item == null)
-                    return NotFound("Item do Produto não encontrado.");
-
-                return Ok(item);
+                return Ok(_service.BuscaItensPorIdPedido(pedidoId));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
         }
 
@@ -51,20 +50,6 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult CriarItensPedido(ItensPedido itens)
-        {
-            try
-            {
-                var ItemPedidoCriado = _service.CriarItemPedido(itens);
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPatch("{id}")]
         public IActionResult ItemPedidoUpdate(int id, ItensPedido item)
         {
@@ -73,7 +58,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var itemAtualizado = _service.AtualizarItemPedido(id, item);
 
                 if (itemAtualizado == null)
-                    return NotFound("Item não encontrado.");
+                    return Ok("Item removido do pedido.");
 
                 return Ok("Os itens desse pedido foram atualizados!");
             }

@@ -8,23 +8,21 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 {
     public class ItensPedidoService(ItensPedidoRepository repository, EstoqueUnidadeService estoqueUnidadeService)
     {
-        public ItensDoPedidoDTO BuscaPorId(int id)
+        public ICollection<ItensDoPedidoDTO> BuscaItensPorIdPedido(int pedidoId)
         {
-            if (id <= 0)
+            if (pedidoId <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
 
-            var item = repository.BuscaItensPedidoPorId(id);
+            var itens = repository.BuscaItensPorIdPedido(pedidoId) ?? new List<ItensPedido>();
 
-            if (item == null)
+            if (itens.Count == 0)
             {
-                return null;
+                throw new KeyNotFoundException("Nenhum item encontrado para este pedido.");
             }
 
-            var itemPedidoDTO = CriarObjeto(item);
-
-            return itemPedidoDTO;
+            return CriarObjetoCollection(itens);
         }
 
         public ICollection<ItensDoPedidoDTO> ListarItensPedidos()
@@ -52,6 +50,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (item.PedidoId <= 0)
             {
                 throw new ArgumentException("Id do pedido é obrigatória.");
+            }
+
+            if (pedido == null)
+            {
+                throw new KeyNotFoundException("Pedido não encontrado.");
             }
 
             pedido.ValidarEditarPedido();
@@ -153,9 +156,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 estoqueUnidadeService.ReporNoEstoque(pedido.EstabelecimentoId, itemEncontrado.ProdutoId, -diferenca, pedido.Id, pedido.UsuarioId);
             }
 
-            var itemAtualizado = repository.AtualizarItemPedido(id, item);
+            repository.AtualizarItemPedido(id, item);
 
-            return CriarObjeto(itemAtualizado!);
+            return CriarObjeto(repository.BuscaItensPedidoPorId(id)!);
         }
 
         public void DevolverItensAoEstoque(int pedidoId)
@@ -167,7 +170,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 return;
             }
 
-            foreach (var item in pedido.ItensPedidos)
+            var itens = repository.BuscaItensPorIdPedido(pedidoId);
+
+            foreach (var item in itens)
             {
                 estoqueUnidadeService.ReporNoEstoque(pedido.EstabelecimentoId, item.ProdutoId, item.QtdItens, pedido.Id, pedido.UsuarioId);
             }

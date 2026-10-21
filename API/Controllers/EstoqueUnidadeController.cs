@@ -56,15 +56,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var possuiEstoque = _service.VerificaSePossuiEstoque(estabelecimentoId, produtoId, quantidade);
-
-                return Ok(new
-                {
-                    estabelecimentoId,
-                    produtoId,
-                    quantidade,
-                    possuiEstoque
-                });
+                return Ok(_service.VerificaQtdEmEstoqueAposPedido(estabelecimentoId, produtoId, quantidade));
             }
             catch (ArgumentException ex)
             {
