@@ -41,8 +41,30 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("ID do pedido é inválido.");
             }
 
-            var movimentacoes = repository.ListarMovimentacoesPorPedido(pedidoId) ?? new List<EstoqueMovimentacao>();
+            var movimentacoes = repository.ListarMovimentacoesPorPedido(pedidoId);
+
+            if (movimentacoes == null || !movimentacoes.Any())
+            {
+                throw new KeyNotFoundException("Nenhuma movimentação encontrada para este pedido.");
+            }
+
             return CriarObjetoCollection(movimentacoes);
+        }
+
+        public ICollection<MovimentacaoDTO> ListarMovimentacoesEntrada()
+        {
+            var movimentacao = repository.ListarMovimentacoesEntrada();
+            var movimentacaoDTO = CriarObjetoCollection(movimentacao);
+
+            return movimentacaoDTO;
+        }
+
+        public ICollection<MovimentacaoDTO> ListarMovimentacoesSaida()
+        {
+            var movimentacao = repository.ListarMovimentacoesSaida();
+            var movimentacaoDTO = CriarObjetoCollection(movimentacao);
+
+            return movimentacaoDTO;
         }
 
         public void RegistrarMovimentacao(int estoqueId, int pedidoId, int usuarioId, TipoMovimento tipo, int quantidade, string motivo)

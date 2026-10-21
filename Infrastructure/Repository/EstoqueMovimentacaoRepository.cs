@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
@@ -26,6 +27,22 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .Include(em => em.EstoqueUnidade)
                 .Where(em => em.PedidoId == pedidoId)
                 .OrderBy(em => em.DataMovimentacao)
+                .ToList();
+        }
+
+        public ICollection<EstoqueMovimentacao>? ListarMovimentacoesEntrada()
+        {
+            return _context.EstoquesMovimentacao
+                .Include(em => em.EstoqueUnidade)
+                .Where(em => em.TipoMovimento == TipoMovimento.ENTRADA)
+                .ToList();
+        }
+
+        public ICollection<EstoqueMovimentacao>? ListarMovimentacoesSaida()
+        {
+            return _context.EstoquesMovimentacao
+                .Include(em => em.EstoqueUnidade)
+                .Where(em => em.TipoMovimento == TipoMovimento.SAIDA)
                 .ToList();
         }
 

@@ -26,7 +26,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 var movimentacao = _service.BuscaPorId(id);
 
                 if (movimentacao == null)
-                    return NoContent();
+                    return NotFound("Movimentação não encontrada.");
 
                 return Ok(movimentacao);
             }
@@ -57,6 +57,36 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             try
             {
                 return Ok(_service.ListarMovimentacoesPorPedido(pedidoId));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
+        [HttpGet("entrada")]
+        public IActionResult ListarMovimentacoesEntrada()
+        {
+            try
+            {
+                return Ok(_service.ListarMovimentacoesEntrada());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("saida")]
+        public IActionResult ListarMovimentacoesSaida()
+        {
+            try
+            {
+                return Ok(_service.ListarMovimentacoesSaida());
             }
             catch (Exception ex)
             {

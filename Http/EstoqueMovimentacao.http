@@ -1,37 +1,60 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/
-Content-Type: application/json
+//------------ ACERTOS: GET ------------
+
+//Esperado: 200 - Listar todas as entradas e saídas de estoque de todos os pedidos
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/
-Content-Type: application/json
+//Esperado: 200 - Buscar movimentação pelo Id do produto
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/3
 Accept: application/json
-{
-  "EstoqueId": 1,
-  "PedidoId": 2,
-  "UsuarioUsadoId": 3,
-  "QtdEmEstoque": 12,
-  "TipoMovimento": 0,
-  "MotivoMovimentacao": "Entrada de produto - café"
-}
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/1
-Content-Type: application/json
+//Esperado: 200 - Buscar movimentações pelo Id do pedido
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/pedido/5
 Accept: application/json
-{
-  "estoqueId": 1,
-  "pedidoId": 2,
-  "usuarioUsadoId": 3,
-  "qtdEmEstoque": 1,
-  "tipoMovimento": 1,
-  "motivoMovimentacao": "Saída por venda - pedido 2"
-}
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/estoqueMovimentacao/2
+
+//Esperado: 200 - Listar as ENTRADAS (devoluções ao estoque)
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/entrada
+Accept: application/json
+
+###
+
+//Esperado: 200 - Listar as SAÍDAS (baixas de estoque)
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/saida
+Accept: application/json
+
+###
+
+//------------ ERROS ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Movimentação não encontrada."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/9999
+Accept: application/json
+
+###
+
+//Esperado: 400 - "ID do pedido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/pedido/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Nenhuma movimentação encontrada para este pedido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueMovimentacao/pedido/9999
+Accept: application/json
+
+###
