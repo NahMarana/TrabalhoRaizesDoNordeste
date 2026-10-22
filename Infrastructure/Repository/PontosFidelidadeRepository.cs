@@ -23,16 +23,6 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .ToList();
         }
 
-        public Fidelidade? BuscaFidelidadePorId(int fidelizacaoId)
-        {
-            return _context.Fidelidades.Find(fidelizacaoId);
-        }
-
-        public Pedido? BuscaPedidoPorId(int pedidoId)
-        {
-            return _context.Pedidos.Find(pedidoId);
-        }
-
         public PontosFidelidade? CriarPontosFidelidade(PontosFidelidade pontos)
         {
             _context.PontosFidelidade.Add(pontos);
@@ -64,13 +54,6 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
 
             _context.Fidelidades.Update(fidelidade);
             _context.SaveChanges();
-        }
-
-        public bool PossuiPontuacao(int pedidoId)
-        {
-            return _context.PontosFidelidade.Any(p =>
-                p.PedidoId == pedidoId &&
-                p.TipoMovimentacaoPontos == TipoMovimentoPontos.ACUMULO);
         }
     }
 }

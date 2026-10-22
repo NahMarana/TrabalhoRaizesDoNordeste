@@ -92,7 +92,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 PontosFidelidade = fidelidade.PontosFidelidade.Select(pf => new PontosFidDTO
                 {
                     Id = pf.Id,
-                    TipoMovimentacaoPontos = pf.TipoMovimentacaoPontos,
+                    TipoMovimentacaoPontos = pf.TipoMovimentacaoPontos.ToString(),
                     Pontos = pf.Pontos,
 
                 }).ToList(),
@@ -121,7 +121,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                     PontosFidelidade = item.PontosFidelidade.Select(pf => new PontosFidDTO
                     {
                         Id = pf.Id,
-                        TipoMovimentacaoPontos = pf.TipoMovimentacaoPontos,
+                        TipoMovimentacaoPontos = pf.TipoMovimentacaoPontos.ToString(),
                         Pontos = pf.Pontos,
 
                     }).ToList(),

@@ -1,4 +1,5 @@
-﻿using TrabalhoRaizesDoNordeste.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.Application.DTOs
@@ -12,6 +13,8 @@ namespace TrabalhoRaizesDoNordeste.Application.DTOs
         public required CanalPedido CanalPedido { get; set; }
         public required ModoReceber ModoReceber { get; set; }
         public required StatusPedido StatusPedido { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public decimal? ValorComDescontoDosPontos { get; set; }
         public UsuarioPedidoDTO? Usuarios { get; set; }
         public ICollection<ItensPedidoDTO>? ItensPedidos { get; set; }
         public PgPedidoDTO? Pagamentos { get; set; }

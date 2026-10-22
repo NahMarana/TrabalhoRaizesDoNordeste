@@ -36,23 +36,10 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         public Pagamento? CriarPagamento(Pagamento pagamento)
         {
             pagamento.IdTransacaoExterna = Guid.NewGuid().ToString("N");
-            pagamento.StatusPagamento = StatusPagamento.ACEITO;
             _context.Pagamentos.Add(pagamento);
             _context.SaveChanges();
 
             return pagamento;
-        }
-
-        public Pagamento? AtualizarPagamento(int id, Pagamento pagamento)
-        {
-            var pagamentoEncontrado = _context.Pagamentos.Find(id);
-
-            pagamentoEncontrado.TipoPagamento = pagamento.TipoPagamento;
-
-            _context.Pagamentos.Update(pagamentoEncontrado);
-            _context.SaveChanges();
-
-            return pagamentoEncontrado;
         }
     }
 }

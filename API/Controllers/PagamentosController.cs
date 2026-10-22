@@ -41,9 +41,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var pagamento = _service.ListarPagamentos();
-
-                return Ok(pagamento);
+                return Ok(_service.ListarPagamentos());
             }
             catch (Exception ex)
             {
@@ -52,27 +50,26 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarPagamento(Pagamento pagamento, bool usarPontos = false)
+        public IActionResult CriarPagamento(Pagamento pagamento, bool usarPontos = false, bool simularRecusa = false)
         {
             try
             {
-                var pagamentoCriado = _service.CriarPagamento(pagamento, usarPontos);
-                return Created();
+                var payload = _service.CriarPagamento(pagamento, usarPontos, simularRecusa);
+
+                return Ok(payload);
             }
-            catch(Exception ex)
+            catch(ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        [HttpPatch("{id}")]
-        public IActionResult PagamentoUpdate(int id, Pagamento pagamento)
-        {
-            var pagamentos = _service.AtualizarPagamento(id, pagamento);
-            if (pagamentos == null)
-                return NoContent();
-
-            return Ok("Pagamento atualizado!");
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
     }
 }

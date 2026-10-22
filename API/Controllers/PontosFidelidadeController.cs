@@ -41,42 +41,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         {
             try
             {
-                var pontos = _service.ListarPontosFidelidade();
-
-                return Ok(pontos);
+                return Ok(_service.ListarPontosFidelidade());
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        [HttpPost]
-        public IActionResult CriarPontosPorFidelidade(PontosFidelidade pontos)
-        {
-            try
-            {
-                var pontosCriados = _service.CriarPontos(pontos);
-
-                return Created();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-        }
-
-        [HttpPatch("{id}")]
-        public IActionResult PontosUpdate(int id, PontosFidelidade ponto)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult DeletarPontos(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

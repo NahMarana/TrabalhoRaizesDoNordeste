@@ -11,7 +11,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
     {
         public PontosDTO? BuscaPorId(int id)
         {
-            if (id < 0)
+            if (id <= 0)
             {
                 throw new ArgumentException("ID fornecido é inválido.");
             }
@@ -36,23 +36,6 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return pontosDTO;
         }
 
-        public PontosFidelidade CriarPontos(PontosFidelidade pontos)
-        {
-            if (pontos == null)
-            {
-                throw new ArgumentNullException("Pontos por Fidelidade inexistente.");
-            }
-
-            if (pontos.FidelizacaoId == null || pontos.FidelizacaoId < 0)
-            {
-                throw new ArgumentNullException("ID da Fidelização inexistente.");
-            }
-            
-            var pontosCriados = repository.CriarPontosFidelidade(pontos);
-
-            return pontosCriados;
-        }
-
         public void RegistrarPontuacao(PontosFidelidade pontos)
         {
             if (pontos.Pontos < 0)
@@ -65,7 +48,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 throw new ArgumentException("Tipo de movimentação inválido.");
             }
 
-            repository.RegistarPontuacao(pontos);
+            repository.CriarPontosFidelidade(pontos);
         }
 
         public PontosDTO CriarObjeto(PontosFidelidade pontos)
@@ -74,7 +57,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             {
                 Id = pontos.Id,
                 FidelizacaoId = pontos.FidelizacaoId,
-                TipoMovimentacaoPontos = pontos.TipoMovimentacaoPontos,
+                TipoMovimentacaoPontos = pontos.TipoMovimentacaoPontos.ToString(),
                 Pontos = pontos.Pontos,
                 DataPontos = pontos.DataPontos,
                 Pedidos = pontos.Pedidos == null
@@ -94,38 +77,10 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in pontos)
             {
-                var pontosDTO = new PontosDTO
-                {
-                    Id = item.Id,
-                    FidelizacaoId = item.FidelizacaoId,
-                    TipoMovimentacaoPontos = item.TipoMovimentacaoPontos,
-                    Pontos = item.Pontos,
-                    DataPontos = item.DataPontos,
-                    Pedidos = item.Pedidos == null
-                ? null : new PontosDoPedidoDTO
-                    {
-                        Id = item.Pedidos.Id,
-                        UsuarioId = item.Pedidos.UsuarioId,
-                        ValorTotalPedido = item.Pedidos.ValorTotalPedido,
-                    }
-                };
-
-                auxiliaPontosFidelidade.Add(pontosDTO);
+                auxiliaPontosFidelidade.Add(CriarObjeto(item));
             }
 
             return auxiliaPontosFidelidade;
         }
-
-        //public void ConsumirSaldo(PontosFidelidade fidelidade)
-        //{
-        //    if (fidelidade.TipoMovimentacaoPontos == TipoMovimentoPontos.ACUMULO) 
-        //    {
-
-        //        //metodo para acumular pontos
-        //        return;
-        //    }
-
-        //    //meotodo para resgatar pontos
-        //}
     }
 }

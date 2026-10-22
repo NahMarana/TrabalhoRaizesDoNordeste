@@ -1,4 +1,6 @@
-﻿namespace TrabalhoRaizesDoNordeste.Application.DTOs
+﻿using System.Text.Json.Serialization;
+
+namespace TrabalhoRaizesDoNordeste.Application.DTOs
 {
     public class RetornoDoPedidoDTO
     {
@@ -10,6 +12,8 @@
         public string StatusPedido { get; set; } = "";
         public List<ItensPedidoDTO> Itens { get; set; } = new();
         public decimal ValorTotalPedido { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public decimal? ValorComDescontoDosPontos { get; set; }
         public PgPedidoDTO? Pagamento { get; set; }
     }
 }

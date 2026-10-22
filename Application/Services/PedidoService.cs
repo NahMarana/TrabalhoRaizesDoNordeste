@@ -302,6 +302,16 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return pedidoCancelado;
         }
 
+        private decimal? ValorComDescontoDePontos(Pedido pedido)
+        {
+            var pontos = pedido.Usuarios?.Fidelidade?.QtdPontos ?? 0;
+
+            if (pedido.StatusPedido != StatusPedido.PENDENTE || pontos <= 0)
+                return null;
+
+            return pedido.ValorTotalPedido - Math.Min(Math.Floor(pontos), Math.Floor(pedido.ValorTotalPedido));
+        }
+
         public RetornoDoPedidoDTO CriarRetornoCliente(Pedido pedido)
         {
             var itens = new List<ItensPedidoDTO>();
@@ -329,12 +339,16 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 StatusPedido = pedido.StatusPedido.ToString(),
                 Itens = itens,
                 ValorTotalPedido = pedido.ValorTotalPedido,
+                ValorComDescontoDosPontos = ValorComDescontoDePontos(pedido),
                 Pagamento = pedido.Pagamentos == null
                     ? null : new PgPedidoDTO
                     {
                         Id = pedido.Pagamentos.Id,
                         ValorPagamento = pedido.Pagamentos.ValorPagamento,
-                        TipoPagamento = pedido.Pagamentos.TipoPagamento,
+                        TipoPagamento = pedido.Pagamentos.TipoPagamento.ToString(),
+                        StatusPagamento = pedido.Pagamentos.StatusPagamento.ToString(),
+                        IdTransacaoExterna = pedido.Pagamentos.IdTransacaoExterna,
+                        RespostaPayload = pedido.Pagamentos.RespostaPayload,
                         DataPagamento = pedido.Pagamentos.DataPagamento,
                     }
             };
@@ -348,6 +362,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 DataHoraPedido = pedido.DataHoraPedido,
                 Descricao = pedido.Descricao,
                 ValorTotalPedido = pedido.ValorTotalPedido,
+                ValorComDescontoDosPontos = ValorComDescontoDePontos(pedido),
                 CanalPedido = pedido.CanalPedido,
                 ModoReceber = pedido.ModoReceber,
                 StatusPedido = pedido.StatusPedido,
@@ -380,7 +395,10 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
                 {
                     Id = pedido.Pagamentos.Id,
                     ValorPagamento = pedido.Pagamentos.ValorPagamento,
-                    TipoPagamento = pedido.Pagamentos.TipoPagamento,
+                    TipoPagamento = pedido.Pagamentos.TipoPagamento.ToString(),
+                    StatusPagamento = pedido.Pagamentos.StatusPagamento.ToString(),
+                    IdTransacaoExterna = pedido.Pagamentos.IdTransacaoExterna,
+                    RespostaPayload = pedido.Pagamentos.RespostaPayload,
                     DataPagamento = pedido.Pagamentos.DataPagamento,
                 }
             };

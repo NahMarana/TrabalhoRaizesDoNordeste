@@ -413,7 +413,7 @@ Accept: application/json
   "estabelecimentoId": 4,
   "canalPedido": 3,
   "modoReceber": 1,
-  "statusPedido": 0,
+  "statusPedido": 2,
   "valorTotalPedido": 0,
   "descricao": "Pedido TESTE - vou buscar no balcão",
   "itensPedidos": [
@@ -427,6 +427,13 @@ Accept: application/json
     }
   ]
 }
+
+###
+
+//Esperado: 200 - Pedido 5: a cozinha terminou o preparo (EMPREPARO -> ENTREGUE)
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/5/statusPedido?statusPedido=3
+Content-Type: application/json
+Accept: application/json
 
 ###
 

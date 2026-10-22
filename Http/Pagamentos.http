@@ -1,40 +1,218 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/
-Content-Type: application/json
+//------------ FLUXO 1: ANTES DO PAGAMENTO ------------
+
+//Esperado: 200 - Pedido 5, Usuário Cliente 10 (Neusa) - Visualizar quantidade de pontos em Fidelidade = 0
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Fidelidade/3/saldo
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/
+//------------ ERROS: CRIAR PAGAMENTO (antes de pagar, não alteram nada) ------------
+
+//Esperado: 400 - "Pedido é obrigatório."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
 Content-Type: application/json
 Accept: application/json
+
 {
-  "PedidoId": 2,
-  "TipoPagamento": 0,
-  "StatusPagamento": 2,
-  "ValorPagamento": 93.40,
-  "DataConfirmaPg": "2026-10-03T18:41:30",
-  "IdTransacaoExterna": "CREDITO-E12345678202610031740ABC124",
-  "RespostaPayload": "{\"id\":\"CREDITO-E12345678202610031740ABC124\",\"status\":\"approved\",\"valor\":93.40,\"metodo\":\"credito\",\"data_aprovacao\":\"2026-10-03T18:41:30\"}"
+  "pedidoId": 0,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
 }
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/1
+//Esperado: 400 - "Modo de escolha de pagamento inválido."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
 Content-Type: application/json
 Accept: application/json
+
 {
-  "pedidoId": 2,
-  "tipoPagamento": 3,
-  "statusPagamento": 1,
-  "valorPagamento": 107.7,
-  "dataPagamento": "2026-10-03T20:46:51.3973936",
-  "dataConfirmaPg": "2026-10-03T17:41:30",
-  "idTransacaoExterna": "PIX-E12345678202610031740ABC123",
-  "respostaPayload": "{\"id\":\"PIX-E12345678202610031740ABC123\",\"status\":\"approved\",\"valor\":107.70,\"metodo\":\"pix\",\"data_aprovacao\":\"2026-10-03T17:41:30\"}"
+  "pedidoId": 5,
+  "tipoPagamento": 99,
+  "statusPagamento": 0,
+  "valorPagamento": 0
 }
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/pagamentos/2
+//Esperado: 404 - "Pedido não encontrado."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 9999,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//Esperado: 409 - "Só é possível pagar seu pedido se o status estiver PENDENTE."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 14,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//Esperado: 409 - "O cliente não possui pontos para resgatar." (o Pedido 5 continua PENDENTE)
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos?usarPontos=true
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 5,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//------------ FLUXO 1: ACERTO - PAGAR O PEDIDO / ACUMULA PONTOS ------------
+
+//Pagar o Pedido 5
+//"idTransacaoExterna" preenchido, "mensagem": "Pagamento realizado com sucesso." e "pontosAcumulados": 4
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 5,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//------------ FLUXO 2: ACERTO - PAGAR O PEDIDO / RESGATA PONTOS ------------
+
+//Pagar o Pedido 16
+//"idTransacaoExterna" preenchido, "mensagem": "Pagamento realizado com sucesso.", "pontosResgatados": 4 e "pontosAcumulados": 0
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos?usarPontos=true
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 16,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//------------ FLUXO 3: ACERTO - PAGAMENTO RECUSADO ------------
+
+//Pagar o Pedido 15
+//"idTransacaoExterna" preenchido, "mensagem": "Pagamento recusado. O pedido foi cancelado.", sem pontos
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos?simularRecusa=true
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 15,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//------------ FLUXOS: DEPOIS DO PAGAMENTO (conferências) ------------
+
+// (visão interna)
+//Esperado: 200 - "statusPedido": 1 (EMPREPARO), status ACEITO, ID da transação e resposta payload
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/5
+Accept: application/json
+
+###
+
+// (visão da cliente)
+//Esperado: 200 - "statusPedido": 1 (EMPREPARO), status ACEITO, ID da transação e resposta payload
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/cliente/10
+Accept: application/json
+
+###
+
+//Esperado: 200 - Listar pagamentos com status ACEITO, ID da transação e "respostaPayload"
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
+Accept: application/json
+
+###
+
+//Esperado: 200 - Busca Pedido por ID de pagamento
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos/1
+Accept: application/json
+
+###
+
+
+//------------ ERROS: DEPOIS DO PAGAMENTO ------------
+
+//Esperado: 409 - "Este pedido já possui um pagamento."
+POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
+Content-Type: application/json
+Accept: application/json
+
+{
+  "pedidoId": 5,
+  "tipoPagamento": 0,
+  "statusPagamento": 0,
+  "valorPagamento": 0
+}
+
+###
+
+//Esperado: 409 - "A alteração do pedido só é possível enquanto constar status do Pedido for PENDENTE"
+PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/5
+Content-Type: application/json
+Accept: application/json
+
+{
+  "usuarioId": 10,
+  "estabelecimentoId": 4,
+  "canalPedido": 0,
+  "modoReceber": 0,
+  "statusPedido": 0,
+  "valorTotalPedido": 0,
+  "descricao": "Pedido 1 - tentando alterar depois de pago",
+  "itensPedidos": [
+    {
+      "produtoId": 4,
+      "qtdItens": 2
+    }
+  ]
+}
+
+###
+
+//Esperado: 409 - "A alteração do pedido só é possível enquanto constar status do Pedido for PENDENTE"
+DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pedidos/5
+Accept: application/json
+
+###
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos/0
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Pagamento não encontrado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos/9999
+Accept: application/json
+
+###
