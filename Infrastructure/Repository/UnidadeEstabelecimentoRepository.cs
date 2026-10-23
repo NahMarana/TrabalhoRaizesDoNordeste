@@ -105,18 +105,5 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
 
             return unidade;
         }
-
-        public bool Deletar(int id)
-        {
-            var unidade = _context.UnidadesEstabelecimento.Find(id);
-
-            if (unidade == null)
-                return false;
-
-            _context.UnidadesEstabelecimento.Remove(unidade);
-            var response = _context.SaveChanges();
-
-            return response > 0;
-        }
     }
 }

@@ -158,17 +158,6 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             }).ToList();
         }
 
-        public bool Deletar(int id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("ID fornecido é inválido.");
-            }
-
-            var unidadeDeletada = repository.Deletar(id);
-            return unidadeDeletada;
-        }
-
         public UnidadeDTO CriarObjeto(UnidadesEstabelecimento unidade)
         {
             var unidadeDTO = new UnidadeDTO

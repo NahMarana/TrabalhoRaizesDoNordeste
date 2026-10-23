@@ -136,24 +136,5 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
-        {
-            try
-            {
-                var unidadeDeletada = _service.Deletar(id);
-
-                if (!unidadeDeletada)
-                    return NotFound("Categoria ID não encontrada");
-
-                return Ok("Unidade deletada com sucesso!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
     }
 }
