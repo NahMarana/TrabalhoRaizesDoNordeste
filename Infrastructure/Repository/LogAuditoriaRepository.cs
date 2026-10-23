@@ -17,6 +17,7 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
         {
             return _context.LogsAuditoria
                 .Include(l => l.Usuarios)
+                .OrderByDescending(l => l.DataOrigem)
                 .ToList();
         }
 

@@ -1,37 +1,57 @@
 @TrabalhoRaizesDoNordeste_HostAddress = http://localhost:5044
 
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/
-Content-Type: application/json
+//------------ ACERTOS: GET ------------
+
+//Esperado: 200 - Listar todas as auditorias
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria?usuarioId=7
 Accept: application/json
 
 ###
 
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/
-Content-Type: application/json
+//Esperado: 200 - Buscar log por ID
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria/36?usuarioId=7
 Accept: application/json
-{
-  "UsuarioId": 3,
-  "Acao": "UPDATE",
-  "EntidadeAfetada": "EstoqueMovimentacao",
-  "EntidadeAfetadaId": 1,
-  "DadosAnteriores": "{\"TelefoneUnidade\":\"(11) 1234-5678\",\"TipoUnidade\":0}",
-  "DadosNovos": "{\"TelefoneUnidade\":\"(11) 3322-4455\",\"TipoUnidade\":1}"
-}
 
 ###
 
-PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/1
-Content-Type: application/json
+
+//------------ ERROS: VALIDAR ACESSO ------------
+
+//Esperado: 403 - "Somente Gerente e Administrador podem acessar as auditorias."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria?usuarioId=10
 Accept: application/json
-{
-  "usuarioId": 3,
-  "acao": "UPDATE",
-  "entidadeAfetada": "Produtos",
-  "entidadeAfetadaId": 1,
-  "dadosNovos": "{\"TelefoneUnidade\":\"(11) 3322-4455\",\"TipoUnidade\":1}",
-  "dadosAnteriores": "{\"TelefoneUnidade\":\"(11) 1234-5678\",\"TipoUnidade\":0}"
-}
 
 ###
 
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/logAuditoria/2
+//Esperado: 409 - "Usuário tem que estar ativo."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria?usuarioId=15
+Accept: application/json
+
+###
+
+//Esperado: 400 - "Usuário é obrigatório."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Usuário não encontrado."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria?usuarioId=9999
+Accept: application/json
+
+###
+
+
+//------------ ERROS: BUSCA POR ID ------------
+
+//Esperado: 400 - "ID fornecido é inválido."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria/0?usuarioId=7
+Accept: application/json
+
+###
+
+//Esperado: 404 - "Auditoria não encontrada."
+GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/LogAuditoria/9999?usuarioId=7
+Accept: application/json
+
+###

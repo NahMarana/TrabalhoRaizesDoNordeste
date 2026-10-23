@@ -57,16 +57,21 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         private void ValidarAcesso(int usuarioId)
         {
-            var usuario = repository.BuscaUsuarioPorId(usuarioId);
-
-            if (!usuario.UsuarioAtivo == true)
+            if (usuarioId <= 0)
             {
-                throw new KeyNotFoundException("Usuário tem que estar ativo.");
+                throw new ArgumentException("Usuário é obrigatório.");
             }
+
+            var usuario = repository.BuscaUsuarioPorId(usuarioId);
 
             if (usuario == null)
             {
                 throw new KeyNotFoundException("Usuário não encontrado.");
+            }
+
+            if (!usuario.UsuarioAtivo)
+            {
+                throw new KeyNotFoundException("Usuário tem que estar ativo.");
             }
 
             if (usuario.Perfil != TipoPerfil.GERENTE && usuario.Perfil != TipoPerfil.ADMIN)
@@ -104,26 +109,9 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in auditoria)
             {
-                var logAuditoriaDTO = new LogAuditoriaDTO
-                {
-                    Id = item.Id,
-                    Acao = item.Acao,
-                    EntidadeAfetada = item.EntidadeAfetada,
-                    EntidadeAfetadaId = item.EntidadeAfetadaId,
-                    DadosNovos = item.DadosNovos,
-                    DadosAnteriores = item.DadosAnteriores,
-                    DataOrigem = item.DataOrigem,
-                    Usuarios = item.Usuarios == null
-                    ? null : new UsuarioDTO
-                    {
-                        Id = item.Usuarios.Id,
-                        Nome = item.Usuarios.Nome,
-                        Perfil = item.Usuarios.Perfil,
-                        UsuarioAtivo = item.Usuarios.UsuarioAtivo,
-                    }
-                };
-                auxiliaLogAuditoria.Add(logAuditoriaDTO);
+                auxiliaLogAuditoria.Add(CriarObjeto(item));
             }
+
             return auxiliaLogAuditoria;
         }
     }
