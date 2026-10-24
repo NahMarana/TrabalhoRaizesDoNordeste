@@ -201,44 +201,10 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
         public ICollection<UnidadeDTO> CriarObjetoCollection(ICollection<UnidadesEstabelecimento> unidade)
         {
             var auxiliaUnidade = new List<UnidadeDTO>();
+
             foreach (var item in unidade)
             {
-                var unidadeDTO = new UnidadeDTO
-                {
-                    Id = item.Id,
-                    NomeEstabelecimento = item.NomeEstabelecimento,
-                    CNPJ = item.CNPJ,
-                    UnidadeAtiva = item.UnidadeAtiva,
-                    TipoUnidade = item.TipoUnidade,
-                    Rua = item.Rua,
-                    Numero = item.Numero,
-                    Bairro = item.Bairro,
-                    Cidade = item.Cidade,
-                    Estado = item.Estado,
-                    CEP = item.CEP,
-                    TelefoneUnidade = item.TelefoneUnidade,
-                    EstoqueUnidades = item.EstoqueUnidades.Select(eu => new EstoqueUnidadeDTO
-                    {
-                        Id = eu.Id,
-                        QtdEstoqueDisponivel = eu.QtdEstoqueDisponivel,
-                        ProdutoId = eu.ProdutoId,
-                        NomeCategoria = eu.Produtos.Categoria?.NomeCategoria ?? "",
-                        NomeProduto = eu.Produtos!.NomeProduto,
-                        DescricaoProduto = eu.Produtos.DescricaoProduto,
-                        PrecoUnitario = eu.Produtos.PrecoUnitario,
-                        ProdutoSazonal = eu.Produtos.ProdutoSazonal,
-
-                    }).ToList(),
-                    Usuarios = item.Usuarios.Select(u => new UsuarioDTO
-                    {
-                        Id = u.Id,
-                        Nome = u.Nome,
-                        Perfil = u.Perfil,
-                        UsuarioAtivo = u.UsuarioAtivo,
-                    }
-                    ).ToList()
-                };
-                auxiliaUnidade.Add(unidadeDTO);
+                auxiliaUnidade.Add(CriarObjeto(item));
             }
 
             return auxiliaUnidade;

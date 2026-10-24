@@ -199,32 +199,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in promo)
             {
-                var promoCampanhaDTO = new PromoCampanhaDTO
-                {
-                    Id = item.Id,
-                    Descricao = item.Descricao,
-                    ValorPromocional = item.ValorPromocional,
-                    StatusPromoCampanha = item.StatusPromoCampanha,
-                    DataInicio = item.DataInicio,
-                    DataFim = item.DataFim,
-                    Produtos = item.Produtos == null
-                    ? null : new ProdutoDTO
-                    {
-                        Id = item.Produtos.Id,
-                        NomeProduto = item.Produtos.NomeProduto,
-                    },
-                    UnidadesEstabelecimento = item.UnidadesEstabelecimento == null
-                    ? null : new EstabelecimentoDTO
-                    {
-                        Id = item.UnidadesEstabelecimento.Id,
-                        NomeEstabelecimento = item.UnidadesEstabelecimento.NomeEstabelecimento,
-                        CNPJ = item.UnidadesEstabelecimento.CNPJ,
-                        Cidade = item.UnidadesEstabelecimento.Cidade,
-                        Estado = item.UnidadesEstabelecimento.Estado,
-                    },
-                };
-
-                auxiliaPromo.Add(promoCampanhaDTO);
+                auxiliaPromo.Add(CriarObjeto(item));
             }
 
             return auxiliaPromo;

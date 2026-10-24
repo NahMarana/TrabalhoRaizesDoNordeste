@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
@@ -20,6 +23,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("buscar")]
         public IActionResult BuscarUsuarioPorNome([FromQuery] string? nome)
         {
@@ -39,6 +44,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
         public IActionResult BuscarUsuarioPorId(int id)
         {
@@ -57,6 +64,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet]
         public IActionResult ListarUsuarios()
         {
@@ -72,6 +81,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("funcionarios/inativos")]
         public IActionResult ListarFuncionariosInativos()
         {
@@ -85,15 +96,21 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-
         [HttpPost]
         public IActionResult CriarUsuario(Usuario usuario)
         {
             try
             {
+                if (usuario.Perfil != TipoPerfil.CLIENTE
+                    && !User.IsInRole(nameof(TipoPerfil.GERENTE))
+                    && !User.IsInRole(nameof(TipoPerfil.ADMIN)))
+                {
+                    return StatusCode(403, "Somente Gerente e Administrador podem cadastrar funcionários.");
+                }
+
                 var UsuarioCriado = _service.CriarUsuario(usuario);
 
-                return Created();
+                return Ok(_service.CriarObjeto(UsuarioCriado)); ;
             }
             catch (Exception ex)
             {
@@ -101,14 +118,26 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpPatch("{id}")]
         public IActionResult UsuarioUpdate(int id, Usuario usuario)
         {
             try
             {
+                if (User.IsInRole(nameof(TipoPerfil.CLIENTE)))
+                {
+                    var idDoToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (!int.TryParse(idDoToken, out var idLogado) || idLogado != id)
+                        return StatusCode(403, "Você só pode alterar o seu próprio cadastro.");
+
+                    usuario.Perfil = TipoPerfil.CLIENTE;
+                }
+
                 var usuarios = _service.AtualizarUsuario(id, usuario);
 
-                if (usuario == null)
+                if (usuarios == null)
                     return NotFound("Usuário não encontrado(a).");
 
                 return Ok("Usuário(a) Atualizado(a)!");
@@ -119,6 +148,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}/desativar")]
         public IActionResult DesativarUsuario(int id)
         {

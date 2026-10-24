@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
@@ -19,6 +21,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
         public IActionResult BuscarPromocoesECampanhasPorId(int id)
         {
@@ -37,6 +41,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet]
         public IActionResult ListarPromocoesECampanhasAtivas()
         {
@@ -52,6 +58,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("promocoesCampanhas/inativos")]
         public IActionResult ListarPromocoesCampanhasInativas()
         {
@@ -65,6 +73,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPost]
         public IActionResult CriarPromocoesECampanhas(PromocoesCampanhas promo)
         {
@@ -82,6 +91,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}")]
         public IActionResult PromoUpdate(int id, PromocoesCampanhas promos)
         {
@@ -100,6 +110,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}/desativar")]
         public IActionResult DesativarPromo(int id)
         {

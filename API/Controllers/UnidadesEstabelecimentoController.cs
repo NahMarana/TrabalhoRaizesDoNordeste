@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
@@ -18,7 +20,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             _service = service;
         }
 
-
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet("buscar")]
         public IActionResult BuscarEstabelecimentoPorNome([FromQuery] string? nome)
         {
@@ -38,7 +40,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet("{id:int}")]
         public IActionResult BuscarUnidadePorId(int id)
         {
@@ -57,6 +59,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet]
         public IActionResult ListarUnidades()
         {
@@ -86,6 +89,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPost]
         public IActionResult CriarUnidade(UnidadesEstabelecimento unidade)
         {
@@ -101,6 +105,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}")]
         public IActionResult UnidadeUpdate(int id, UnidadesEstabelecimento unidades)
         {
@@ -119,6 +124,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}/desativar")]
         public IActionResult DesativarUnidade(int id)
         {
