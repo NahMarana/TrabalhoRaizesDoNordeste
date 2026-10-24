@@ -46,6 +46,13 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
                 .ToList();
         }
 
+        public Usuario? BuscarEmailSenha(string email, string senha)
+        {
+            return _context.Usuarios
+                .Where(u => u.Email == email && u.SenhaHash == senha)
+                .FirstOrDefault();
+        }
+
         public Usuario CriarUsuario(Usuario usuario)
         {
             _context.Usuarios.Add(usuario);
@@ -94,6 +101,27 @@ namespace TrabalhoRaizesDoNordeste.Infrastructure.Repository
             _context.SaveChanges();
 
             return usuarioEncontrado;
+        }
+
+        public Usuario? AtualizarEmailSenha(int id, string email, string senha)
+        {
+            var usuarioEncontrado = _context.Usuarios.Find(id);
+
+            if (usuarioEncontrado == null)
+                return null;
+
+            usuarioEncontrado.Email = email;
+            usuarioEncontrado.SenhaHash = senha;
+
+            _context.Usuarios.Update(usuarioEncontrado);
+            _context.SaveChanges();
+
+            return usuarioEncontrado;
+        }
+
+        public bool EmailJaPossuiCadastro(string email, int usuarioProprioId)
+        {
+            return _context.Usuarios.Any(u => u.Email == email && u.Id != usuarioProprioId);
         }
 
         public Usuario? DesativarUsuario(int id)

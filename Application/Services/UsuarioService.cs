@@ -140,6 +140,47 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return usuarioCriado;
         }
 
+        public Usuario BuscaEmailSenha(string email, string senha)
+        {
+            return repository.BuscarEmailSenha(email, senha);
+        }
+
+        public Usuario? AtualizaEmailSenha(int id, string email, string senha)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("ID fornecido é inválido.");
+            }
+
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha))
+            {
+                throw new ArgumentException("Email e senha são obrigatórios.");
+            }
+
+            if (repository.EmailJaPossuiCadastro(email, id))
+            {
+                throw new InvalidOperationException("Este email já está cadastrado para outro usuário.");
+            }
+
+            var usuario = repository.AtualizarEmailSenha(id, email, senha);
+
+            if (usuario == null)
+            {
+                return null;
+            }
+
+            auditoriaService.RegistrarLog(
+                id,
+                "ATUALIZAR_CREDENCIAIS",
+                "Usuario",
+                id,
+                "",
+                $"Email atualizado para {email}; senha alterada"
+            );
+
+            return usuario;
+        }
+
         private  bool BuscarPerfilGerente(int estabelecimentoid, int usuarioProprioId = 0)
         {
             return repository.BuscarPerfilGerente(estabelecimentoid, usuarioProprioId);
@@ -332,55 +373,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in usuarios)
             {
-                FidelidadeDTO? fidelidadeDTO = null;
-
-                if (item.Perfil == TipoPerfil.CLIENTE && item.ParticipaFidelidade)
-                {
-                    if (item.Fidelidade != null)
-                    {
-                        fidelidadeDTO = new FidelidadeDTO
-                        {
-                            Id = item.Fidelidade.Id,
-                            QtdPontos = item.Fidelidade.QtdPontos
-                        };
-                    }
-                }
-
-                var usuarioServiceDTO = new UsuarioServiceDTO
-                {
-                    Id = item.Id,
-                    Nome = item.Nome,
-                    Email = item.Email,
-                    CPF = item.CPF,
-                    Telefone = item.Telefone,
-                    Perfil = item.Perfil,
-                    Rua = item.Rua,
-                    Numero = item.Numero,
-                    Complemento = item.Complemento,
-                    Bairro = item.Bairro,
-                    Cidade = item.Cidade,
-                    Estado = item.Estado,
-                    CEP = item.CEP,
-                    ConsentimentoLGPD = item.ConsentimentoLGPD,
-                    ParticipaFidelidade = item.ParticipaFidelidade,
-                    DataCadastro = item.DataCadastro,
-                    UsuarioAtivo = item.UsuarioAtivo,
-
-                    UnidadesEstabelecimento = item.UnidadesEstabelecimento == null
-                        ? null
-                        : new EstabelecimentoDTO
-                        {
-                            Id = item.UnidadesEstabelecimento.Id,
-                            NomeEstabelecimento = item.UnidadesEstabelecimento.NomeEstabelecimento,
-                            CNPJ = item.UnidadesEstabelecimento.CNPJ,
-                            Estado = item.UnidadesEstabelecimento.Estado,
-                            Cidade = item.UnidadesEstabelecimento.Cidade
-                        },
-
-                    Fidelidade = fidelidadeDTO
-                };
-
-                auxiliaUsuario.Add(usuarioServiceDTO);
+                auxiliaUsuario.Add(CriarObjeto(item));
             }
 
             return auxiliaUsuario;

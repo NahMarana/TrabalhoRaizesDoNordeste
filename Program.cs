@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
-using TrabalhoRaizesDoNordeste.Domain.Models;
 using TrabalhoRaizesDoNordeste.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,8 +53,48 @@ builder.Services.AddScoped<LogAuditoriaRepository, LogAuditoriaRepository>();
 builder.Services.AddScoped<PromocoesCampanhasService, PromocoesCampanhasService>();
 builder.Services.AddScoped<PromocoesCampanhasRepository, PromocoesCampanhasRepository>();
 
+builder.Services.AddScoped<TokenService, TokenService>();
+builder.Services.AddScoped<AuthService, AuthService>();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "Cole apenas o token JWT, sem o prefixo Bearer."
+    });
+
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
+});
+
+var secret = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Chave JWT não configurada.");
+var keyBytes = Convert.FromBase64String(secret);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new()
+    {
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero,
+
+        ValidAlgorithms = [SecurityAlgorithms.HmacSha256]
+    };
+});
+
 
 var app = builder.Build();
 
@@ -66,6 +108,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
