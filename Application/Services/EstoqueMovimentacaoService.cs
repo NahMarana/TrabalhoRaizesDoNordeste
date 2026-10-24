@@ -119,27 +119,10 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
         public ICollection<MovimentacaoDTO> CriarObjetoCollection(ICollection<EstoqueMovimentacao> movimentacao)
         {
             var auxiliaMovimentacao = new List<MovimentacaoDTO>();
+
             foreach (var item in movimentacao)
             {
-                var movimentacaoDTO = new MovimentacaoDTO
-                {
-                    Id = item.Id,
-                    UsuarioUsadoId = item.UsuarioUsadoId,
-                    PedidoId = item.PedidoId,
-                    QtdEmEstoque = item.QtdEmEstoque,
-                    TipoMovimento = item.TipoMovimento,
-                    MotivoMovimentacao = item.MotivoMovimentacao,
-                    DataMovimentacao = item.DataMovimentacao,
-                    EstoqueUnidade = item.EstoqueUnidade == null
-                    ? null : new MovEstoqueDTO
-                    {
-                        Id = item.EstoqueUnidade.Id,
-                        ProdutoId = item.EstoqueUnidade.ProdutoId,
-                        EstabelecimentoId = item.EstoqueUnidade.EstabelecimentoId,
-                        QtdEstoqueDisponivel = item.EstoqueUnidade.QtdEstoqueDisponivel,
-                    }
-                };
-                auxiliaMovimentacao.Add(movimentacaoDTO);
+                auxiliaMovimentacao.Add(CriarObjeto(item));
             }
 
             return auxiliaMovimentacao;

@@ -12,7 +12,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
     [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
         $"{nameof(TipoPerfil.ATENDENTE)}")]
-    
+
     public class CategoriasController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -75,6 +75,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPost]
         public IActionResult CriarCategoria(Categoria categoria)
         {
@@ -90,6 +91,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
            }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}")]
         public IActionResult CategoriaUpdate(int id, Categoria categoria)
         {
@@ -108,6 +110,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
            }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpDelete("{id}")]
         public ActionResult DeleteCategoria(int id)
         {

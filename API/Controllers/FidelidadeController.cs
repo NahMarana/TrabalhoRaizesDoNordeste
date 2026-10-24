@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
@@ -19,6 +22,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet("{id:int}")]
         public IActionResult BuscarFidelizacaoPorId(int id)
         {
@@ -38,6 +42,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet]
         public IActionResult ListarFidelidades()
         {
@@ -53,17 +58,25 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-        [HttpGet("{id:int}/saldo")]
-        public IActionResult ConsultarSaldo(int id)
+        [Authorize(Roles = $"{nameof(TipoPerfil.CLIENTE)}")]
+        [HttpGet("meu-saldo")]
+        public IActionResult ConsultarSaldo()
         {
             try
             {
-                var saldo = _service.ConsultarSaldo(id);
+                var idDoToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (saldo == null)
-                    return NotFound("Fidelidade não encontrada.");
+                if (!int.TryParse(idDoToken, out var usuarioId))
+                    return Unauthorized("Sua sessão expirou. Faça login novamente.");
 
-                return Ok(new { fidelidadeId = id, saldoPontos = saldo });
+                var fidelidadeId = _service.BuscaFidelidadePorUsuario(usuarioId);
+
+                if (fidelidadeId <= 0)
+                    return NotFound("Você não participa do programa de fidelidade.");
+
+                var saldo = _service.ConsultarSaldo(fidelidadeId);
+
+                return Ok(new { fidelidadeId, saldoPontos = saldo });
             }
             catch (ArgumentException ex)
             {

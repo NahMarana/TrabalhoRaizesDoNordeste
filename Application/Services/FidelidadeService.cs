@@ -63,7 +63,14 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         public int BuscaFidelidadePorUsuario(int id)
         {
-            return repository.BuscaFidelidadePorUsuario(id).Id;
+            var fidelidade = repository.BuscaFidelidadePorUsuario(id);
+
+            if (fidelidade == null)
+            {
+                return 0;
+            }
+
+            return fidelidade.Id;
         }
 
         public decimal? ConsultarSaldo(int id)
@@ -114,28 +121,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in fidelidade)
             {
-                var fidDTO = new FidDTO
-                {
-                    Id = item.Id,
-                    QtdPontos = item.QtdPontos,
-                    PontosFidelidade = item.PontosFidelidade.Select(pf => new PontosFidDTO
-                    {
-                        Id = pf.Id,
-                        TipoMovimentacaoPontos = pf.TipoMovimentacaoPontos.ToString(),
-                        Pontos = pf.Pontos,
-
-                    }).ToList(),
-                    Usuarios = item.Usuarios == null
-                        ? null : new UsuarioFidelidadeDTO
-                    {
-                        Id = item.Usuarios.Id,
-                        Nome = item.Usuarios.Nome,
-                        Perfil = item.Usuarios.Perfil,
-                        ParticipaFidelidade = item.Usuarios.ParticipaFidelidade,
-                    }
-                };
-
-                auxiliaFidelidade.Add(fidDTO);
+                auxiliaFidelidade.Add(CriarObjeto(item));
             }
 
             return auxiliaFidelidade;
