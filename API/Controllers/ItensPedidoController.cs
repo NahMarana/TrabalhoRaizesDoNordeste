@@ -1,12 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
+        $"{nameof(TipoPerfil.ATENDENTE)}")]
+
     public class ItensPedidoController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -47,28 +53,6 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPatch("{id}")]
-        public IActionResult ItemPedidoUpdate(int id, ItensPedido item)
-        {
-            try
-            {
-                var itemAtualizado = _service.AtualizarItemPedido(id, item);
-
-                if (itemAtualizado == null)
-                    return Ok("Item removido do pedido.");
-
-                return Ok("Os itens desse pedido foram atualizados!");
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(ex.Message);
             }
         }
     }

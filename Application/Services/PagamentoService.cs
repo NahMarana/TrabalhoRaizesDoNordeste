@@ -35,7 +35,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         }
 
-        public PagamentoPayloadDTO CriarPagamento(Pagamento pagamento, bool usarPontos, bool simularRecusa)
+        public PagamentoPayloadDTO CriarPagamento(Pagamento pagamento, bool usarPontos, bool simularRecusa, int? clienteId = null)
         {
             if (pagamento == null)
             {
@@ -57,6 +57,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (pedido == null)
             {
                 throw new KeyNotFoundException("Pedido não encontrado.");
+            }
+
+            if (clienteId != null && pedido.UsuarioId != clienteId)
+            {
+                throw new UnauthorizedAccessException("Este pedido não pertence a você.");
             }
 
             if (pedido.Pagamentos != null)
@@ -182,7 +187,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             return new PagamentoPayloadDTO
             {
                 IdTransacaoExterna = pagamento.IdTransacaoExterna,
-                CanalDoPedido = pagamento.Pedidos.CanalPedido,
+                CanalDoPedido = pedido.CanalPedido,
                 TipoPagamento = pagamento.TipoPagamento,
                 ValorPagamento = pagamento.ValorPagamento,
                 StatusPagamento = pagamento.StatusPagamento,
@@ -227,9 +232,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in pagamentos)
             {
-                var pagamentoDTO = CriarObjeto(item);
-
-                auxiliaPagamento.Add(pagamentoDTO);
+                auxiliaPagamento.Add(CriarObjeto(item));
             }
 
             return auxiliaPagamento;

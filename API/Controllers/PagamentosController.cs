@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class PagamentosController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -18,6 +21,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
         public IActionResult BuscarPagamentoPorId(int id)
         {
@@ -36,6 +40,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet]
         public IActionResult ListarPagamentos()
         {
@@ -49,6 +54,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.CLIENTE)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpPost]
         public IActionResult CriarPagamento(Pagamento pagamento, bool usarPontos = false, bool simularRecusa = false)
         {

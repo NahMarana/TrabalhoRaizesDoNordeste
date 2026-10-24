@@ -208,27 +208,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
             foreach (var item in itens)
             {
-                var itemPedidoDTO = new ItensDoPedidoDTO
-                {
-                    Id = item.Id,
-                    QtdItens = item.QtdItens,
-                    PrecoUnitario = item.PrecoUnitario,
-                    PrecoTotal = item.PrecoTotal,
-                    Pedidos = item.Pedidos == null
-                    ? null : new PedidoItemDTO
-                    {
-                        Id = item.Pedidos.Id,
-                        UsuarioId = item.Pedidos.UsuarioId,
-                    },
-                    Produtos = item.Produtos == null
-                    ? null : new ProdutoItemDTO
-                    {
-                        Id = item.Produtos.Id,
-                        NomeProduto = item.Produtos.NomeProduto,
-                    },
-                };
-
-                auxiliaItensPedido.Add(itemPedidoDTO);
+                auxiliaItensPedido.Add(CriarObjeto(item));
             }
 
             return auxiliaItensPedido;
