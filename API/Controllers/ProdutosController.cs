@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
+using TrabalhoRaizesDoNordeste.Domain.Enums;
 using TrabalhoRaizesDoNordeste.Domain.Models;
 
 namespace TrabalhoRaizesDoNordeste.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
+
     public class ProdutosController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
@@ -70,6 +75,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPost]
         public IActionResult CriarProduto(Produto produtos)
         {
@@ -90,6 +96,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}")]
         public IActionResult ProdutoUpdate(int id, Produto produto)
         {
@@ -108,6 +115,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpDelete("{id}")]
         public IActionResult DeleteProduto(int id)
         {

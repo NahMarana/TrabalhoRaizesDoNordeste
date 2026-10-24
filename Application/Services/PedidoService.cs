@@ -162,7 +162,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         }
 
-        public Pedido? AtualizarPedido(int id, Pedido pedido)
+        public Pedido? AtualizarPedido(int id, Pedido pedido, int? clienteId = null)
         {
             if (id <= 0)
             {
@@ -179,6 +179,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (pedidoEncontrado == null)
             {
                 return null;
+            }
+
+            if (clienteId != null && pedidoEncontrado.UsuarioId != clienteId)
+            {
+                throw new UnauthorizedAccessException("Este pedido não pertence a você.");
             }
 
             pedidoEncontrado.ValidarEditarPedido();
@@ -264,7 +269,7 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
 
         }
 
-        public Pedido CancelarPedido(int id)
+        public Pedido CancelarPedido(int id, int? clienteId = null)
         {
             if (id <= 0)
             {
@@ -276,6 +281,11 @@ namespace TrabalhoRaizesDoNordeste.Application.Services
             if (pedido == null)
             {
                 return null;
+            }
+
+            if (clienteId != null && pedido.UsuarioId != clienteId)
+            {
+                throw new UnauthorizedAccessException("Este pedido não pertence a você.");
             }
 
             if (pedido.StatusPedido == StatusPedido.CANCELADO)

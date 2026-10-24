@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -19,6 +21,9 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
+        $"{nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
         public IActionResult BuscarPedidoPorId(int id)
         {
@@ -37,6 +42,9 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
+        $"{nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("ativos")]
         public IActionResult ListarPedidos()
         {
@@ -52,6 +60,9 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
+        $"{nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("cancelados")]
         public IActionResult ListarPedidosCancelados()
         {
@@ -67,6 +78,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("canal")]
         public IActionResult ListarPedidosPorCanal(int canalPedido)
         {
@@ -80,11 +93,21 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpGet("cliente/{usuarioId:int}")]
         public IActionResult BuscarPedidosDoCliente(int usuarioId)
         {
             try
             {
+                if (User.IsInRole(nameof(TipoPerfil.CLIENTE)))
+                {
+                    var idDoToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (!int.TryParse(idDoToken, out var idLogado) || idLogado != usuarioId)
+                        return StatusCode(403, "Você só pode consultar os seus próprios pedidos.");
+                }
+
                 return Ok(_service.BuscarPedidosDoCliente(usuarioId));
             }
             catch (ArgumentException ex)
@@ -97,12 +120,23 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
-
+        [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
+        $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpPost]
         public IActionResult CriarPedido(Pedido pedido)
         {
             try
             {
+                if (User.IsInRole(nameof(TipoPerfil.CLIENTE)))
+                {
+                    var idDoToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (!int.TryParse(idDoToken, out var usuarioId))
+                        return Unauthorized("Sua sessão expirou. Faça login novamente.");
+
+                    pedido.UsuarioId = usuarioId;
+                }
+
                 var pedidoCriado = _service.CriarPedido(pedido);
 
                 return Ok(_service.CriarRetornoCliente(pedidoCriado));
@@ -121,24 +155,50 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpPatch("{id}")]
         public IActionResult PedidoUpdate(int id, Pedido pedido)
         {
             try
             {
-                var pedidoAtualizado = _service.AtualizarPedido(id, pedido);
+                int? clienteId = null;
+
+                if (User.IsInRole(nameof(TipoPerfil.CLIENTE)))
+                {
+                    var idDoToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (!int.TryParse(idDoToken, out var usuarioId))
+                        return Unauthorized("Sua sessão expirou. Faça login novamente.");
+
+                    clienteId = usuarioId;
+                }
+
+                var pedidoAtualizado = _service.AtualizarPedido(id, pedido, clienteId);
 
                 if (pedidoAtualizado == null)
                     return NotFound("Pedido não encontrado.");
 
                 return Ok(_service.CriarRetornoCliente(pedidoAtualizado));
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.COZINHA)}")]
         [HttpPatch("{id:int}/statusPedido")]
         public IActionResult AtualizarStatusPedido(int id, int statusPedido)
         {
@@ -161,12 +221,25 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             }
         }
 
+        [Authorize(Roles = $"{nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpDelete("{id}")]
         public IActionResult CancelarPedido(int id)
         {
             try
             {
-                var pedido = _service.CancelarPedido(id);
+                int? clienteId = null;
+
+                if (User.IsInRole(nameof(TipoPerfil.CLIENTE)))
+                {
+                    var idDoToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (!int.TryParse(idDoToken, out var usuarioId))
+                        return Unauthorized("Sua sessão expirou. Faça login novamente.");
+
+                    clienteId = usuarioId;
+                }
+
+                var pedido = _service.CancelarPedido(id, clienteId);
 
                 if (pedido == null)
                     return NotFound("Pedido não encontrado.");
@@ -177,9 +250,17 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
             }
         }
     }
