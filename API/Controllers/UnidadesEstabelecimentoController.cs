@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -22,6 +23,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet("buscar")]
+        [ProducesResponseType(typeof(ICollection<UnidadeDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarEstabelecimentoPorNome([FromQuery] string? nome)
         {
             try
@@ -42,6 +48,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(UnidadeDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarUnidadePorId(int id)
         {
             try
@@ -61,6 +72,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<UnidadeDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarUnidades()
         {
             try
@@ -76,6 +91,8 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("{id:int}/cardapio")]
+        [ProducesResponseType(typeof(ICollection<CardapioDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult ConsultarCardapio(int id)
         {
             try
@@ -91,6 +108,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPost]
+        [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult CriarUnidade(UnidadesEstabelecimento unidade)
         {
             try
@@ -107,6 +128,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult UnidadeUpdate(int id, UnidadesEstabelecimento unidades)
         {
             try
@@ -126,6 +152,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}/desativar")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult DesativarUnidade(int id)
         {
             try

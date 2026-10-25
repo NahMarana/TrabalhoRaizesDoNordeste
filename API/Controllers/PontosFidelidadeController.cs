@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -24,6 +25,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(PontosDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarPontosPorId(int id)
         {
             try
@@ -42,6 +48,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<PontosDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarPontosPorFidelidade()
         {
             try

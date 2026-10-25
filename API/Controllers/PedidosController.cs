@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -25,6 +26,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
         $"{nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(PedidoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarPedidoPorId(int id)
         {
             try
@@ -46,6 +52,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
         $"{nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("ativos")]
+        [ProducesResponseType(typeof(ICollection<PedidoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarPedidos()
         {
             try
@@ -64,6 +74,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.COZINHA)}, " +
         $"{nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("cancelados")]
+        [ProducesResponseType(typeof(ICollection<PedidoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarPedidosCancelados()
         {
             try
@@ -81,6 +95,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("canal")]
+        [ProducesResponseType(typeof(ICollection<PedidoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarPedidosPorCanal(int canalPedido)
         {
             try
@@ -96,6 +114,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpGet("cliente/{usuarioId:int}")]
+        [ProducesResponseType(typeof(ICollection<RetornoDoPedidoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarPedidosDoCliente(int usuarioId)
         {
             try
@@ -123,6 +146,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpPost]
+        [ProducesResponseType(typeof(RetornoDoPedidoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public IActionResult CriarPedido(Pedido pedido)
         {
             try
@@ -157,6 +186,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(RetornoDoPedidoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public IActionResult PedidoUpdate(int id, Pedido pedido)
         {
             try
@@ -200,6 +235,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.COZINHA)}")]
         [HttpPatch("{id:int}/statusPedido")]
+        [ProducesResponseType(typeof(PedidoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public IActionResult AtualizarStatusPedido(int id, int statusPedido)
         {
             try
@@ -223,6 +264,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.ATENDENTE)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public IActionResult CancelarPedido(int id)
         {
             try
