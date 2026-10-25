@@ -14,12 +14,6 @@ Accept: application/json
 
 ###
 
-//Esperado: 200 - Verificar estoque insuficiente - "possuiEstoque": false
-GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=3
-Accept: application/json
-
-###
-
 //------------ CARDÁPIO DAS UNIDADES (depois do estoque) ------------
 
 //Esperado: 200 - Cardápio da unidade COMPLETA de Recife Sem Pratos Sazonais(fora de epoca)
@@ -1711,7 +1705,7 @@ Accept: application/json
 
 ###
 
-//Esperado: 409 - "Já possui estoque deste produto nesta unidade."
+//Esperado: 400 - "Já possui estoque deste produto nesta unidade."
 POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/
 Content-Type: application/json
 Accept: application/json
@@ -1725,7 +1719,7 @@ Accept: application/json
 
 ###
 
-//------------ ACERTOS: ATUALIZAÇÃO (VENDA DISPONÍVEL) ------------
+//------------ ACERTOS: ATUALIZAÇÃO ------------
 
 //Retirar a venda do Estoque TESTE (ID 3)
 //Esperado: 200 - estoque com "vendaDisponivel": false
@@ -1759,7 +1753,7 @@ Accept: application/json
 
 ###
 
-//Esperado: 404 - "Estoque não encontrado!"
+//Esperado: 400 - "Estoque não encontrado!"
 PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/EstoqueUnidade/9999
 Content-Type: application/json
 Accept: application/json

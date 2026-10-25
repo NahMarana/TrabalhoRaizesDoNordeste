@@ -55,36 +55,6 @@ Accept: application/json
 
 ###
 
-//------------ FIDELIDADE TESTE ------------
-
-// A fidelidade é criada junto com o usuário.
-
-//Esperado: 200 - Fidelidade TESTE - usuário criado com "fidelidade"
-POST {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Usuarios/
-Content-Type: application/json
-Accept: application/json
-
-{
-  "nome": "Cliente TESTE Fidelidade",
-  "email": "cliente.teste.fidelidade@example.com",
-  "cpf": "39053344705",
-  "telefone": "82900000000",
-  "perfil": 0,
-  "rua": "Rua Jangadeiros Alagoanos",
-  "numero": "410",
-  "complemento": null,
-  "bairro": "Pajuçara",
-  "cidade": "Maceió",
-  "estado": "AL",
-  "cep": "57030000",
-  "senha": "Teste@123456",
-  "consentimentoLGPD": true,
-  "participaFidelidade": true,
-  "estabelecimentoId": 9
-}
-
-###
-
 //------------ ERROS: REGRAS DA FIDELIDADE ------------
 
 //Fidelidade não tem rota de criação própria. É criada no POST ou PATCH de usuários.

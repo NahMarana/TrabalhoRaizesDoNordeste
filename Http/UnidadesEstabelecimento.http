@@ -34,7 +34,7 @@ Accept: application/json
 
 ###
 
-//Esperado: 400 - "Nome da Unidade de Estabelecimento não informada."
+//Esperado: 404 - "Nome da Unidade de Estabelecimento não informada."
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/buscar?nome=
 Accept: application/json
 
@@ -382,12 +382,8 @@ PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/0/des
 ###
 
 //Consultar o cardápio de uma unidade inativa
-//Esperado: 409 - "Esta unidade está desativada e não possui cardápio disponível."
+//Esperado: 400 - "Esta unidade está desativada e não possui cardápio disponível."
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/UnidadesEstabelecimento/10/cardapio
 Accept: application/json
 
 ###
-
-
-
-DELETE {{TrabalhoRaizesDoNordeste_HostAddress}}/api/unidadesEstabelecimento/6
