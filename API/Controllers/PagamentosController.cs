@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -23,6 +24,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(PagamentoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarPagamentoPorId(int id)
         {
             try
@@ -42,6 +48,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<PagamentoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarPagamentos()
         {
             try
@@ -56,6 +66,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.CLIENTE)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpPost]
+        [ProducesResponseType(typeof(PagamentoPayloadDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public IActionResult CriarPagamento(Pagamento pagamento, bool usarPontos = false, bool simularRecusa = false)
         {
             try

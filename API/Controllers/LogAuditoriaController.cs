@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -23,6 +24,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(LogAuditoriaDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarAuditoriaPorId(int id)
         {
             try
@@ -47,6 +53,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<LogAuditoriaDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarAuditorias()
         {
             try

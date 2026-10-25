@@ -24,6 +24,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(FidDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarFidelizacaoPorId(int id)
         {
             try
@@ -44,6 +49,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<FidDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarFidelidades()
         {
             try
@@ -60,6 +69,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.CLIENTE)}")]
         [HttpGet("meu-saldo")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult ConsultarSaldo()
         {
             try
