@@ -21,6 +21,8 @@ public class AuthController : ControllerBase
 
     [Route("login")]
     [HttpPost]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
     public IActionResult Login(string email, string senha)
     {
         try
@@ -37,6 +39,10 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpPatch("atualizar-acesso")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     public IActionResult AtualizarEmailSenha(string email, string senha)
     {
         try

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TrabalhoRaizesDoNordeste.Application.DTOs;
 using TrabalhoRaizesDoNordeste.Application.Services;
 using TrabalhoRaizesDoNordeste.Context;
 using TrabalhoRaizesDoNordeste.Domain.Enums;
@@ -22,6 +23,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(MovimentacaoDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarMovimentacaoDoEstoquePorId(int id)
         {
             try
@@ -40,6 +46,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<MovimentacaoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarMovimentacoesDoEstoque()
         {
             try
@@ -55,6 +65,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("pedido/{pedidoId:int}")]
+        [ProducesResponseType(typeof(ICollection<MovimentacaoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult ListarMovimentacoesPorPedido(int pedidoId)
         {
             try
@@ -72,6 +87,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("entrada")]
+        [ProducesResponseType(typeof(ICollection<MovimentacaoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarMovimentacoesEntrada()
         {
             try
@@ -85,6 +104,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpGet("saida")]
+        [ProducesResponseType(typeof(ICollection<MovimentacaoDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarMovimentacoesSaida()
         {
             try
