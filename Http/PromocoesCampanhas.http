@@ -318,7 +318,7 @@ Accept: application/json
 
 //------------ ERROS: DESATIVAÇÃO ------------
 
-//Esperado: 409 - "Esta promoção já está inativa."
+//Esperado: 400 - "Esta promoção já está inativa."
 PATCH {{TrabalhoRaizesDoNordeste_HostAddress}}/api/PromocoesCampanhas/2/desativar
 Accept: application/json
 

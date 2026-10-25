@@ -26,6 +26,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("buscar")]
+        [ProducesResponseType(typeof(List<UsuarioServiceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarUsuarioPorNome([FromQuery] string? nome)
         {
             //nome = String.Concat(char.ToUpper(nome[0]), nome.Substring(1));
@@ -47,6 +52,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("{id:int}")]
+        [ProducesResponseType(typeof(UsuarioServiceDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult BuscarUsuarioPorId(int id)
         {
             try
@@ -67,6 +77,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet]
+        [ProducesResponseType(typeof(ICollection<UsuarioServiceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarUsuarios()
         {
             try
@@ -84,6 +98,10 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.ATENDENTE)}")]
         [HttpGet("funcionarios/inativos")]
+        [ProducesResponseType(typeof(ICollection<UsuarioServiceDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public IActionResult ListarFuncionariosInativos()
         {
             try
@@ -97,6 +115,9 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(UsuarioServiceDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
         public IActionResult CriarUsuario(Usuario usuario)
         {
             try
@@ -110,7 +131,7 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
                 var UsuarioCriado = _service.CriarUsuario(usuario);
 
-                return Ok(_service.CriarObjeto(UsuarioCriado)); ;
+                return Ok(_service.CriarObjeto(UsuarioCriado));
             }
             catch (Exception ex)
             {
@@ -121,6 +142,11 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, " +
         $"{nameof(TipoPerfil.ADMIN)}, {nameof(TipoPerfil.CLIENTE)}")]
         [HttpPatch("{id}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult UsuarioUpdate(int id, Usuario usuario)
         {
             try
@@ -150,6 +176,12 @@ namespace TrabalhoRaizesDoNordeste.API.Controllers
 
         [Authorize(Roles = $"{nameof(TipoPerfil.GERENTE)}, {nameof(TipoPerfil.ADMIN)}")]
         [HttpPatch("{id}/desativar")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status409Conflict)]
         public IActionResult DesativarUsuario(int id)
         {
             try

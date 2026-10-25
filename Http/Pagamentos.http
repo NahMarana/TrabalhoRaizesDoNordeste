@@ -147,7 +147,7 @@ Accept: application/json
 
 ###
 
-//Esperado: 200 - Listar pagamentos com status ACEITO, ID da transação e "respostaPayload"
+//Esperado: 200 - Listar pagamentos, ID da transação e "respostaPayload"
 GET {{TrabalhoRaizesDoNordeste_HostAddress}}/api/Pagamentos
 Accept: application/json
 
