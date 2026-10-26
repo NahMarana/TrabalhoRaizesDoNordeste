@@ -1,0 +1,2437 @@
+{
+  "info": {
+    "_postman_id": "2b301fdb-24b8-4077-9252-9b86847e1191",
+    "name": "RaízesDoNordeste",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56041896",
+    "_collection_link": "https://go.postman.co/collection/56041896-2b301fdb-24b8-4077-9252-9b86847e1191?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "GerarToken(Gerente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {\r",
+                  "    pm.collectionVariables.set(\"token\", pm.response.text().replace(/\"/g, \"\"));\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=carlos.albuquerque@example.com&senha=Teste@123456",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "carlos.albuquerque@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Teste@123456"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GerarToken(Cliente Neusa)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {\r",
+                  "    pm.collectionVariables.set(\"token\", pm.response.text().replace(/\"/g, \"\"));\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=neusa.bacci@example.com&senha=Teste@123456",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "neusa.bacci@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Teste@123456"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GerarToken(Atendente)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {\r",
+                  "    pm.collectionVariables.set(\"token\", pm.response.text().replace(/\"/g, \"\"));\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=juliana.barros@example.com&senha=Teste@123456",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "juliana.barros@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Teste@123456"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GerarToken(Cozinha)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {\r",
+                  "    pm.collectionVariables.set(\"token\", pm.response.text().replace(/\"/g, \"\"));\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=severino.lima@example.com&senha=Teste@123456",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "severino.lima@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Teste@123456"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GerarToken(Cliente Marcos)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {\r",
+                  "    pm.collectionVariables.set(\"token\", pm.response.text().replace(/\"/g, \"\"));\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=marcos.vieira@example.com&senha=Marcos@2026",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "marcos.vieira@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Marcos@2026"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GerarToken(Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {\r",
+                  "    pm.collectionVariables.set(\"token\", pm.response.text().replace(/\"/g, \"\"));\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=fernanda.cavalcanti@example.com&senha=Teste@123456",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "fernanda.cavalcanti@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Teste@123456"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GerarToken(Invalido)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "jwt",
+              "jwt": [
+                {
+                  "key": "algorithm",
+                  "value": "HS256",
+                  "type": "string"
+                },
+                {
+                  "key": "isSecretBase64Encoded",
+                  "value": false,
+                  "type": "boolean"
+                },
+                {
+                  "key": "payload",
+                  "value": "{}",
+                  "type": "string"
+                },
+                {
+                  "key": "addTokenTo",
+                  "value": "header",
+                  "type": "string"
+                },
+                {
+                  "key": "headerPrefix",
+                  "value": "Bearer",
+                  "type": "string"
+                },
+                {
+                  "key": "queryParamKey",
+                  "value": "token",
+                  "type": "string"
+                },
+                {
+                  "key": "header",
+                  "value": "{}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=neusa.bacci@example.com&senha=Teste@123458",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "neusa.bacci@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Teste@123458"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AtualizarEmailSenha",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  " pm.environment.set(\"token\", pm.response.text().replace(/\"/g, \"\"));"
+                ],
+                "packages": {},
+                "requests": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{json_web_token_14i2}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Auth/login?email=marcos.vieira@example.com&senha=Marcos@2026",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Auth",
+                "login"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "marcos.vieira@example.com"
+                },
+                {
+                  "key": "senha",
+                  "value": "Marcos@2026"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categoria",
+      "item": [
+        {
+          "name": "ListarCategorias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Categorias/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Categorias",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscaCategoriaPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Categorias/6",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Categorias",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPorNome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Categorias/?buscar=Doces",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Categorias",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "buscar",
+                  "value": "Doces"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarCategoria",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nomeCategoria\": \"Salgados\",\r\n  \"categoriaAtiva\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Categorias",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Categorias"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CategoriaUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nomeCategoria\": \"Salgados Nordestinos\",\r\n  \"categoriaAtiva\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Categorias/13",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Categorias",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteCategoria",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Categorias/13",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Categorias",
+                "13"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "BuscarProdutosPorNome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Produtos/buscar?nome=queijo",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Produtos",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "queijo"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarProdutosPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Produtos/5",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Produtos",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarProdutos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Produtos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Produtos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarProduto",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nomeProduto\": \"Coxinha de charque\",\r\n  \"descricaoProduto\": \"Coxinha recheada com charque desfiado e queijo coalho.\",\r\n  \"precoUnitario\": 9.90,\r\n  \"produtoSazonal\": false,\r\n  \"dataInicioSazonal\": null,\r\n  \"dataFimSazonal\": null,\r\n  \"produtoAtivo\": true,\r\n  \"categoriaId\": 8\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Produtos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Produtos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ProdutoUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nomeProduto\": \"Coxinha de charque\",\r\n  \"descricaoProduto\": \"Coxinha de charque com queijo coalho e catupiry.\",\r\n  \"precoUnitario\": 10.90,\r\n  \"produtoSazonal\": false,\r\n  \"dataInicioSazonal\": null,\r\n  \"dataFimSazonal\": null,\r\n  \"produtoAtivo\": true,\r\n  \"categoriaId\": 13\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Produtos/63",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Produtos",
+                "63"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteProduto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nomeProduto\": \"Coxinha de charque\",\r\n  \"descricaoProduto\": \"Coxinha de charque com queijo coalho e catupiry.\",\r\n  \"precoUnitario\": 10.90,\r\n  \"produtoSazonal\": false,\r\n  \"dataInicioSazonal\": null,\r\n  \"dataFimSazonal\": null,\r\n  \"produtoAtivo\": true,\r\n  \"categoriaId\": 13\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Produtos/63",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Produtos",
+                "63"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "UnidadesEstabelecimento",
+      "item": [
+        {
+          "name": "BuscarEstabelecimentoPorNome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/buscar?nome=shopping",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "shopping"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarUnidadePorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/4",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarUnidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ConsultarCardapio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/4/cardapio",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                "4",
+                "cardapio"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarUnidade",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"NomeEstabelecimento\": \"Raízes do Nordeste - Unidade João Pessoa Cabo Branco\",\r\n  \"CNPJ\": \"45.218.330/0003-58\",\r\n  \"UnidadeAtiva\": true,\r\n  \"TipoUnidade\": 0,\r\n  \"Rua\": \"Avenida Cabo Branco\",\r\n  \"Numero\": \"2800\",\r\n  \"Bairro\": \"Cabo Branco\",\r\n  \"Cidade\": \"João Pessoa\",\r\n  \"Estado\": \"PB\",\r\n  \"CEP\": \"58045-010\",\r\n  \"TelefoneUnidade\": \"(83) 3247-5520\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UnidadeUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"NomeEstabelecimento\": \"Raízes do Nordeste - Unidade João Pessoa Cabo Branco\",\r\n  \"CNPJ\": \"45.218.330/0003-58\",\r\n  \"UnidadeAtiva\": true,\r\n  \"TipoUnidade\": 0,\r\n  \"Rua\": \"Avenida Cabo Branco\",\r\n  \"Numero\": \"3150\",\r\n  \"Bairro\": \"Cabo Branco\",\r\n  \"Cidade\": \"João Pessoa\",\r\n  \"Estado\": \"PB\",\r\n  \"CEP\": \"58045-011\",\r\n  \"TelefoneUnidade\": \"(83) 3247-6631\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/12",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesativarUnidade",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"NomeEstabelecimento\": \"Raízes do Nordeste - Unidade João Pessoa Cabo Branco\",\r\n  \"CNPJ\": \"45.218.330/0003-58\",\r\n  \"UnidadeAtiva\": true,\r\n  \"TipoUnidade\": 0,\r\n  \"Rua\": \"Avenida Cabo Branco\",\r\n  \"Numero\": \"3150\",\r\n  \"Bairro\": \"Cabo Branco\",\r\n  \"Cidade\": \"João Pessoa\",\r\n  \"Estado\": \"PB\",\r\n  \"CEP\": \"58045-011\",\r\n  \"TelefoneUnidade\": \"(83) 3247-6631\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/UnidadesEstabelecimento/12/desativar",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "UnidadesEstabelecimento",
+                "12",
+                "desativar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "BuscarUsuarioPorNome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/buscar?nome=Neusa",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                "buscar"
+              ],
+              "query": [
+                {
+                  "key": "nome",
+                  "value": "Neusa"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarUsuarioPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/10",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                "10"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarUsuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarFuncionariosInativos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/funcionarios/inativos",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                "funcionarios",
+                "inativos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarUsuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Rafael Menezes\",\r\n  \"email\": \"rafael.menezes@example.com\",\r\n  \"cpf\": \"47382615928\",\r\n  \"telefone\": \"81966665555\",\r\n  \"perfil\": 1,\r\n  \"rua\": \"Rua Padre Carapuceiro\",\r\n  \"numero\": \"730\",\r\n  \"complemento\": \"Apartamento 304\",\r\n  \"bairro\": \"Boa Viagem\",\r\n  \"cidade\": \"Recife\",\r\n  \"estado\": \"PE\",\r\n  \"cep\": \"51020280\",\r\n  \"senha\": \"Teste@123456\",\r\n  \"consentimentoLGPD\": true,\r\n  \"participaFidelidade\": false,\r\n  \"estabelecimentoId\": 4\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UsuarioUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Rafael Menezes\",\r\n  \"email\": \"rafael.menezes@example.com\",\r\n  \"cpf\": \"47382615928\",\r\n  \"telefone\": \"81955554444\",\r\n  \"perfil\": 1,\r\n  \"rua\": \"Rua Padre Carapuceiro\",\r\n  \"numero\": \"815\",\r\n  \"complemento\": \"Apartamento 1102\",\r\n  \"bairro\": \"Boa Viagem\",\r\n  \"cidade\": \"Recife\",\r\n  \"estado\": \"PE\",\r\n  \"cep\": \"51020280\",\r\n  \"senha\": \"Teste@123456\",\r\n  \"consentimentoLGPD\": true,\r\n  \"participaFidelidade\": false,\r\n  \"estabelecimentoId\": 4\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/22",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                "22"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesativarUsuario",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Usuarios/22/desativar",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Usuarios",
+                "22",
+                "desativar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Fidelidade",
+      "item": [
+        {
+          "name": "BuscarFidelidadePorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Fidelidade/3",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Fidelidade",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarFidelidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Fidelidade/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Fidelidade",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ConsultarSaldo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Fidelidade/meu-saldo",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Fidelidade",
+                "meu-saldo"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "EstoqueUnidade",
+      "item": [
+        {
+          "name": "BuscarEstoqueDeUnidadePorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueUnidade/4",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueUnidade",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarEstoqueDeUnidades",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueUnidade/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueUnidade",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "VerificaSePossuiEstoque",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueUnidade/verificar?estabelecimentoId=4&produtoId=28",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueUnidade",
+                "verificar"
+              ],
+              "query": [
+                {
+                  "key": "estabelecimentoId",
+                  "value": "4"
+                },
+                {
+                  "key": "produtoId",
+                  "value": "28"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarEstoqueDeUnidade",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"produtoId\": 28,\r\n  \"estabelecimentoId\": 11,\r\n  \"qtdEstoqueDisponivel\": 50,\r\n  \"vendaDisponivel\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueUnidade/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueUnidade",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "EstoqueDeUnidadeUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"produtoId\": 28,\r\n  \"estabelecimentoId\": 11,\r\n  \"qtdEstoqueDisponivel\": 25,\r\n  \"vendaDisponivel\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueUnidade/111",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueUnidade",
+                "111"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PromocoesCampanhas",
+      "item": [
+        {
+          "name": "BuscarPromocoesECampanhasPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/PromocoesCampanhas/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PromocoesCampanhas",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPromocoesECampanhasAtivas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/PromocoesCampanhas/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PromocoesCampanhas",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPromocoesCampanhasInativas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/PromocoesCampanhas/inativos",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PromocoesCampanhas",
+                "inativos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPromocoesECampanhas",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"estabelecimentoId\": 4,\r\n  \"produtoId\": 29,\r\n  \"descricao\": \"Dia da calma - Promoção Suco de Maracujá\",\r\n  \"valorPromocional\": 7.5,\r\n  \"statusPromoCampanha\": 0,\r\n  \"dataInicio\": \"2026-10-25\",\r\n  \"dataFim\": \"2026-11-30\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/PromocoesCampanhas/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PromocoesCampanhas",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PromoUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"estabelecimentoId\": 4,\r\n  \"produtoId\": 29,\r\n  \"descricao\": \"Dia da calma - Promoção Suco de Maracujá\",\r\n  \"valorPromocional\": 7.0,\r\n  \"statusPromoCampanha\": 0,\r\n  \"dataInicio\": \"2026-10-25\",\r\n  \"dataFim\": \"2026-12-15\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/PromocoesCampanhas/4",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PromocoesCampanhas",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DesativarPromo",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/PromocoesCampanhas/4/desativar",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PromocoesCampanhas",
+                "4",
+                "desativar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "BuscarPedidoPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/5",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/ativos",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "ativos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPedidosCancelados",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/cancelados",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "cancelados"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPedidosPorCanal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/canal?canalPedido=0",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "canal"
+              ],
+              "query": [
+                {
+                  "key": "canalPedido",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BuscarPedidosDoCliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/cliente/20",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "cliente",
+                "20"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPedido",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"usuarioId\": 10,\r\n  \"estabelecimentoId\": 4,\r\n  \"canalPedido\": 1,\r\n  \"modoReceber\": 1,\r\n  \"statusPedido\": 0,\r\n  \"valorTotalPedido\": 0,\r\n  \"descricao\": \"Pedido Neusa - acúmulo de pontos\",\r\n  \"itensPedidos\": [\r\n    { \"produtoId\": 13, \"qtdItens\": 2 },\r\n    { \"produtoId\": 30, \"qtdItens\": 1 }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPedido",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"usuarioId\": 10,\r\n  \"estabelecimentoId\": 4,\r\n  \"canalPedido\": 3,\r\n  \"modoReceber\": 1,\r\n  \"statusPedido\": 0,\r\n  \"valorTotalPedido\": 0,\r\n  \"descricao\": \"Pedido Neusa - resgate de pontos\",\r\n  \"itensPedidos\": [\r\n    { \"produtoId\": 7, \"qtdItens\": 1 },\r\n    { \"produtoId\": 37, \"qtdItens\": 2 }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPedido",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"usuarioId\": 20,\r\n  \"estabelecimentoId\": 4,\r\n  \"canalPedido\": 0,\r\n  \"modoReceber\": 0,\r\n  \"statusPedido\": 0,\r\n  \"valorTotalPedido\": 0,\r\n  \"descricao\": \"Pedido Marcos - pagamento recusado\",\r\n  \"itensPedidos\": [\r\n    { \"produtoId\": 13, \"qtdItens\": 1 },\r\n    { \"produtoId\": 4, \"qtdItens\": 2 }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PedidoUpdate",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"usuarioId\": 10,\r\n  \"estabelecimentoId\": 4,\r\n  \"canalPedido\": 1,\r\n  \"modoReceber\": 1,\r\n  \"statusPedido\": 0,\r\n  \"valorTotalPedido\": 0,\r\n  \"descricao\": \"Pedido Neusa - acúmulo de pontos (mais um suco)\",\r\n  \"itensPedidos\": [\r\n    { \"produtoId\": 13, \"qtdItens\": 2 },\r\n    { \"produtoId\": 7, \"qtdItens\": 1 },\r\n    { \"produtoId\": 30, \"qtdItens\": 2 }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/18",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "18"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AtualizarStatusPedido",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pedidos/18/statusPedido?statusPedido=3",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pedidos",
+                "18",
+                "statusPedido"
+              ],
+              "query": [
+                {
+                  "key": "statusPedido",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "ItensPedido",
+      "item": [
+        {
+          "name": "BuscarItensPorIdPedido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/ItensPedido/pedido/5",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "ItensPedido",
+                "pedido",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarItensPedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/ItensPedido/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "ItensPedido",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "EstoqueMovimentacao",
+      "item": [
+        {
+          "name": "BuscarMovimentacaoDoEstoquePorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueMovimentacao/3",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueMovimentacao",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarMovimentacoesDoEstoque",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueMovimentacao/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueMovimentacao",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarMovimentacoesPorPedido",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueMovimentacao/pedido/5",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueMovimentacao",
+                "pedido",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarMovimentacoesEntrada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueMovimentacao/entrada",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueMovimentacao",
+                "entrada"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarMovimentacoesSaida",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/EstoqueMovimentacao/entrada/saida",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "EstoqueMovimentacao",
+                "entrada",
+                "saida"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pagamentos",
+      "item": [
+        {
+          "name": "BuscarPagamentoPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pagamentos/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pagamentos",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPagamentos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/Pagamentos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pagamentos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pedidoId\": 18,\r\n  \"tipoPagamento\": 0,\r\n  \"statusPagamento\": 0,\r\n  \"valorPagamento\": 0\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pagamentos/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pagamentos",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pedidoId\": 19,\r\n  \"tipoPagamento\": 0,\r\n  \"statusPagamento\": 0,\r\n  \"valorPagamento\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pagamentos?usarPontos=true",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pagamentos"
+              ],
+              "query": [
+                {
+                  "key": "usarPontos",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CriarPagamento",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"pedidoId\": 20,\r\n  \"tipoPagamento\": 0,\r\n  \"statusPagamento\": 0,\r\n  \"valorPagamento\": 0\r\n}\r\n\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7209/api/Pagamentos?simularRecusa=true",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "Pagamentos"
+              ],
+              "query": [
+                {
+                  "key": "simularRecusa",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "PontosFidelidade",
+      "item": [
+        {
+          "name": "BuscarPontosPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/PontosFidelidade/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PontosFidelidade",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarPontosPorFidelidade",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/PontosFidelidade/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "PontosFidelidade",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "LogAuditoria",
+      "item": [
+        {
+          "name": "BuscarAuditoriaPorId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/LogAuditoria/36",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "LogAuditoria",
+                "36"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ListarAuditorias",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://localhost:7209/api/LogAuditoria",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7209",
+              "path": [
+                "api",
+                "LogAuditoria"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "   {{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": ""
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}
