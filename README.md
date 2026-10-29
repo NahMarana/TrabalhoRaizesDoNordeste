@@ -36,7 +36,7 @@ Pacote                                                       Versão
 
 .NET 10SDK (https://dotnet.microsoft.com/download)
 Ferramenta do EF Core (para as migrations):
-  ```bash
+  ```
   dotnet tool install --global dotnet-ef
   ```
 Visual Studio 2022
@@ -89,9 +89,8 @@ OBS: A Jwt__Key nunca deve ficar no repositório, por conta da segurança do pro
 
 # Como instalar dependências
 
-Na pasta do projeto ( onde fica o ".csproj")
-
-bash 
+Abrir o prompt de commando na pasta do projeto (onde fica o ".csproj") Rode:
+ 
 dotnet restore
 
 
@@ -100,7 +99,7 @@ dotnet restore
 O banco é SQLlite e fica em um arquivo local
 
 Criar o banco e aplicar as migrations
-bash 
+
 dotnet ef database update
 
 Este comando cria o arquivo do banco com todas as tabelas.
@@ -126,8 +125,8 @@ na coleção "Postman" deixei preenchido com dados caso queria criar.
 
 # Como iniciar a API
 
-bash
-dotnet run --launch-profile https
+Abrir o prompt de commando na pasta do projeto (onde fica o ".csproj"). Rode:
+dotnet run
 
 Ou no Visual Studio, selecione "https" e aperte o F5
 
@@ -137,7 +136,6 @@ HTTP: http://localhost:5044/swagger/
 
 Caso na primeira execução, se o navegador reclamar do certificado, rode:
 
-bash
 dotnet dev-certs https --trust
 
 # Como acessar a documentação (Swagger/OpenAPI)
